@@ -7,6 +7,9 @@
     <string name="title_activity_game_live">GameLiveActivity</string>
 
     <!-- Main Menu-->
+    <string name="start_button">Start Game</string>
+    <string name="player_two">Player Two:</string>
+    <string name="player_one">Player One:</string>
 
     <!-- Game Live -->
     <string name="surrender">Surrender</string>
