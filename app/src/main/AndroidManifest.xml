@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".GameOverActivity"
+            android:label="@string/title_activity_game_over" >
+        </activity>
+        <activity
+            android:name=".GameLiveActivity"
+            android:label="@string/title_activity_game_live" >
+        </activity>
     </application>
 
 </manifest>
