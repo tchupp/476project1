@@ -1,9 +1,11 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class GameLiveActivity extends AppCompatActivity {
 
@@ -33,5 +35,10 @@ public class GameLiveActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSurrender(View view) {
+        Intent intent = new Intent(this, GameOverActivity.class);
+        startActivity(intent);
     }
 }
