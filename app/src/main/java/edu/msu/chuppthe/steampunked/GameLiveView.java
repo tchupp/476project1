@@ -15,6 +15,11 @@ import android.view.View;
  */
 public class GameLiveView extends View {
 
+    /**
+     * The actual puzzle
+     */
+    private Pipe pipe;
+
     public GameLiveView(Context context) {
         super(context);
         init(null, 0);
@@ -31,6 +36,7 @@ public class GameLiveView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
+
 
     }
 
