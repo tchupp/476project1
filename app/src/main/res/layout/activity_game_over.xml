@@ -27,8 +27,8 @@
         android:layout_alignRight="@+id/mainMenuButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="133dp"
-        android:text="@string/game_over_new_game"
-        android:onClick="onNewGame" />
+        android:onClick="onNewGame"
+        android:text="@string/game_over_new_game" />
 
     <Button
         android:id="@+id/mainMenuButton"
@@ -37,9 +37,9 @@
         android:layout_alignTop="@+id/newGameButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="53dp"
+        android:onClick="onMainMenu"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="@string/game_over_main_menu"
-        android:onClick="onMainMenu" />
+        android:text="@string/game_over_main_menu" />
 
 </RelativeLayout>
