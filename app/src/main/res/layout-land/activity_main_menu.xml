@@ -59,37 +59,41 @@
         android:layout_toLeftOf="@+id/startButton"
         android:inputType="text" />
 
-    <FrameLayout
+    <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/fiveXFiveCheck"
-        android:id="@+id/checkFrame"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/playerTwoTextField"
-        android:layout_margin="10dp">
+        android:orientation="horizontal"
+        android:id="@+id/gridRadioGroup">
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/five_grid"
-            android:id="@+id/fiveXFiveCheck"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/startButton"
-            android:layout_toStartOf="@+id/startButton"
-            android:layout_gravity="left|top" />
+            android:id="@+id/gridFiveRadio"
+            android:layout_gravity="left|center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ten_grid"
-            android:id="@+id/tenXTenCheck"
-            android:layout_gravity="center_horizontal|top" />
+            android:id="@+id/gridTenRadio"
+            android:layout_gravity="center"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp" />
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/twenty_grid"
-            android:id="@+id/twentyXTwentyCheck"
-            android:layout_gravity="right|top" />
-    </FrameLayout>
+            android:id="@+id/gridTwentyRadio"
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+    </RadioGroup>
 
 </RelativeLayout>
