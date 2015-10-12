@@ -14,7 +14,28 @@
         android:nestedScrollingEnabled="false"
         android:onClick="onStart"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/player_one"
+        android:id="@+id/playerOneTextView"
+        android:layout_above="@+id/playerTwoTextView"
+        android:layout_toStartOf="@id/mainLayout"
+        android:layout_alignBottom="@+id/playerOneTextField" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerOneTextField"
+        android:layout_above="@+id/startButton"
+        android:layout_alignParentEnd="false"
+        android:inputType="text"
+        android:layout_toLeftOf="@+id/startButton"
+        android:layout_toEndOf="@id/playerOneTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,25 +55,5 @@
         android:inputType="text"
         android:layout_toLeftOf="@+id/startButton"
         android:layout_below="@+id/startButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/player_one"
-        android:id="@+id/playerOneTextView"
-        android:layout_above="@+id/playerTwoTextView"
-        android:layout_toStartOf="@id/mainLayout"
-        android:layout_alignBottom="@+id/playerOneTextField" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/playerOneTextField"
-        android:layout_toRightOf="@+id/playerOneTextView"
-        android:layout_above="@+id/startButton"
-        android:layout_alignParentEnd="false"
-        android:inputType="text"
-        android:layout_toLeftOf="@+id/startButton" />
 
 </RelativeLayout>
