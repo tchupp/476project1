@@ -12,34 +12,34 @@
         android:id="@+id/gameOverTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/game_over"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="@string/game_over"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/newGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/game_over_new_game"
-        android:onClick="onNewGame"
         android:layout_above="@+id/gameOverTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/mainMenuButton"
-        android:layout_alignRight="@+id/mainMenuButton" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/mainMenuButton"
+        android:onClick="onNewGame"
+        android:text="@string/game_over_new_game" />
 
     <Button
         android:id="@+id/mainMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/gameOverTextView"
+        android:onClick="onMainMenu"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="@string/game_over_main_menu"
-        android:onClick="onMainMenu"
-        android:layout_below="@+id/gameOverTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:text="@string/game_over_main_menu" />
 
 </RelativeLayout>

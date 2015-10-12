@@ -1,10 +1,6 @@
 package edu.msu.chuppthe.steampunked;
 
 /**
- * Created by abigaelonchiri on 10/12/15.
- */
-
-/**
  * A representation of the playing area
  */
 public class PlayingArea {
@@ -23,11 +19,12 @@ public class PlayingArea {
      * Storage for the pipes
      * First level: X, second level Y
      */
-    private Pipe [][] pipes;
+    private Pipe[][] pipes;
 
     /**
      * Construct a playing area
-     * @param width Width (integer number of cells)
+     *
+     * @param width  Width (integer number of cells)
      * @param height Height (integer number of cells)
      */
     public PlayingArea(int width, int height) {
@@ -41,6 +38,7 @@ public class PlayingArea {
 
     /**
      * Get the playing area height
+     *
      * @return Height
      */
     public int getHeight() {
@@ -49,6 +47,7 @@ public class PlayingArea {
 
     /**
      * Get the playing area width
+     *
      * @return Width
      */
     public int getWidth() {
@@ -58,12 +57,13 @@ public class PlayingArea {
     /**
      * Get the pipe at a given location.
      * This will return null if outside the playing area.
+     *
      * @param x X location
      * @param y Y location
      * @return Reference to Pipe object or null if none exists
      */
     public Pipe getPipe(int x, int y) {
-        if(x < 0 || x >= width || y < 0 || y >= height) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
             return null;
         }
 
@@ -72,9 +72,10 @@ public class PlayingArea {
 
     /**
      * Add a pipe to the playing area
+     *
      * @param pipe Pipe to add
-     * @param x X location
-     * @param y Y location
+     * @param x    X location
+     * @param y    Y location
      */
     public void add(Pipe pipe, int x, int y) {
         pipes[x][y] = pipe;
@@ -83,6 +84,7 @@ public class PlayingArea {
 
     /**
      * Search to determine if this pipe has no leaks
+     *
      * @param start Starting pipe to search from
      * @return true if no leaks
      */
@@ -90,8 +92,8 @@ public class PlayingArea {
         /*
          * Set the visited flags to false
          */
-        for(Pipe[] row: pipes) {
-            for(Pipe pipe : row) {
+        for (Pipe[] row : pipes) {
+            for (Pipe pipe : row) {
                 if (pipe != null) {
                     pipe.setVisited(false);
                 }
