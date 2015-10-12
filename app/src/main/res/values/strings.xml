@@ -12,13 +12,13 @@
     <string name="player_one">Player One:</string>
 
     <!-- Game Live -->
-    <string name="surrender">Surrender</string>
+    <string name="surrender_button">Surrender</string>
+    <string name="install_button">Install</string>
+    <string name="discard_button">Discard</string>
+    <string name="open_valve_button">Open Valve</string>
 
     <!-- Game Over -->
     <string name="game_over">Game Over Man!</string>
     <string name="game_over_new_game">New Game</string>
     <string name="game_over_main_menu">Main Menu</string>
-    <string name="Install">Install</string>
-    <string name="Discard">Discard</string>
-    <string name="OpenValve">Open Valve</string>
 </resources>
