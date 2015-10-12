@@ -1,5 +1,7 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.graphics.Canvas;
+
 /**
  * A representation of the playing area
  */
@@ -106,4 +108,18 @@ public class PlayingArea {
         return start.search();
     }
 
+    /**
+     * Draw all the pieces to the canvas
+     *
+     * @param canvas canvas to draw to
+     */
+    public void draw(Canvas canvas) {
+        for (Pipe[] row : pipes) {
+            for (Pipe pipe : row) {
+                if (pipe != null) {
+                    pipe.draw(canvas);
+                }
+            }
+        }
+    }
 }

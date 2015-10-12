@@ -1,5 +1,7 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 public class Pipe {
@@ -7,11 +9,6 @@ public class Pipe {
      * Playing area this pipe is a member of
      */
     private PlayingArea playingArea = null;
-
-    /**
-     * Collection of puzzle pieces
-     */
-    private ArrayList<Pipe> pieces = new ArrayList<>();
 
     /**
      * Array that indicates which sides of this pipe
@@ -43,10 +40,10 @@ public class Pipe {
     /**
      * Constructor
      *
-     * @param north True if connected north
-     * @param east  True if connected east
-     * @param south True if connected south
-     * @param west  True if connected west
+     * @param north True if can connect north
+     * @param east  True if can connect east
+     * @param south True if can connect south
+     * @param west  True if can connect west
      */
     public Pipe(boolean north, boolean east, boolean south, boolean west) {
         connect[0] = north;
@@ -172,4 +169,12 @@ public class Pipe {
         this.visited = visited;
     }
 
+    /**
+     * Draw the piece to the canvas
+     *
+     * @param canvas canvas to draw to
+     */
+    public void draw(Canvas canvas) {
+
+    }
 }
