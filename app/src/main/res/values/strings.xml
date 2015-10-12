@@ -21,4 +21,7 @@
     <string name="game_over">Game Over Man!</string>
     <string name="game_over_new_game">New Game</string>
     <string name="game_over_main_menu">Main Menu</string>
+    <string name="five_grid">5 X 5</string>
+    <string name="ten_grid">10 X 10</string>
+    <string name="twenty_grid">20 X 20</string>
 </resources>

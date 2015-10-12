@@ -48,9 +48,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/playerTwoTextField"
-        android:layout_above="@+id/startButton"
         android:layout_toEndOf="@id/playerTwoTextView"
         android:layout_alignParentEnd="true"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_above="@+id/checkFrame" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/fiveXFiveCheck"
+        android:id="@+id/checkFrame"
+        android:layout_above="@+id/startButton">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/five_grid"
+            android:id="@+id/fiveXFiveCheck"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/startButton"
+            android:layout_toStartOf="@+id/startButton"
+            android:layout_gravity="left|top" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ten_grid"
+            android:id="@+id/tenXTenCheck"
+            android:layout_gravity="center_horizontal|top" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twenty_grid"
+            android:id="@+id/twentyXTwentyCheck"
+            android:layout_gravity="right|top" />
+    </FrameLayout>
 
 </RelativeLayout>
