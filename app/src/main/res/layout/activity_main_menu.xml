@@ -20,24 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/player_two"
-        android:id="@+id/playerTwoTextView"
-        android:layout_toStartOf="@id/mainLayout"
-        android:layout_alignBottom="@+id/playerTwoTextField" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/playerTwoTextField"
-        android:layout_above="@+id/startButton"
-        android:layout_toEndOf="@id/playerTwoTextView"
-        android:layout_alignParentEnd="true"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/player_one"
         android:id="@+id/playerOneTextView"
         android:layout_above="@+id/playerTwoTextView"
@@ -50,6 +32,24 @@
         android:id="@+id/playerOneTextField"
         android:layout_toRightOf="@+id/playerOneTextView"
         android:layout_above="@+id/playerTwoTextField"
+        android:layout_alignParentEnd="true"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/player_two"
+        android:id="@+id/playerTwoTextView"
+        android:layout_toStartOf="@id/mainLayout"
+        android:layout_alignBottom="@+id/playerTwoTextField" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerTwoTextField"
+        android:layout_above="@+id/startButton"
+        android:layout_toEndOf="@id/playerTwoTextView"
         android:layout_alignParentEnd="true"
         android:inputType="text" />
 
