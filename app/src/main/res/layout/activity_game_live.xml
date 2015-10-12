@@ -12,52 +12,52 @@
         android:id="@+id/surrenderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonOpenValve"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/buttonOpenValve"
         android:onClick="onSurrender"
-        android:text="@string/surrender_button"
-        android:layout_alignLeft="@+id/buttonOpenValve"
-        android:layout_alignRight="@+id/buttonOpenValve" />
+        android:text="@string/surrender_button" />
 
     <Button
+        android:id="@+id/buttonDiscard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/discard_button"
-        android:id="@+id/buttonDiscard"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:text="@string/discard_button" />
 
     <Button
+        android:id="@+id/buttonInstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/install_button"
-        android:id="@+id/buttonInstall"
         android:layout_above="@+id/buttonDiscard"
-        android:layout_alignRight="@+id/buttonDiscard"
         android:layout_alignEnd="@+id/buttonDiscard"
         android:layout_alignLeft="@+id/buttonDiscard"
-        android:layout_alignStart="@+id/buttonDiscard" />
+        android:layout_alignRight="@+id/buttonDiscard"
+        android:layout_alignStart="@+id/buttonDiscard"
+        android:text="@string/install_button" />
 
     <Button
+        android:id="@+id/buttonOpenValve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/open_valve_button"
-        android:id="@+id/buttonOpenValve"
-        android:layout_alignTop="@+id/buttonInstall"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/buttonInstall"
+        android:text="@string/open_valve_button" />
 
     <edu.msu.chuppthe.steampunked.GameLiveView
+        android:id="@+id/gameView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gameView"
-        android:background="@android:color/black"
+        android:layout_above="@+id/buttonInstall"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/buttonInstall"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:background="@android:color/black" />
 </RelativeLayout>
