@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:text="@string/start_button"
         android:id="@+id/startButton"
-        android:layout_centerHorizontal="true"
         android:nestedScrollingEnabled="false"
         android:onClick="onStart"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
 
     <TextView
@@ -29,10 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/playerTwoTextField"
-        android:layout_above="@+id/startButton"
         android:layout_toEndOf="@id/playerTwoTextView"
         android:layout_alignParentEnd="false"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_toLeftOf="@+id/startButton"
+        android:layout_below="@+id/startButton" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,8 +50,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/playerOneTextField"
         android:layout_toRightOf="@+id/playerOneTextView"
-        android:layout_above="@+id/playerTwoTextField"
+        android:layout_above="@+id/startButton"
         android:layout_alignParentEnd="false"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_toLeftOf="@+id/startButton" />
 
 </RelativeLayout>
