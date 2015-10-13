@@ -1,5 +1,7 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.graphics.Canvas;
+
 /**
  * A representation of the playing area
  */
@@ -79,7 +81,7 @@ public class PlayingArea {
      */
     public void add(Pipe pipe, int x, int y) {
         pipes[x][y] = pipe;
-        pipe.set(this, x, y);
+        pipe.setPosition(this, x, y);
     }
 
     /**
@@ -106,4 +108,28 @@ public class PlayingArea {
         return start.search();
     }
 
+    /**
+     * Draw all the pieces to the canvas
+     *
+     * @param canvas canvas to draw to
+     */
+    public void draw(Canvas canvas) {
+        int wid = canvas.getWidth();
+        int hgt = canvas.getHeight();
+
+        for (int i = 0; i < pipes.length; i++) {
+            Pipe[] row = pipes[i];
+            for (int j = 0; j < row.length; j++) {
+                Pipe pipe = row[j];
+                if (pipe != null) {
+                    canvas.save();
+                    float xScale = (float) i / (float) this.width;
+                    float yScale = (float) j / (float) this.width;
+                    canvas.translate(xScale * wid, yScale * hgt);
+                    pipe.draw(canvas);
+                    canvas.restore();
+                }
+            }
+        }
+    }
 }
