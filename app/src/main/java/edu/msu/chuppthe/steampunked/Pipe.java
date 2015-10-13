@@ -4,19 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import java.util.ArrayList;
 
 public class Pipe {
 
     public static Pipe createStartingPipe(Context context) {
-        Pipe startingPipe = new Pipe( context, false, true, false, false);
+        Pipe startingPipe = new Pipe(false, true, false, false);
         startingPipe.setId(context, R.drawable.straight);
         return startingPipe;
     }
 
     public static Pipe createEndingPipe(Context context) {
-        Pipe startingPipe = new Pipe( context, false, false, false, true);
+        Pipe startingPipe = new Pipe(false, false, false, true);
         startingPipe.setId(context, R.drawable.gauge);
         return startingPipe;
     }
@@ -58,18 +56,10 @@ public class Pipe {
     private Bitmap pipeImage = null;
 
 
-
     /**
      * ID for the pipe image
      */
     private int id;
-
-    /**
-     * Percentage of the display width or height that
-     * is occupied by the puzzle.
-     */
-    final static float SCALE_IN_VIEW = 0.9f;
-
 
     /**
      * Constructor
@@ -79,19 +69,11 @@ public class Pipe {
      * @param south True if can connect south
      * @param west  True if can connect west
      */
-    public Pipe(Context context, boolean north, boolean east, boolean south, boolean west) {
-
-        pipeImage =
-                BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.splash);
+    public Pipe(boolean north, boolean east, boolean south, boolean west) {
         connect[0] = north;
         connect[1] = east;
         connect[2] = south;
         connect[3] = west;
-
-        // Load the pipe pieces
-      //  pipes.add(0, createStartingPipe(context));
-
     }
 
     /**
@@ -224,18 +206,14 @@ public class Pipe {
 
     /**
      * Draw the piece to the canvas
-     *  @param canvas canvas to draw to
      *
+     * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
-
-
         canvas.save();
-        canvas.translate(0, pipeImage.getHeight());
+//        canvas.translate(0, pipeImage.getHeight());
         canvas.rotate(-90);
         canvas.drawBitmap(pipeImage, 0, 0, null);
         canvas.restore();
-
-
     }
 }

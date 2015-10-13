@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
@@ -46,19 +45,13 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void onStart(View view) {
         Intent intent = new Intent(this, GameLiveActivity.class);
-
         if (getFiveRadioButton().isSelected()) {
             intent.putExtra(GRID_SELECTION, "5");
-        }
-        else if (getTenRadioButton().isSelected())
-        {
+        } else if (getTenRadioButton().isSelected()) {
             intent.putExtra(GRID_SELECTION, "10");
+        } else if (getTwentyRadioButton().isSelected()) {
+            intent.putExtra(GRID_SELECTION, "20");
         }
-        else if (getTwentyRadioButton().isSelected())
-        {
-            intent.putExtra(GRID_SELECTION,"20");
-        }
-
         intent.putExtra(PLAYER_ONE, getPlayerOneTextField().getText());
         intent.putExtra(PLAYER_TWO, getPlayerTwoTextField().getText());
 
@@ -66,22 +59,22 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private RadioButton getFiveRadioButton() {
-        return (RadioButton)findViewById(R.id.gridFiveRadio);
+        return (RadioButton) findViewById(R.id.gridFiveRadio);
     }
 
     private RadioButton getTenRadioButton() {
-        return (RadioButton)findViewById(R.id.gridTenRadio);
+        return (RadioButton) findViewById(R.id.gridTenRadio);
     }
 
     private RadioButton getTwentyRadioButton() {
-        return (RadioButton)findViewById(R.id.gridTwentyRadio);
+        return (RadioButton) findViewById(R.id.gridTwentyRadio);
     }
 
     private EditText getPlayerOneTextField() {
-        return (EditText)findViewById(R.id.playerOneTextField);
+        return (EditText) findViewById(R.id.playerOneTextField);
     }
 
     private EditText getPlayerTwoTextField() {
-        return (EditText)findViewById(R.id.playerTwoTextField);
+        return (EditText) findViewById(R.id.playerTwoTextField);
     }
 }

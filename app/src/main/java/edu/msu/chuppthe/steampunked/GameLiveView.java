@@ -6,21 +6,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class GameLiveView extends View {
-
-
-
     /**
-
      * The play area
      */
     private PlayingArea playingArea;
-
-    /**
-     *pipe to draw
-     */
-    private Pipe pipe ;
-
-
 
     public GameLiveView(Context context) {
         super(context);
@@ -39,9 +28,6 @@ public class GameLiveView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-
-
-
         playingArea = new PlayingArea(5, 5);
 
         Pipe player1StartPipe = Pipe.createStartingPipe(getContext());
@@ -59,11 +45,6 @@ public class GameLiveView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
         playingArea.draw(canvas);
-        pipe.draw(canvas);
     }
-
-
 }

@@ -6,7 +6,6 @@ import android.graphics.Canvas;
  * A representation of the playing area
  */
 public class PlayingArea {
-
     /**
      * Width of the playing area (integer number of cells)
      */
@@ -116,6 +115,7 @@ public class PlayingArea {
     public void draw(Canvas canvas) {
         int wid = canvas.getWidth();
         int hgt = canvas.getHeight();
+        int sqSize = wid < hgt ? wid : hgt;
 
         for (int i = 0; i < pipes.length; i++) {
             Pipe[] row = pipes[i];
@@ -125,7 +125,7 @@ public class PlayingArea {
                     canvas.save();
                     float xScale = (float) i / (float) this.width;
                     float yScale = (float) j / (float) this.width;
-                    canvas.translate(xScale * wid, yScale * hgt);
+                    canvas.translate(xScale * sqSize, yScale * sqSize);
                     pipe.draw(canvas);
                     canvas.restore();
                 }

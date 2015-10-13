@@ -1,94 +1,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainMenuActivity"
-    android:id="@+id/mainLayout">
+    tools:context=".MainMenuActivity">
 
     <Button
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_button"
-        android:id="@+id/startButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:nestedScrollingEnabled="false"
-        android:onClick="onStart" />
+        android:onClick="onStart"
+        android:text="@string/start_button" />
 
     <TextView
+        android:id="@+id/playerOneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/player_one"
-        android:id="@+id/playerOneTextView"
         android:layout_above="@+id/playerTwoTextView"
+        android:layout_alignBottom="@+id/playerOneTextField"
         android:layout_toStartOf="@id/mainLayout"
-        android:layout_alignBottom="@+id/playerOneTextField" />
+        android:text="@string/player_one"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
+        android:id="@+id/playerOneTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/playerOneTextField"
-        android:layout_toRightOf="@+id/playerOneTextView"
         android:layout_above="@+id/playerTwoTextField"
         android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/playerOneTextView"
         android:inputType="text" />
 
     <TextView
+        android:id="@+id/playerTwoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/player_two"
-        android:id="@+id/playerTwoTextView"
+        android:layout_alignBottom="@+id/playerTwoTextField"
         android:layout_toStartOf="@id/mainLayout"
-        android:layout_alignBottom="@+id/playerTwoTextField" />
+        android:text="@string/player_two"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
+        android:id="@+id/playerTwoTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/playerTwoTextField"
-        android:layout_toEndOf="@id/playerTwoTextView"
+        android:layout_above="@+id/gridRadioGroup"
         android:layout_alignParentEnd="true"
-        android:inputType="text"
-        android:layout_above="@+id/gridRadioGroup" />
+        android:layout_toEndOf="@id/playerTwoTextView"
+        android:inputType="text" />
 
     <RadioGroup
+        android:id="@+id/gridRadioGroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/startButton"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:orientation="horizontal"
-        android:layout_above="@+id/startButton"
-        android:id="@+id/gridRadioGroup"
-        android:layout_alignParentEnd="false">
+        android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/gridFiveRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/five_grid"
-            android:id="@+id/gridFiveRadio"
             android:layout_gravity="left|center"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ten_grid"
-            android:id="@+id/tenXTenRadio"
-            android:layout_gravity="center"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp" />
+            android:text="@string/five_grid" />
 
         <RadioButton
+            android:id="@+id/gridTenRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/twenty_grid"
-            android:id="@+id/twentyXTwentyRadio"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/ten_grid" />
+
+        <RadioButton
+            android:id="@+id/gridTwentyRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center|right"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:text="@string/twenty_grid" />
     </RadioGroup>
 
 </RelativeLayout>
