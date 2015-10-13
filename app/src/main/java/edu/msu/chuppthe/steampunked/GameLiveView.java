@@ -30,15 +30,15 @@ public class GameLiveView extends View {
     private void init(AttributeSet attrs, int defStyle) {
         playingArea = new PlayingArea(5, 5);
 
-        Pipe player1StartPipe = new Pipe(false, true, false, false);
-        Pipe player2StartPipe = new Pipe(false, true, false, false);
-        playingArea.add(player1StartPipe, 1, 2);
-        playingArea.add(player2StartPipe, 1, 4);
+        Pipe player1StartPipe = Pipe.createStartingPipe(getContext());
+        Pipe player2StartPipe = Pipe.createStartingPipe(getContext());
+        playingArea.add(player1StartPipe, 0, 1);
+        playingArea.add(player2StartPipe, 0, 3);
 
-        Pipe player1EndPipe = new Pipe(false, false, false, true);
-        Pipe player2EndPipe = new Pipe(false, false, false, true);
-        playingArea.add(player1EndPipe, 5, 2);
-        playingArea.add(player2EndPipe, 5, 4);
+        Pipe player1EndPipe = Pipe.createEndingPipe(getContext());
+        Pipe player2EndPipe = Pipe.createEndingPipe(getContext());
+        playingArea.add(player1EndPipe, 4, 1);
+        playingArea.add(player2EndPipe, 4, 3);
     }
 
     @Override

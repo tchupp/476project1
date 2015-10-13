@@ -1,10 +1,24 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import java.util.ArrayList;
-
 public class Pipe {
+
+    public static Pipe createStartingPipe(Context context) {
+        Pipe startingPipe = new Pipe(false, true, false, false);
+        startingPipe.setId(context, R.drawable.straight);
+        return startingPipe;
+    }
+
+    public static Pipe createEndingPipe(Context context) {
+        Pipe startingPipe = new Pipe(false, false, false, true);
+        startingPipe.setId(context, R.drawable.gauge);
+        return startingPipe;
+    }
+
     /**
      * Playing area this pipe is a member of
      */
@@ -35,6 +49,16 @@ public class Pipe {
      * Depth-first visited visited
      */
     private boolean visited = false;
+
+    /**
+     * Image for the pipe
+     */
+    private Bitmap pipeImage = null;
+
+    /**
+     * ID for the pipe image
+     */
+    private int id;
 
 
     /**
@@ -145,10 +169,21 @@ public class Pipe {
      * @param x           X index
      * @param y           Y index
      */
-    public void set(PlayingArea playingArea, int x, int y) {
+    public void setPosition(PlayingArea playingArea, int x, int y) {
         this.playingArea = playingArea;
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Set the playing area and location for this pipe
+     *
+     * @param context view context
+     * @param id      id of the image
+     */
+    public void setId(Context context, int id) {
+        this.id = id;
+        this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
     /**
@@ -171,10 +206,14 @@ public class Pipe {
 
     /**
      * Draw the piece to the canvas
+     *  @param canvas canvas to draw to
      *
-     * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
-
+        canvas.save();
+        canvas.translate(0, pipeImage.getHeight());
+        canvas.rotate(-90);
+        canvas.drawBitmap(pipeImage, 0, 0, null);
+        canvas.restore();
     }
 }
