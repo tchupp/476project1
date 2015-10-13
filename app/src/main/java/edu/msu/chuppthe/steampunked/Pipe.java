@@ -4,17 +4,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import java.util.ArrayList;
 
 public class Pipe {
 
     public static Pipe createStartingPipe(Context context) {
-        Pipe startingPipe = new Pipe(false, true, false, false);
+        Pipe startingPipe = new Pipe( context, false, true, false, false);
         startingPipe.setId(context, R.drawable.straight);
         return startingPipe;
     }
 
     public static Pipe createEndingPipe(Context context) {
-        Pipe startingPipe = new Pipe(false, false, false, true);
+        Pipe startingPipe = new Pipe( context, false, false, false, true);
         startingPipe.setId(context, R.drawable.gauge);
         return startingPipe;
     }
@@ -56,9 +58,32 @@ public class Pipe {
     private Bitmap pipeImage = null;
 
     /**
+     * Collection of  pipes
+     */
+    public ArrayList<Pipe> pipes = new ArrayList<Pipe>();
+
+
+
+    /**
+     * Paint for filling the area the puzzle is in
+     */
+    private Paint fillPaint;
+
+    /**
+     * Paint for outlining the area the puzzle is in
+     */
+    private Paint outlinePaint;
+
+    /**
      * ID for the pipe image
      */
     private int id;
+
+    /**
+     * Percentage of the display width or height that
+     * is occupied by the puzzle.
+     */
+    final static float SCALE_IN_VIEW = 0.9f;
 
 
     /**
@@ -69,11 +94,19 @@ public class Pipe {
      * @param south True if can connect south
      * @param west  True if can connect west
      */
-    public Pipe(boolean north, boolean east, boolean south, boolean west) {
+    public Pipe(Context context, boolean north, boolean east, boolean south, boolean west) {
+
+        pipeImage =
+                BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.splash);
         connect[0] = north;
         connect[1] = east;
         connect[2] = south;
         connect[3] = west;
+
+        // Load the pipe pieces
+      //  pipes.add(0, createStartingPipe(context));
+
     }
 
     /**
@@ -210,10 +243,33 @@ public class Pipe {
      *
      */
     public void draw(Canvas canvas) {
+
+       /* int wid = canvas.getWidth();
+        int hit = canvas.getHeight();
+
+        // Determine the minimum of the two dimensions
+        int minDim = wid < hit ? wid : hit;
+
+        int playingAreaSize = (int)(minDim * SCALE_IN_VIEW);
+
+
+        // Compute the margins so we center the pIPE
+        int marginX = (wid - playingAreaSize) / 2;
+        int marginY = (hit - playingAreaSize) / 2;
+
+        // Draw the outline of the playing area
+        //
+
+        canvas.drawRect(marginX, marginY,
+                marginX + playingAreaSize, marginY + playingAreaSize, fillPaint); */
+
+
         canvas.save();
         canvas.translate(0, pipeImage.getHeight());
         canvas.rotate(-90);
         canvas.drawBitmap(pipeImage, 0, 0, null);
         canvas.restore();
+
+
     }
 }
