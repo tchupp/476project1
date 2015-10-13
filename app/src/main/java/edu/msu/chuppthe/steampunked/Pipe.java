@@ -229,25 +229,6 @@ public class Pipe {
      */
     public void draw(Canvas canvas) {
 
-       /* int wid = canvas.getWidth();
-        int hit = canvas.getHeight();
-
-        // Determine the minimum of the two dimensions
-        int minDim = wid < hit ? wid : hit;
-
-        int playingAreaSize = (int)(minDim * SCALE_IN_VIEW);
-
-
-        // Compute the margins so we center the pIPE
-        int marginX = (wid - playingAreaSize) / 2;
-        int marginY = (hit - playingAreaSize) / 2;
-
-        // Draw the outline of the playing area
-        //
-
-        canvas.drawRect(marginX, marginY,
-                marginX + playingAreaSize, marginY + playingAreaSize, fillPaint); */
-
 
         canvas.save();
         canvas.translate(0, pipeImage.getHeight());
