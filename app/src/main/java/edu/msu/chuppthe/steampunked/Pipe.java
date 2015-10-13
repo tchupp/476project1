@@ -57,22 +57,7 @@ public class Pipe {
      */
     private Bitmap pipeImage = null;
 
-    /**
-     * Collection of  pipes
-     */
-    public ArrayList<Pipe> pipes = new ArrayList<Pipe>();
 
-
-
-    /**
-     * Paint for filling the area the puzzle is in
-     */
-    private Paint fillPaint;
-
-    /**
-     * Paint for outlining the area the puzzle is in
-     */
-    private Paint outlinePaint;
 
     /**
      * ID for the pipe image
