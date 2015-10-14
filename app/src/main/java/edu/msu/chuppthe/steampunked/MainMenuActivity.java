@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -45,9 +46,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void onStart(View view) {
         Intent intent = new Intent(this, GameLiveActivity.class);
-        if (getTenRadioButton().isSelected()) {
+        if (getTenRadioButton().isChecked()) {
             intent.putExtra(GRID_SELECTION, 2);
-        } else if (getTwentyRadioButton().isSelected()) {
+        } else if (getTwentyRadioButton().isChecked()) {
             intent.putExtra(GRID_SELECTION, 4);
         } else {
             intent.putExtra(GRID_SELECTION, 1);
