@@ -11,9 +11,9 @@ import android.widget.RadioButton;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    public static final String GRID_SELECTION = "Grid Selection";
-    public static final String PLAYER_ONE = "Player One";
-    public static final String PLAYER_TWO = "Player Two";
+    public static final String GRID_SELECTION = "GridSelection";
+    public static final String PLAYER_ONE = "PlayerOne";
+    public static final String PLAYER_TWO = "PlayerTwo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +45,14 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void onStart(View view) {
         Intent intent = new Intent(this, GameLiveActivity.class);
-        if (getFiveRadioButton().isSelected()) {
-            intent.putExtra(GRID_SELECTION, "5");
-        } else if (getTenRadioButton().isSelected()) {
-            intent.putExtra(GRID_SELECTION, "10");
+        if (getTenRadioButton().isSelected()) {
+            intent.putExtra(GRID_SELECTION, 2);
         } else if (getTwentyRadioButton().isSelected()) {
-            intent.putExtra(GRID_SELECTION, "20");
+            intent.putExtra(GRID_SELECTION, 4);
+        } else {
+            intent.putExtra(GRID_SELECTION, 1);
         }
+
         intent.putExtra(PLAYER_ONE, getPlayerOneTextField().getText());
         intent.putExtra(PLAYER_TWO, getPlayerTwoTextField().getText());
 

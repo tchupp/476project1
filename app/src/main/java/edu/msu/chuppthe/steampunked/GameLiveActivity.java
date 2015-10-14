@@ -13,6 +13,11 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_live);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        int gridSize = extras.getInt(MainMenuActivity.GRID_SELECTION);
+        getGameLiveView().setPlayAreaSize(gridSize);
     }
 
     @Override
@@ -40,5 +45,9 @@ public class GameLiveActivity extends AppCompatActivity {
     public void onSurrender(View view) {
         Intent intent = new Intent(this, GameOverActivity.class);
         startActivity(intent);
+    }
+
+    private GameLiveView getGameLiveView() {
+        return (GameLiveView) findViewById(R.id.gameView);
     }
 }
