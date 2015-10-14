@@ -66,7 +66,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/playerTwoTextField"
         android:orientation="horizontal"
-        android:id="@+id/gridRadioGroup">
+        android:id="@+id/gridRadioGroup"
+        android:gravity="center_horizontal">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -74,8 +75,8 @@
             android:text="@string/five_grid"
             android:id="@+id/gridFiveRadio"
             android:layout_gravity="left|center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -83,8 +84,8 @@
             android:text="@string/ten_grid"
             android:id="@+id/gridTenRadio"
             android:layout_gravity="center"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -92,8 +93,8 @@
             android:text="@string/twenty_grid"
             android:id="@+id/gridTwentyRadio"
             android:layout_gravity="center|right"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
     </RadioGroup>
 
 </RelativeLayout>

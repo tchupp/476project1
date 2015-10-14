@@ -19,6 +19,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        getFiveRadioButton().setSelected(true);
     }
 
     @Override
