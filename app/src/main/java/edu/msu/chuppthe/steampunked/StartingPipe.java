@@ -43,8 +43,8 @@ public class StartingPipe extends Pipe {
 
         canvas.save();
 
-        canvas.scale(scale, scale);
         canvas.translate(facX * cSize, facY * cSize + 55.f);
+        canvas.scale(scale, scale);
         canvas.rotate(-90);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
