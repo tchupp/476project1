@@ -34,7 +34,7 @@ public class PlayingArea {
 
         // Allocate the playing area
         // Java automatically initializes all of the locations to null
-        pipes = new Pipe[width][height];
+        this.pipes = new Pipe[width][height];
     }
 
     /**
@@ -113,6 +113,7 @@ public class PlayingArea {
      * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
+        // Draw the board
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null) {
