@@ -27,11 +27,9 @@ public class GameLiveView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        int gridSize = 1;
-        setPlayAreaSize(gridSize);
     }
 
-    public void setPlayAreaSize(int gridSize) {
+    public void setupPlayArea(int gridSize, String playerOne, String playerTwo) {
         int totalGridSize = 5 * gridSize;
         int startingX = 0;
         int endingX = totalGridSize - 1;
@@ -40,8 +38,8 @@ public class GameLiveView extends View {
 
         playingArea = new PlayingArea(totalGridSize, totalGridSize);
 
-        Pipe player1StartPipe = Pipe.createStartingPipe(getContext());
-        Pipe player2StartPipe = Pipe.createStartingPipe(getContext());
+        Pipe player1StartPipe = Pipe.createStartingPipe(getContext(), playerOne);
+        Pipe player2StartPipe = Pipe.createStartingPipe(getContext(), playerTwo);
         playingArea.add(player1StartPipe, startingX, player1Y);
         playingArea.add(player2StartPipe, startingX, player2Y);
 

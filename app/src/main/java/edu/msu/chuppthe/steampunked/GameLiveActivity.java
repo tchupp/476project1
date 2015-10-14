@@ -16,8 +16,12 @@ public class GameLiveActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+
         int gridSize = extras.getInt(MainMenuActivity.GRID_SELECTION);
-        getGameLiveView().setPlayAreaSize(gridSize);
+        String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
+        String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
+
+        getGameLiveView().setupPlayArea(gridSize, playerOneName, playerTwoName);
     }
 
     @Override

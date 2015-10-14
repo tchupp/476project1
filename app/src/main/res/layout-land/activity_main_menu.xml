@@ -24,10 +24,10 @@
         android:id="@+id/playerOneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/playerTwoTextView"
-        android:layout_alignBottom="@+id/playerOneTextField"
-        android:layout_toStartOf="@id/mainLayout"
-        android:text="@string/player_one"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/playerOneTextField"
+        android:text="@string/player_one_lable"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -44,9 +44,10 @@
         android:id="@+id/playerTwoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/playerTwoTextField"
-        android:layout_toStartOf="@id/mainLayout"
-        android:text="@string/player_two"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/playerTwoTextField"
+        android:text="@string/player_two_lable"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -60,42 +61,42 @@
         android:inputType="text" />
 
     <RadioGroup
+        android:id="@+id/gridRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/playerTwoTextField"
-        android:orientation="horizontal"
-        android:id="@+id/gridRadioGroup"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/gridFiveRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/five_grid"
-            android:id="@+id/gridFiveRadio"
             android:layout_gravity="left|center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="@string/five_grid" />
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ten_grid"
             android:id="@+id/gridTenRadio"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp" />
-
-        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/twenty_grid"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/ten_grid" />
+
+        <RadioButton
             android:id="@+id/gridTwentyRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center|right"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:text="@string/twenty_grid" />
     </RadioGroup>
 
 </RelativeLayout>

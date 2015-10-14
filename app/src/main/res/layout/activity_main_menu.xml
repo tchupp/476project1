@@ -25,8 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/playerTwoTextView"
         android:layout_alignBottom="@+id/playerOneTextField"
+        android:layout_alignTop="@+id/playerOneTextField"
         android:layout_toStartOf="@id/mainLayout"
-        android:text="@string/player_one"
+        android:text="@string/player_one_lable"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -43,8 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/playerTwoTextField"
+        android:layout_alignTop="@+id/playerTwoTextField"
         android:layout_toStartOf="@id/mainLayout"
-        android:text="@string/player_two"
+        android:text="@string/player_two_lable"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -64,8 +66,8 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/gridFiveRadio"
@@ -74,8 +76,8 @@
             android:layout_gravity="left|center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="@string/five_grid"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="@string/five_grid" />
 
         <RadioButton
             android:id="@+id/gridTenRadio"

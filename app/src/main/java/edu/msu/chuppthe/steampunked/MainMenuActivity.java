@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -54,8 +53,14 @@ public class MainMenuActivity extends AppCompatActivity {
             intent.putExtra(GRID_SELECTION, 1);
         }
 
-        intent.putExtra(PLAYER_ONE, getPlayerOneTextField().getText());
-        intent.putExtra(PLAYER_TWO, getPlayerTwoTextField().getText());
+        String playerOneName = String.valueOf(getPlayerOneTextField().getText());
+        String playerTwoName = String.valueOf(getPlayerTwoTextField().getText());
+
+        playerOneName = playerOneName.isEmpty() ? "Player One" : playerOneName;
+        playerTwoName = playerTwoName.isEmpty() ? "Player Two" : playerTwoName;
+
+        intent.putExtra(PLAYER_ONE, playerOneName);
+        intent.putExtra(PLAYER_TWO, playerTwoName);
 
         startActivity(intent);
     }

@@ -8,8 +8,8 @@
 
     <!-- Main Menu-->
     <string name="start_button">Start Game</string>
-    <string name="player_two">Player Two:</string>
-    <string name="player_one">Player One:</string>
+    <string name="player_one_lable">Player One:</string>
+    <string name="player_two_lable">Player Two:</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>

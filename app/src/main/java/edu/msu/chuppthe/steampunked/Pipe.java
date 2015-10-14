@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 
 public class Pipe {
 
-    public static Pipe createStartingPipe(Context context) {
-        return new StartingPipe(context, "");
+    public static Pipe createStartingPipe(Context context, String playerName) {
+        return new StartingPipe(context, playerName);
     }
 
     public static Pipe createEndingPipe(Context context) {
