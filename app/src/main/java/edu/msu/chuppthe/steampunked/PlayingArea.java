@@ -113,21 +113,10 @@ public class PlayingArea {
      * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
-        int wid = canvas.getWidth();
-        int hgt = canvas.getHeight();
-        int sqSize = wid < hgt ? wid : hgt;
-
-        for (int i = 0; i < pipes.length; i++) {
-            Pipe[] row = pipes[i];
-            for (int j = 0; j < row.length; j++) {
-                Pipe pipe = row[j];
+        for (Pipe[] row : pipes) {
+            for (Pipe pipe : row) {
                 if (pipe != null) {
-                    canvas.save();
-                    float xScale = (float) i / (float) this.width;
-                    float yScale = (float) j / (float) this.width;
-                    canvas.translate(xScale * sqSize, yScale * sqSize);
-                    pipe.draw(canvas);
-                    canvas.restore();
+                    pipe.draw(canvas, this.width);
                 }
             }
         }

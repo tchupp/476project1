@@ -8,9 +8,7 @@ import android.graphics.Canvas;
 public class Pipe {
 
     public static Pipe createStartingPipe(Context context) {
-        Pipe startingPipe = new Pipe(false, true, false, false);
-        startingPipe.setId(context, R.drawable.straight);
-        return startingPipe;
+        return new StartingPipe(context, "");
     }
 
     public static Pipe createEndingPipe(Context context) {
@@ -38,12 +36,12 @@ public class Pipe {
     /**
      * X location in the playing area (index into array)
      */
-    private int x = 0;
+    protected int x = 0;
 
     /**
      * Y location in the playing area (index into array)
      */
-    private int y = 0;
+    protected int y = 0;
 
     /**
      * Depth-first visited visited
@@ -53,8 +51,7 @@ public class Pipe {
     /**
      * Image for the pipe
      */
-    private Bitmap pipeImage = null;
-
+    protected Bitmap pipeImage = null;
 
     /**
      * ID for the pipe image
@@ -181,7 +178,7 @@ public class Pipe {
      * @param context view context
      * @param id      id of the image
      */
-    public void setId(Context context, int id) {
+    protected void setId(Context context, int id) {
         this.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
     }
@@ -207,13 +204,30 @@ public class Pipe {
     /**
      * Draw the piece to the canvas
      *
-     * @param canvas canvas to draw to
+     * @param canvas   canvas to draw to
+     * @param gridSize size of the playing area
      */
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, float gridSize) {
+        int cWidth = canvas.getWidth();
+        int cHeight = canvas.getHeight();
+        float cSize = cWidth < cHeight ? cWidth : cHeight;
+
+        int pWidth = pipeImage.getWidth();
+        int pHeight = pipeImage.getHeight();
+        float pSize = pWidth < pHeight ? pWidth : pHeight;
+        float scale = cSize / (gridSize * pSize);
+
+        float facX = (float) this.x / gridSize;
+        float facY = (this.y + 1.f) / gridSize;
+
         canvas.save();
-//        canvas.translate(0, pipeImage.getHeight());
+
+        canvas.scale(scale, scale);
+        canvas.translate(facX * cSize, facY * cSize + 55.f);
         canvas.rotate(-90);
+
         canvas.drawBitmap(pipeImage, 0, 0, null);
+
         canvas.restore();
     }
 }
