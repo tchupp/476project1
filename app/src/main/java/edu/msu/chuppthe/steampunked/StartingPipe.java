@@ -40,23 +40,9 @@ public class StartingPipe extends Pipe {
     }
 
     @Override
-    public void draw(Canvas canvas, float gridSize) {
-        int cWidth = canvas.getWidth();
-        int cHeight = canvas.getHeight();
-        float cSize = cWidth < cHeight ? cWidth : cHeight;
-
-        int pWidth = pipeImage.getWidth();
-        int pHeight = pipeImage.getHeight();
-        float pSize = pWidth < pHeight ? pWidth : pHeight;
-        float scale = cSize / (gridSize * pSize);
-
-        float facX = (float) this.x / gridSize;
-        float facY = (this.y + 1.f) / gridSize;
-
-        canvas.save();
-
-        canvas.translate(facX * cSize, facY * cSize + 55.f);
-        canvas.scale(scale, scale);
+    public void draw(Canvas canvas) {
+        int pWidth = this.pipeImage.getWidth();
+        int pHeight = this.pipeImage.getHeight();
 
         canvas.save();
         canvas.rotate(-90);
@@ -68,12 +54,12 @@ public class StartingPipe extends Pipe {
         canvas.translate(0, -pHeight);
 
         canvas.drawBitmap(handleImage, 0, 0, null);
-
         canvas.restore();
 
+        canvas.save();
         canvas.translate(pWidth / 2.f, pHeight / 8.f);
-        canvas.drawText(this.playerName, 0, 0, this.namePaint);
 
+        canvas.drawText(this.playerName, 0, 0, this.namePaint);
         canvas.restore();
     }
 }

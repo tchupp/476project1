@@ -1,7 +1,11 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectionArea {
 
@@ -10,9 +14,20 @@ public class SelectionArea {
      */
     private Paint selectionAreaPaint;
 
-    public SelectionArea() {
+    private List<Pipe> pipes;
+
+    public SelectionArea(Context context) {
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.selectionAreaPaint.setColor(0xffadf99d);
+
+        this.pipes = new ArrayList<>();
+
+        //TODO: Replace this with random generation
+        pipes.add(Pipe.createCapPipe(context));
+        pipes.add(Pipe.createStraightPipe(context));
+        pipes.add(Pipe.createNinetyPipe(context));
+        pipes.add(Pipe.createStraightPipe(context));
+        pipes.add(Pipe.createTeePipe(context));
     }
 
     public void draw(Canvas canvas) {
@@ -23,5 +38,13 @@ public class SelectionArea {
 
         // Draw the selection area
         canvas.drawRect(left, top, cWidth, cHeight, this.selectionAreaPaint);
+
+        for (int i = 0; i < this.pipes.size(); i++) {
+            Pipe pipe = this.pipes.get(i);
+
+            canvas.save();
+            pipe.draw(canvas);
+            canvas.restore();
+        }
     }
 }

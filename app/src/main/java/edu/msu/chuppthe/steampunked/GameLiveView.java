@@ -39,7 +39,7 @@ public class GameLiveView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        this.selectionArea = new SelectionArea();
+        this.selectionArea = new SelectionArea(getContext());
 
         this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.outlinePaint.setColor(Color.BLACK);

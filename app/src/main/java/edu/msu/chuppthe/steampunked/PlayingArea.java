@@ -113,11 +113,30 @@ public class PlayingArea {
      * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
+        int cWidth = canvas.getWidth();
+        int cHeight = canvas.getHeight();
+        float cSize = cWidth < cHeight ? cWidth : cHeight;
+
         // Draw the board
-        for (Pipe[] row : pipes) {
-            for (Pipe pipe : row) {
+        for (int x = 0; x < pipes.length; x++) {
+            Pipe[] row = pipes[x];
+            for (int y = 0; y < row.length; y++) {
+                Pipe pipe = row[y];
                 if (pipe != null) {
-                    pipe.draw(canvas, this.width);
+                    float pSize = pipe.getImageSize();
+                    float scale = cSize / (this.width * pSize);
+
+                    float facX = (float) x / this.width;
+                    float facY = (y + 1.f) / this.width;
+
+                    canvas.save();
+
+                    canvas.translate(facX * cSize, facY * cSize + 55.f);
+                    canvas.scale(scale, scale);
+
+                    pipe.draw(canvas);
+
+                    canvas.restore();
                 }
             }
         }

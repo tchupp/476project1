@@ -17,6 +17,30 @@ public class Pipe {
         return startingPipe;
     }
 
+    public static Pipe createCapPipe(Context context) {
+        Pipe capPipe = new Pipe(false, false, true, false);
+        capPipe.setId(context, R.drawable.cap);
+        return capPipe;
+    }
+
+    public static Pipe createTeePipe(Context context) {
+        Pipe capPipe = new Pipe(true, true, true, false);
+        capPipe.setId(context, R.drawable.tee);
+        return capPipe;
+    }
+
+    public static Pipe createNinetyPipe(Context context) {
+        Pipe capPipe = new Pipe(false, true, true, false);
+        capPipe.setId(context, R.drawable.ninety);
+        return capPipe;
+    }
+
+    public static Pipe createStraightPipe(Context context) {
+        Pipe capPipe = new Pipe(true, false, true, false);
+        capPipe.setId(context, R.drawable.straight);
+        return capPipe;
+    }
+
     /**
      * Playing area this pipe is a member of
      */
@@ -202,32 +226,26 @@ public class Pipe {
     }
 
     /**
-     * Draw the piece to the canvas
+     * Get the smaller side of the pipe image
      *
-     * @param canvas   canvas to draw to
-     * @param gridSize size of the playing area
+     * @return smaller side of pipe image
      */
-    public void draw(Canvas canvas, float gridSize) {
-        int cWidth = canvas.getWidth();
-        int cHeight = canvas.getHeight();
-        float cSize = cWidth < cHeight ? cWidth : cHeight;
-
+    public float getImageSize() {
         int pWidth = pipeImage.getWidth();
         int pHeight = pipeImage.getHeight();
-        float pSize = pWidth < pHeight ? pWidth : pHeight;
-        float scale = cSize / (gridSize * pSize);
+        return (float) (pWidth < pHeight ? pWidth : pHeight);
+    }
 
-        float facX = (float) this.x / gridSize;
-        float facY = (this.y + 1.f) / gridSize;
-
+    /**
+     * Draw the piece to the canvas
+     *  @param canvas   canvas to draw to
+     *
+     */
+    public void draw(Canvas canvas) {
         canvas.save();
-
-        canvas.translate(facX * cSize, facY * cSize + 55.f);
-        canvas.scale(scale, scale);
         canvas.rotate(-90);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
-
         canvas.restore();
     }
 }
