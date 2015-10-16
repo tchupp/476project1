@@ -31,8 +31,12 @@ public class SelectionArea {
     }
 
     public void draw(Canvas canvas) {
+        float gridSize = 6;
+
         int cWidth = canvas.getWidth();
         int cHeight = canvas.getHeight();
+        float cSize = cWidth < cHeight ? cWidth : cHeight;
+
         float top = cWidth < cHeight ? cWidth : 0;
         float left = cWidth < cHeight ? 0 : cHeight;
 
@@ -42,8 +46,25 @@ public class SelectionArea {
         for (int i = 0; i < this.pipes.size(); i++) {
             Pipe pipe = this.pipes.get(i);
 
+            float pSize = pipe.getImageSize();
+            float scale = cSize / (gridSize * pSize);
+            float fac = (float) i / (gridSize - 1f);
+            float dx = (left + top * fac);
+            float dy = (top + left * fac);
+
+            if (cWidth < cHeight) {
+                dy += (pSize * 1.25f);
+            } else {
+                dy += (pSize * 0.8f);
+                dx += (pSize * 1f);
+            }
+
             canvas.save();
+            canvas.translate(dx, dy);
+            canvas.scale(scale, scale);
+
             pipe.draw(canvas);
+
             canvas.restore();
         }
     }

@@ -131,7 +131,7 @@ public class PlayingArea {
 
                     canvas.save();
 
-                    canvas.translate(facX * cSize, facY * cSize + 55.f);
+                    canvas.translate(facX * cSize, facY * cSize);
                     canvas.scale(scale, scale);
 
                     pipe.draw(canvas);

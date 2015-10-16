@@ -62,8 +62,8 @@ public class GameLiveView extends View {
 
         Pipe player1EndPipe = Pipe.createEndingPipe(getContext());
         Pipe player2EndPipe = Pipe.createEndingPipe(getContext());
-        this.playingArea.add(player1EndPipe, endingX, player1Y);
-        this.playingArea.add(player2EndPipe, endingX, player2Y);
+        this.playingArea.add(player1EndPipe, endingX, player1Y + 1);
+        this.playingArea.add(player2EndPipe, endingX, player2Y + 1);
     }
 
     @Override
