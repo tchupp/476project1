@@ -1,11 +1,60 @@
 package edu.msu.chuppthe.steampunked;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import java.io.Serializable;
 
 /**
  * A representation of the playing area
  */
 public class PlayingArea {
+    private class Parameters implements Serializable {
+        /**
+         * X location for the left side of the board
+         */
+        private float x = 0f;
+
+        /**
+         * Y location for the top side of the board
+         */
+        private float y = 0f;
+
+        /**
+         * Max X location for the right side of the board
+         */
+        private float maxX = -1f;
+
+        /**
+         * Max Y location for the bottom side of the board
+         */
+        private float maxY = -1f;
+
+        /**
+         * Scale of the overall board
+         */
+        private float scaleFac = 1f;
+    }
+
+    private class DebugInfo {
+        private Paint linePaint;
+
+        public DebugInfo() {
+            this.linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            this.linePaint.setColor(Color.BLACK);
+            this.linePaint.setTextSize(40);
+        }
+
+        public void draw(Canvas canvas, float x, float y, float maxX, float maxY, float scale) {
+            canvas.drawText("X: " + String.valueOf(x), 100, 50, this.linePaint);
+            canvas.drawText("Y: " + String.valueOf(y), 100, 100, this.linePaint);
+            canvas.drawText("Max X: " + String.valueOf(maxX), 100, 150, this.linePaint);
+            canvas.drawText("Max Y: " + String.valueOf(maxY), 100, 200, this.linePaint);
+            canvas.drawText("Scale: " + String.valueOf(scale), 100, 250, this.linePaint);
+        }
+    }
+
     /**
      * Width of the playing area (integer number of cells)
      */
@@ -21,6 +70,11 @@ public class PlayingArea {
      * First level: X, second level Y
      */
     private Pipe[][] pipes;
+
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
 
     /**
      * Construct a playing area
@@ -43,7 +97,7 @@ public class PlayingArea {
      * @return Height
      */
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     /**
@@ -52,7 +106,7 @@ public class PlayingArea {
      * @return Width
      */
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     /**
@@ -116,8 +170,16 @@ public class PlayingArea {
         int cWidth = canvas.getWidth();
         int cHeight = canvas.getHeight();
         float cSize = cWidth < cHeight ? cWidth : cHeight;
+        if (params.maxX < 0) params.maxX = cSize;
+        if (params.maxY < 0) params.maxY = cSize;
 
-        // Draw the board
+//        new DebugInfo().draw(canvas, params.x, params.y, -params.maxX, -params.maxY, params.scaleFac);
+
+        canvas.save();
+        canvas.translate(params.x, params.y);
+        canvas.scale(params.scaleFac, params.scaleFac);
+
+        // Draw the pipes
         for (int x = 0; x < pipes.length; x++) {
             Pipe[] row = pipes[x];
             for (int y = 0; y < row.length; y++) {
@@ -139,6 +201,38 @@ public class PlayingArea {
                     canvas.restore();
                 }
             }
+        }
+        canvas.restore();
+    }
+
+    public void translate(float x, float y) {
+        params.x += x;
+        params.y += y;
+
+        if (params.x > 0) {
+            params.x = 0;
+        }
+        if (params.y > 0) {
+            params.y = 0;
+        }
+        if (params.x < (-params.maxX * params.scaleFac) + params.maxX) {
+            params.x = (-params.maxX * params.scaleFac) + params.maxX;
+        }
+        if (params.y < (-params.maxY * params.scaleFac) + params.maxY) {
+            params.y = (-params.maxY * params.scaleFac) + params.maxY;
+        }
+    }
+
+    public void scale(float ratio) {
+        params.scaleFac *= ratio;
+        if (params.scaleFac < 1f) {
+            params.scaleFac = 1f;
+        } else {
+            float xc = params.maxX / 2f;
+            float yc = params.maxY / 2f;
+
+            params.x = (params.x - xc) * ratio + xc;
+            params.y = (params.y - yc) * ratio + yc;
         }
     }
 }

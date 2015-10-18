@@ -213,7 +213,7 @@ public class Pipe {
      * @return True if yes
      */
     public boolean beenVisited() {
-        return visited;
+        return this.visited;
     }
 
     /**
@@ -238,8 +238,8 @@ public class Pipe {
 
     /**
      * Draw the piece to the canvas
-     *  @param canvas   canvas to draw to
      *
+     * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
         canvas.save();
