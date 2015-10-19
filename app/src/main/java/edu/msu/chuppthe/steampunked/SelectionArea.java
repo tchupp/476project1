@@ -35,6 +35,10 @@ public class SelectionArea {
     private List<Pipe> pipes;
 
     private Random random = new Random();
+
+    /**
+     * Context of the Selection Area
+     */
     private Context context;
 
     public SelectionArea(Context context) {
@@ -43,6 +47,7 @@ public class SelectionArea {
         this.selectionAreaPaint.setColor(0xffadf99d);
 
         this.pipes = new ArrayList<>();
+
         generatePipes(context);
     }
 

@@ -16,9 +16,10 @@ public class Pipe {
     }
 
     public static Pipe createEndingPipe(Context context) {
-        Pipe startingPipe = new Pipe(false, false, false, true);
-        startingPipe.setId(context, R.drawable.gauge);
-        return startingPipe;
+        Pipe endingPipe = new Pipe(false, false, false, true);
+        endingPipe.setId(context, R.drawable.gauge);
+        endingPipe.setMovable(false);
+        return endingPipe;
     }
 
     public static Pipe createCapPipe(Context context) {
@@ -28,21 +29,21 @@ public class Pipe {
     }
 
     public static Pipe createTeePipe(Context context) {
-        Pipe capPipe = new Pipe(true, true, true, false);
-        capPipe.setId(context, R.drawable.tee);
-        return capPipe;
+        Pipe teePipe = new Pipe(true, true, true, false);
+        teePipe.setId(context, R.drawable.tee);
+        return teePipe;
     }
 
     public static Pipe createNinetyPipe(Context context) {
-        Pipe capPipe = new Pipe(false, true, true, false);
-        capPipe.setId(context, R.drawable.ninety);
-        return capPipe;
+        Pipe ninetyPipe = new Pipe(false, true, true, false);
+        ninetyPipe.setId(context, R.drawable.ninety);
+        return ninetyPipe;
     }
 
     public static Pipe createStraightPipe(Context context) {
-        Pipe capPipe = new Pipe(true, false, true, false);
-        capPipe.setId(context, R.drawable.straight);
-        return capPipe;
+        Pipe straightPipe = new Pipe(true, false, true, false);
+        straightPipe.setId(context, R.drawable.straight);
+        return straightPipe;
     }
 
     protected class Parameters implements Serializable {
@@ -225,6 +226,43 @@ public class Pipe {
     }
 
     /**
+     * Draw the piece to the canvas
+     *
+     * @param canvas canvas to draw to
+     */
+    public void draw(Canvas canvas) {
+        canvas.save();
+        canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
+        canvas.scale(params.scaleBase, params.scaleBase);
+        canvas.rotate(-90);
+
+        canvas.drawBitmap(pipeImage, 0, 0, null);
+        canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
+        canvas.restore();
+    }
+
+    public void move(float dx, float dy) {
+        if (params.isMovable) {
+            params.xPos += dx;
+            params.yPos += dy;
+        }
+    }
+
+    public void setBasePosition(float x, float y, float scale) {
+        params.xBase = x;
+        params.yBase = y;
+        params.scaleBase = scale;
+    }
+
+    public boolean hit(float testX, float testY) {
+        float pX = params.xBase + params.xPos;
+        float pY = params.yBase + params.yPos;
+
+        return (pX < testX && testX < pX + this.getImageSize())
+                && (pY - this.getImageSize() < testY && testY < pY);
+    }
+
+    /**
      * Get the playing area
      *
      * @return Playing area object
@@ -286,40 +324,7 @@ public class Pipe {
         return (float) (pWidth < pHeight ? pWidth : pHeight);
     }
 
-    /**
-     * Draw the piece to the canvas
-     *
-     * @param canvas canvas to draw to
-     */
-    public void draw(Canvas canvas) {
-        canvas.save();
-        canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
-        canvas.scale(params.scaleBase, params.scaleBase);
-        canvas.rotate(-90);
-
-        canvas.drawBitmap(pipeImage, 0, 0, null);
-        canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
-        canvas.restore();
-    }
-
-    public void move(float dx, float dy) {
-        if (params.isMovable) {
-            params.xPos += dx;
-            params.yPos += dy;
-        }
-    }
-
-    public void setBasePosition(float x, float y, float scale) {
-        params.xBase = x;
-        params.yBase = y;
-        params.scaleBase = scale;
-    }
-
-    public boolean hit(float testX, float testY) {
-        float pX = params.xBase + params.xPos;
-        float pY = params.yBase + params.yPos;
-
-        return (pX < testX && testX < pX + this.getImageSize())
-                && (pY - this.getImageSize() < testY && testY < pY);
+    public void setMovable(boolean isMovable) {
+        params.isMovable = isMovable;
     }
 }
