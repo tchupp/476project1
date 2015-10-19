@@ -21,7 +21,7 @@ public class GameLiveActivity extends AppCompatActivity {
         String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
         String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
 
-        getGameLiveView().setupPlayArea(gridSize, playerOneName, playerTwoName);
+        getPlayingAreaView().setupPlayArea(gridSize, playerOneName, playerTwoName);
     }
 
     @Override
@@ -51,7 +51,11 @@ public class GameLiveActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private GameLiveView getGameLiveView() {
-        return (GameLiveView) findViewById(R.id.gameView);
+    private PlayingAreaView getPlayingAreaView() {
+        return (PlayingAreaView) findViewById(R.id.playingView);
+    }
+
+    private SelectionAreaView getSelectionAreaView() {
+        return (SelectionAreaView) findViewById(R.id.selectionView);
     }
 }

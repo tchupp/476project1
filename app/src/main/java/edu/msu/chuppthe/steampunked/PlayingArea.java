@@ -24,17 +24,22 @@ public class PlayingArea {
         /**
          * Max X location for the right side of the board
          */
-        private float maxX = -1f;
+        private float maxSmall = -1f;
 
         /**
          * Max Y location for the bottom side of the board
          */
-        private float maxY = -1f;
+        private float maxLarge = -1f;
 
         /**
          * Scale of the overall board
          */
-        private float scaleFac = 1f;
+        private float scaleFac = -1f;
+
+        /**
+         * Do the params need initializing?
+         */
+        private boolean start = true;
     }
 
     private class DebugInfo {
@@ -49,8 +54,8 @@ public class PlayingArea {
         public void draw(Canvas canvas, float x, float y, float maxX, float maxY, float scale) {
             canvas.drawText("X: " + String.valueOf(x), 100, 50, this.linePaint);
             canvas.drawText("Y: " + String.valueOf(y), 100, 100, this.linePaint);
-            canvas.drawText("Max X: " + String.valueOf(maxX), 100, 150, this.linePaint);
-            canvas.drawText("Max Y: " + String.valueOf(maxY), 100, 200, this.linePaint);
+            canvas.drawText("Small: " + String.valueOf(maxX), 100, 150, this.linePaint);
+            canvas.drawText("Large: " + String.valueOf(maxY), 100, 200, this.linePaint);
             canvas.drawText("Scale: " + String.valueOf(scale), 100, 250, this.linePaint);
         }
     }
@@ -169,11 +174,18 @@ public class PlayingArea {
     public void draw(Canvas canvas) {
         int cWidth = canvas.getWidth();
         int cHeight = canvas.getHeight();
-        float cSize = cWidth < cHeight ? cWidth : cHeight;
-        if (params.maxX < 0) params.maxX = cSize;
-        if (params.maxY < 0) params.maxY = cSize;
+        float cSmall = cWidth < cHeight ? cWidth : cHeight;
+        float cBig = cWidth > cHeight ? cWidth : cHeight;
 
-//        new DebugInfo().draw(canvas, params.x, params.y, -params.maxX, -params.maxY, params.scaleFac);
+        if (params.start) {
+            params.maxSmall = cSmall;
+            params.maxLarge = cBig;
+            params.scaleFac = cBig / cSmall;
+            params.start = false;
+        }
+
+        // Comment this in to see info about the view scale/position
+//        new DebugInfo().draw(canvas, params.x, params.y, -params.maxSmall, -params.maxLarge, params.scaleFac);
 
         canvas.save();
         canvas.translate(params.x, params.y);
@@ -186,14 +198,14 @@ public class PlayingArea {
                 Pipe pipe = row[y];
                 if (pipe != null) {
                     float pSize = pipe.getImageSize();
-                    float scale = cSize / (this.width * pSize);
+                    float scale = cSmall / (this.width * pSize);
 
                     float facX = (float) x / this.width;
                     float facY = (y + 1.f) / this.width;
 
                     canvas.save();
 
-                    canvas.translate(facX * cSize, facY * cSize);
+                    canvas.translate(facX * cSmall, facY * cSmall);
                     canvas.scale(scale, scale);
 
                     pipe.draw(canvas);
@@ -215,21 +227,21 @@ public class PlayingArea {
         if (params.y > 0) {
             params.y = 0;
         }
-        if (params.x < (-params.maxX * params.scaleFac) + params.maxX) {
-            params.x = (-params.maxX * params.scaleFac) + params.maxX;
+        if (params.x < (-params.maxSmall * params.scaleFac) + params.maxLarge) {
+            params.x = (-params.maxSmall * params.scaleFac) + params.maxLarge;
         }
-        if (params.y < (-params.maxY * params.scaleFac) + params.maxY) {
-            params.y = (-params.maxY * params.scaleFac) + params.maxY;
+        if (params.y < (-params.maxSmall * params.scaleFac) + params.maxSmall) {
+            params.y = (-params.maxSmall * params.scaleFac) + params.maxSmall;
         }
     }
 
     public void scale(float ratio) {
         params.scaleFac *= ratio;
-        if (params.scaleFac < 1f) {
-            params.scaleFac = 1f;
+        if (params.scaleFac < params.maxLarge / params.maxSmall) {
+            params.scaleFac = params.maxLarge / params.maxSmall;
         } else {
-            float xc = params.maxX / 2f;
-            float yc = params.maxY / 2f;
+            float xc = params.maxSmall / 2f;
+            float yc = params.maxSmall / 2f;
 
             params.x = (params.x - xc) * ratio + xc;
             params.y = (params.y - yc) * ratio + yc;

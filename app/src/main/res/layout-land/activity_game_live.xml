@@ -12,55 +12,67 @@
         android:id="@+id/surrenderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onSurrender"
-        android:text="@string/surrender_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/buttonOpenValve"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:onClick="onSurrender"
+        android:text="@string/surrender_button" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/discard_button"
         android:id="@+id/buttonDiscard"
-        android:layout_below="@+id/buttonInstall"
-        android:layout_alignRight="@+id/buttonOpenValve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/buttonOpenValve"
+        android:layout_alignRight="@+id/buttonOpenValve"
+        android:layout_below="@+id/buttonInstall"
         android:paddingLeft="25dp"
-        android:paddingRight="25dp" />
+        android:paddingRight="25dp"
+        android:text="@string/discard_button" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/install_button"
         android:id="@+id/buttonInstall"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/buttonDiscard"
+        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/buttonDiscard"
+        android:layout_alignWithParentIfMissing="false"
         android:paddingLeft="25dp"
-        android:paddingRight="25dp" />
+        android:paddingRight="25dp"
+        android:text="@string/install_button" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/open_valve_button"
         android:id="@+id/buttonOpenValve"
-        android:layout_below="@+id/buttonDiscard"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-
-
-    <edu.msu.chuppthe.steampunked.GameLiveView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gameView"
-        android:background="@android:color/white"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonDiscard"
+        android:text="@string/open_valve_button" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonDiscard"
         android:layout_toStartOf="@+id/buttonDiscard"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonDiscard" />
+        android:orientation="horizontal">
+
+        <edu.msu.chuppthe.steampunked.PlayingAreaView
+            android:id="@+id/playingView"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/white"
+            android:layout_weight="5" />
+
+        <edu.msu.chuppthe.steampunked.SelectionAreaView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/selectionView"
+            android:layout_weight="1" />
+    </LinearLayout>
 </RelativeLayout>

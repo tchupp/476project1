@@ -49,15 +49,23 @@
         android:layout_alignTop="@+id/buttonInstall"
         android:text="@string/open_valve_button" />
 
-    <edu.msu.chuppthe.steampunked.GameLiveView
-        android:id="@+id/gameView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/buttonInstall"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/white" />
+        android:orientation="vertical">
+
+        <edu.msu.chuppthe.steampunked.PlayingAreaView
+            android:id="@+id/playingView"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4.4"
+            android:background="@android:color/white" />
+
+        <edu.msu.chuppthe.steampunked.SelectionAreaView
+            android:id="@+id/selectionView"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </RelativeLayout>

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class GameLiveView extends View {
+public class PlayingAreaView extends View {
 
     /**
      * Local class to handle the touch status for one touch.
@@ -84,33 +84,26 @@ public class GameLiveView extends View {
     private PlayingArea playingArea;
 
     /**
-     * The selection area
-     */
-    private SelectionArea selectionArea;
-
-    /**
      * Paint for the outline
      */
     private Paint outlinePaint;
 
-    public GameLiveView(Context context) {
+    public PlayingAreaView(Context context) {
         super(context);
         init(null, 0);
     }
 
-    public GameLiveView(Context context, AttributeSet attrs) {
+    public PlayingAreaView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public GameLiveView(Context context, AttributeSet attrs, int defStyle) {
+    public PlayingAreaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        this.selectionArea = new SelectionArea(getContext());
-
         this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.outlinePaint.setColor(Color.BLACK);
         this.outlinePaint.setStyle(Paint.Style.STROKE);
@@ -141,7 +134,6 @@ public class GameLiveView extends View {
         super.onDraw(canvas);
 
         this.playingArea.draw(canvas);
-        this.selectionArea.draw(canvas);
 
         // Draw the outline
         int cWidth = canvas.getWidth();

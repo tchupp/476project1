@@ -2,6 +2,7 @@ package edu.msu.chuppthe.steampunked;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import java.util.ArrayList;
@@ -14,11 +15,20 @@ public class SelectionArea {
      */
     private Paint selectionAreaPaint;
 
+    /**
+     * Paint for the outline
+     */
+    private Paint outlinePaint;
+
     private List<Pipe> pipes;
 
     public SelectionArea(Context context) {
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.selectionAreaPaint.setColor(0xffadf99d);
+
+        this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.outlinePaint.setColor(Color.BLACK);
+        this.outlinePaint.setStyle(Paint.Style.STROKE);
 
         this.pipes = new ArrayList<>();
 
@@ -35,13 +45,12 @@ public class SelectionArea {
 
         int cWidth = canvas.getWidth();
         int cHeight = canvas.getHeight();
-        float cSize = cWidth < cHeight ? cWidth : cHeight;
+        float cSize = cWidth > cHeight ? cWidth : cHeight;
 
-        float top = cWidth < cHeight ? cWidth : 0;
-        float left = cWidth < cHeight ? 0 : cHeight;
+        float top = cWidth > cHeight ? cWidth : 0;
+        float left = cWidth > cHeight ? 0 : cHeight;
 
-        // Draw the selection area
-        canvas.drawRect(left, top, cWidth, cHeight, this.selectionAreaPaint);
+        canvas.drawRect(0, 0, cWidth, cHeight, this.selectionAreaPaint);
 
         for (int i = 0; i < this.pipes.size(); i++) {
             Pipe pipe = this.pipes.get(i);
@@ -49,14 +58,15 @@ public class SelectionArea {
             float pSize = pipe.getImageSize();
             float scale = cSize / (gridSize * pSize);
             float fac = (float) i / (gridSize - 1f);
-            float dx = (left + top * fac);
-            float dy = (top + left * fac);
+            float dx = top * fac;
+            float dy = left * fac;
 
-            if (cWidth < cHeight) {
-                dy += (pSize * 1.25f);
+            if (cWidth > cHeight) {
+                dx += (pSize * 0.1f);
+                dy += (pSize * 1.1f);
             } else {
+                dx += (pSize * 0.25f);
                 dy += (pSize * 0.8f);
-                dx += (pSize * 1f);
             }
 
             canvas.save();
@@ -64,6 +74,7 @@ public class SelectionArea {
             canvas.scale(scale, scale);
 
             pipe.draw(canvas);
+            canvas.drawRect(0, -pSize, pSize, 0, this.outlinePaint);
 
             canvas.restore();
         }
