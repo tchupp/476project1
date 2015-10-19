@@ -257,9 +257,10 @@ public class Pipe {
     public boolean hit(float testX, float testY) {
         float pX = params.xBase + params.xPos;
         float pY = params.yBase + params.yPos;
+        float pSize = this.getImageSize() * params.scaleBase;
 
-        return (pX < testX && testX < pX + this.getImageSize())
-                && (pY - this.getImageSize() < testY && testY < pY);
+        return (pX < testX) && (testX < pX + pSize)
+                && (pY - pSize) < testY && (testY < pY);
     }
 
     /**
@@ -324,7 +325,36 @@ public class Pipe {
         return (float) (pWidth < pHeight ? pWidth : pHeight);
     }
 
+    /**
+     * Set the movable flag for this pipe
+     *
+     * @param isMovable value to set
+     */
     public void setMovable(boolean isMovable) {
         params.isMovable = isMovable;
+    }
+
+    /**
+     * Get the X location of the pipe
+     * @return x location
+     */
+    public float getX() {
+        return params.xBase + params.xPos;
+    }
+
+    /**
+     * Get the Y location of the pipe
+     * @return y location
+     */
+    public float getY() {
+        return params.yBase + params.yPos;
+    }
+
+    /**
+     * Get the scale of the pipe
+     * @return scale
+     */
+    public float getScale() {
+        return params.scaleBase;
     }
 }

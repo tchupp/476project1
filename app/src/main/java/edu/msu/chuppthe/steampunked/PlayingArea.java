@@ -269,8 +269,7 @@ public class PlayingArea {
                 if (id == touch2.id) {
                     touch2.id = -1;
                 } else if (id == touch1.id) {
-                    // Make what was touch2 now be touch1 by
-                    // swapping the objects.
+                    // Make what was touch2 now be touch1
                     Touch t = touch1;
                     touch1 = touch2;
                     touch2 = t;
@@ -291,10 +290,13 @@ public class PlayingArea {
      * Handle a touch message. This is when we get an initial touch
      */
     private void onTouched() {
+        float testX = (touch1.x - params.x) / params.scaleFac;
+        float testY = (touch1.y - params.y) / params.scaleFac;
+
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null) {
-                    if (pipe.hit(touch1.x, touch1.y)) {
+                    if (pipe.hit(testX, testY)) {
                         dragging = pipe;
                         selected = pipe;
                     }
@@ -344,23 +346,20 @@ public class PlayingArea {
      */
     private void move() {
         // If no touch1, we have nothing to do
-        // This should not happen, but it never hurts
-        // to check.
         if (touch1.id < 0) {
             return;
         }
 
         if (touch1.id >= 0) {
-            // At least one touch
-            // We are moving
+            // At least one touch! We are moving
             touch1.computeDeltas();
             if (this.dragging != null) {
-                this.dragging.move(touch1.dX, touch1.dY);
+                this.translatePipe(touch1.dX / params.scaleFac, touch1.dY / params.scaleFac);
+                return;
             } else {
                 this.translate(touch1.dX, touch1.dY);
             }
         }
-
         if (touch2.id >= 0) {
             // Two touches
 
@@ -446,6 +445,17 @@ public class PlayingArea {
         }
         if (params.y < (-params.maxSmall * params.scaleFac) + params.maxSmall) {
             params.y = (-params.maxSmall * params.scaleFac) + params.maxSmall;
+        }
+    }
+
+    private void translatePipe(float dx, float dy) {
+        float x = this.dragging.getX() + dx;
+        float y = this.dragging.getY() + dy;
+        float pSize = this.dragging.getImageSize() * this.dragging.getScale();
+
+        if (x > 0 && (y - pSize) > 0
+                && (x + pSize) < params.maxLarge && y < params.maxSmall) {
+            this.dragging.move(dx, dy);
         }
     }
 
