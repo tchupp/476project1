@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.io.Serializable;
+
 public class Pipe {
 
     public static Pipe createStartingPipe(Context context, String playerName) {
@@ -43,6 +45,53 @@ public class Pipe {
         return capPipe;
     }
 
+    protected class Parameters implements Serializable {
+        /**
+         * X location in the playing area (index into array)
+         */
+        protected int x = 0;
+
+        /**
+         * Y location in the playing area (index into array)
+         */
+        protected int y = 0;
+
+        /**
+         * X position
+         */
+        protected float xPos = 0;
+
+        /**
+         * Y position
+         */
+        protected float yPos = 0;
+
+        /**
+         * Base X position
+         */
+        protected float xBase = 0;
+
+        /**
+         * Base Y position
+         */
+        protected float yBase = 0;
+
+        /**
+         * Base scale
+         */
+        protected float scaleBase;
+
+        /**
+         * Can the piece be moved
+         */
+        protected boolean isMovable = true;
+
+        /**
+         * ID for the pipe image
+         */
+        protected int id;
+    }
+
     /**
      * Playing area this pipe is a member of
      */
@@ -60,46 +109,6 @@ public class Pipe {
     private boolean[] connect = {false, false, false, false};
 
     /**
-     * X location in the playing area (index into array)
-     */
-    protected int x = 0;
-
-    /**
-     * Y location in the playing area (index into array)
-     */
-    protected int y = 0;
-
-    /**
-     * X position
-     */
-    protected float xPos = 0;
-
-    /**
-     * Y position
-     */
-    protected float yPos = 0;
-
-    /**
-     * Base X position
-     */
-    protected float xBase = 0;
-
-    /**
-     * Base Y position
-     */
-    protected float yBase = 0;
-
-    /**
-     * Base scale
-     */
-    protected float scaleBase;
-
-    /**
-     * Can the piece be moved
-     */
-    protected boolean isMovable = true;
-
-    /**
      * Depth-first visited visited
      */
     private boolean visited = false;
@@ -110,14 +119,14 @@ public class Pipe {
     protected Bitmap pipeImage = null;
 
     /**
-     * ID for the pipe image
-     */
-    private int id;
-
-    /**
      * Paint for the outline
      */
     protected Paint outlinePaint;
+
+    /**
+     * The current parameters
+     */
+    protected Parameters params = new Parameters();
 
     /**
      * Constructor
@@ -200,16 +209,16 @@ public class Pipe {
     private Pipe neighbor(int d) {
         switch (d) {
             case 0:
-                return playingArea.getPipe(x, y - 1);
+                return playingArea.getPipe(params.x, params.y - 1);
 
             case 1:
-                return playingArea.getPipe(x + 1, y);
+                return playingArea.getPipe(params.x + 1, params.y);
 
             case 2:
-                return playingArea.getPipe(x, y + 1);
+                return playingArea.getPipe(params.x, params.y + 1);
 
             case 3:
-                return playingArea.getPipe(x - 1, y);
+                return playingArea.getPipe(params.x - 1, params.y);
         }
 
         return null;
@@ -233,8 +242,8 @@ public class Pipe {
      */
     public void setPosition(PlayingArea playingArea, int x, int y) {
         this.playingArea = playingArea;
-        this.x = x;
-        this.y = y;
+        params.x = x;
+        params.y = y;
     }
 
     /**
@@ -244,7 +253,7 @@ public class Pipe {
      * @param id      id of the image
      */
     protected void setId(Context context, int id) {
-        this.id = id;
+        params.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
@@ -272,8 +281,8 @@ public class Pipe {
      * @return smaller side of pipe image
      */
     public float getImageSize() {
-        int pWidth = pipeImage.getWidth();
-        int pHeight = pipeImage.getHeight();
+        int pWidth = this.pipeImage.getWidth();
+        int pHeight = this.pipeImage.getHeight();
         return (float) (pWidth < pHeight ? pWidth : pHeight);
     }
 
@@ -284,8 +293,8 @@ public class Pipe {
      */
     public void draw(Canvas canvas) {
         canvas.save();
-        canvas.translate(this.xBase + this.xPos, this.yBase + this.yPos);
-        canvas.scale(this.scaleBase, this.scaleBase);
+        canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
+        canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(-90);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
@@ -294,21 +303,21 @@ public class Pipe {
     }
 
     public void move(float dx, float dy) {
-        if (this.isMovable) {
-            this.xPos += dx;
-            this.yPos += dy;
+        if (params.isMovable) {
+            params.xPos += dx;
+            params.yPos += dy;
         }
     }
 
     public void setBasePosition(float x, float y, float scale) {
-        this.xBase = x;
-        this.yBase = y;
-        this.scaleBase = scale;
+        params.xBase = x;
+        params.yBase = y;
+        params.scaleBase = scale;
     }
 
     public boolean hit(float testX, float testY) {
-        float pX = this.xBase + this.xPos;
-        float pY = this.yBase + this.yPos;
+        float pX = params.xBase + params.xPos;
+        float pY = params.yBase + params.yPos;
 
         return (pX < testX && testX < pX + this.getImageSize())
                 && (pY - this.getImageSize() < testY && testY < pY);

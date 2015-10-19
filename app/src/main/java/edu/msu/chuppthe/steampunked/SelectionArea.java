@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class SelectionArea {
     /**
@@ -33,18 +34,40 @@ public class SelectionArea {
 
     private List<Pipe> pipes;
 
+    private Random random = new Random();
+    private Context context;
+
     public SelectionArea(Context context) {
+        this.context = context;
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.selectionAreaPaint.setColor(0xffadf99d);
 
         this.pipes = new ArrayList<>();
+        generatePipes(context);
+    }
 
-        //TODO: Replace this with random generation
-        pipes.add(Pipe.createCapPipe(context));
-        pipes.add(Pipe.createStraightPipe(context));
-        pipes.add(Pipe.createNinetyPipe(context));
-        pipes.add(Pipe.createStraightPipe(context));
-        pipes.add(Pipe.createTeePipe(context));
+    private void generatePipes(Context context) {
+        while (this.pipes.size() < 5) {
+            switch (random.nextInt(5)) {
+                case 0:
+                    pipes.add(Pipe.createCapPipe(context));
+                    break;
+                case 1:
+                    pipes.add(Pipe.createTeePipe(context));
+                    break;
+                case 2:
+                    pipes.add(Pipe.createStraightPipe(context));
+                    break;
+                case 3:
+                    pipes.add(Pipe.createNinetyPipe(context));
+                    break;
+                case 4:
+                    pipes.add(Pipe.createStraightPipe(context));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public boolean onTouchEvent(View view, MotionEvent event) {

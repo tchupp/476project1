@@ -1,8 +1,6 @@
 package edu.msu.chuppthe.steampunked;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
 import java.io.Serializable;
 
@@ -10,6 +8,7 @@ import java.io.Serializable;
  * A representation of the playing area
  */
 public class PlayingArea {
+
     private class Parameters implements Serializable {
         /**
          * X location for the left side of the board
@@ -42,24 +41,6 @@ public class PlayingArea {
         private boolean start = true;
     }
 
-    private class DebugInfo {
-        private Paint linePaint;
-
-        public DebugInfo() {
-            this.linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            this.linePaint.setColor(Color.BLACK);
-            this.linePaint.setTextSize(40);
-        }
-
-        public void draw(Canvas canvas, float x, float y, float maxX, float maxY, float scale) {
-            canvas.drawText("X: " + String.valueOf(x), 100, 50, this.linePaint);
-            canvas.drawText("Y: " + String.valueOf(y), 100, 100, this.linePaint);
-            canvas.drawText("Small: " + String.valueOf(maxX), 100, 150, this.linePaint);
-            canvas.drawText("Large: " + String.valueOf(maxY), 100, 200, this.linePaint);
-            canvas.drawText("Scale: " + String.valueOf(scale), 100, 250, this.linePaint);
-        }
-    }
-
     /**
      * Width of the playing area (integer number of cells)
      */
@@ -75,6 +56,18 @@ public class PlayingArea {
      * First level: X, second level Y
      */
     private Pipe[][] pipes;
+
+    /**
+     * This variable is set to a piece we are dragging. If
+     * we are not dragging, the variable is null.
+     */
+    private Pipe dragging = null;
+
+    /**
+     * This variable is set to a piece we most recently selected.
+     * Lets us keep track of which piece we want to discard or install.
+     */
+    private Pipe selected = null;
 
     /**
      * The current parameters
@@ -183,9 +176,6 @@ public class PlayingArea {
             params.scaleFac = cBig / cSmall;
             params.start = false;
         }
-
-        // Comment this in to see info about the view scale/position
-//        new DebugInfo().draw(canvas, params.x, params.y, -params.maxSmall, -params.maxLarge, params.scaleFac);
 
         canvas.save();
         canvas.translate(params.x, params.y);
