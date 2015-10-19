@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class SelectionAreaView extends View {
@@ -52,5 +53,10 @@ public class SelectionAreaView extends View {
         int cWidth = canvas.getWidth();
         int cHeight = canvas.getHeight();
         canvas.drawRect(0, 0, cWidth, cHeight, this.outlinePaint);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return this.selectionArea.onTouchEvent(this, event);
     }
 }

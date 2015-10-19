@@ -203,14 +203,8 @@ public class PlayingArea {
                     float facX = (float) x / this.width;
                     float facY = (y + 1.f) / this.width;
 
-                    canvas.save();
-
-                    canvas.translate(facX * cSmall, facY * cSmall);
-                    canvas.scale(scale, scale);
-
+                    pipe.setBasePosition(facX * cSmall, facY * cSmall, scale);
                     pipe.draw(canvas);
-
-                    canvas.restore();
                 }
             }
         }

@@ -2,33 +2,40 @@ package edu.msu.chuppthe.steampunked;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectionArea {
-
     /**
      * Paint for the selection area
      */
     private Paint selectionAreaPaint;
 
     /**
-     * Paint for the outline
+     * This variable is set to a piece we are dragging. If
+     * we are not dragging, the variable is null.
      */
-    private Paint outlinePaint;
+    private Pipe dragging = null;
+
+    /**
+     * Most recent relative X touch when dragging
+     */
+    private float lastRelX;
+
+    /**
+     * Most recent relative Y touch when dragging
+     */
+    private float lastRelY;
 
     private List<Pipe> pipes;
 
     public SelectionArea(Context context) {
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.selectionAreaPaint.setColor(0xffadf99d);
-
-        this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.outlinePaint.setColor(Color.BLACK);
-        this.outlinePaint.setStyle(Paint.Style.STROKE);
 
         this.pipes = new ArrayList<>();
 
@@ -40,6 +47,65 @@ public class SelectionArea {
         pipes.add(Pipe.createTeePipe(context));
     }
 
+    public boolean onTouchEvent(View view, MotionEvent event) {
+        float relX = event.getX();
+        float relY = event.getY();
+
+        switch (event.getActionMasked()) {
+
+            case MotionEvent.ACTION_DOWN:
+                return onTouched(relX, relY);
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                return onReleased(view);
+
+            case MotionEvent.ACTION_MOVE:
+                // If we are dragging, move the piece and force a redraw
+                if (dragging != null) {
+                    dragging.move(relX - lastRelX, relY - lastRelY);
+                    lastRelX = relX;
+                    lastRelY = relY;
+                    view.invalidate();
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    /**
+     * Handle a touch message. This is when we get an initial touch
+     *
+     * @param x x location for the touch, relative to the puzzle - 0 to 1 over the puzzle
+     * @param y y location for the touch, relative to the puzzle - 0 to 1 over the puzzle
+     * @return true if the touch is handled
+     */
+    private boolean onTouched(float x, float y) {
+
+        // Check each piece to see if it has been hit
+        // We do this in reverse order so we find the pieces in front
+        for (int p = pipes.size() - 1; p >= 0; p--) {
+            if (pipes.get(p).hit(x, y)) {
+                // We hit a piece!
+                dragging = pipes.get(p);
+                lastRelX = x;
+                lastRelY = y;
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean onReleased(View view) {
+        if (dragging != null) {
+            dragging = null;
+            return true;
+        }
+        return false;
+    }
+
     public void draw(Canvas canvas) {
         float gridSize = 6;
 
@@ -47,8 +113,8 @@ public class SelectionArea {
         int cHeight = canvas.getHeight();
         float cSize = cWidth > cHeight ? cWidth : cHeight;
 
-        float top = cWidth > cHeight ? cWidth : 0;
-        float left = cWidth > cHeight ? 0 : cHeight;
+        float horizontal = cWidth > cHeight ? cWidth : 0;
+        float vertical = cWidth > cHeight ? 0 : cHeight;
 
         canvas.drawRect(0, 0, cWidth, cHeight, this.selectionAreaPaint);
 
@@ -58,8 +124,8 @@ public class SelectionArea {
             float pSize = pipe.getImageSize();
             float scale = cSize / (gridSize * pSize);
             float fac = (float) i / (gridSize - 1f);
-            float dx = top * fac;
-            float dy = left * fac;
+            float dx = horizontal * fac;
+            float dy = vertical * fac;
 
             if (cWidth > cHeight) {
                 dx += (pSize * 0.1f);
@@ -69,14 +135,8 @@ public class SelectionArea {
                 dy += (pSize * 0.8f);
             }
 
-            canvas.save();
-            canvas.translate(dx, dy);
-            canvas.scale(scale, scale);
-
+            pipe.setBasePosition(dx, dy, scale);
             pipe.draw(canvas);
-            canvas.drawRect(0, -pSize, pSize, 0, this.outlinePaint);
-
-            canvas.restore();
         }
     }
 }
