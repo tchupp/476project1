@@ -50,12 +50,12 @@ public class Pipe {
         /**
          * X location in the playing area (index into array)
          */
-        protected int x = 0;
+        protected int x = -1;
 
         /**
          * Y location in the playing area (index into array)
          */
-        protected int y = 0;
+        protected int y = -1;
 
         /**
          * X position
@@ -80,7 +80,7 @@ public class Pipe {
         /**
          * Base scale
          */
-        protected float scaleBase;
+        protected float scaleBase = 1f;
 
         /**
          * Can the piece be moved

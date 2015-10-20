@@ -27,7 +27,8 @@
         android:layout_below="@+id/buttonInstall"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="@string/discard_button" />
+        android:text="@string/discard_button"
+        android:onClick="onDiscard" />
 
     <Button
         android:id="@+id/buttonInstall"
@@ -39,7 +40,8 @@
         android:layout_alignWithParentIfMissing="false"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="@string/install_button" />
+        android:text="@string/install_button"
+        android:onClick="onInstall" />
 
     <Button
         android:id="@+id/buttonOpenValve"
@@ -48,7 +50,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/buttonDiscard"
-        android:text="@string/open_valve_button" />
+        android:text="@string/open_valve_button"
+        android:onClick="onOpenValve" />
 
 
     <LinearLayout

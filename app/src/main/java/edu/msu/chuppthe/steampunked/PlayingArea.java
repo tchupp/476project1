@@ -154,8 +154,6 @@ public class PlayingArea {
         this.width = width;
         this.height = height;
 
-        // Allocate the playing area
-        // Java automatically initializes all of the locations to null
         this.pipes = new Pipe[width][height];
     }
 
@@ -293,18 +291,29 @@ public class PlayingArea {
         float testX = (touch1.x - params.x) / params.scaleFac;
         float testY = (touch1.y - params.y) / params.scaleFac;
 
+        if (this.selected != null) {
+            if (this.selected.hit(testX, testY)) {
+                this.dragging = this.selected;
+                return;
+            }
+        }
+
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null) {
                     if (pipe.hit(testX, testY)) {
-                        dragging = pipe;
-                        selected = pipe;
+                        this.dragging = pipe;
+                        this.selected = pipe;
+                        return;
                     }
                 }
             }
         }
     }
 
+    /**
+     * Handle a release message.
+     */
     private void onRelease() {
         if (this.dragging != null) {
             this.dragging = null;
@@ -354,7 +363,7 @@ public class PlayingArea {
             // At least one touch! We are moving
             touch1.computeDeltas();
             if (this.dragging != null) {
-                this.translatePipe(touch1.dX / params.scaleFac, touch1.dY / params.scaleFac);
+                this.translatePipe(touch1.dX / params.scaleFac, touch1.dY / params.scaleFac, this.dragging);
                 return;
             } else {
                 this.translate(touch1.dX, touch1.dY);
@@ -427,12 +436,33 @@ public class PlayingArea {
                 }
             }
         }
+
+        if (this.selected != null) this.selected.draw(canvas);
+
         canvas.restore();
     }
 
-    public void translate(float x, float y) {
-        params.x += x;
-        params.y += y;
+    public void installSelection() {
+        if (this.selected != null) {
+            int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
+            int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
+
+            this.selected.setMovable(false);
+            this.add(this.selected, gridX, gridY);
+
+            this.selected = null;
+        }
+    }
+
+    /**
+     * Translate the view, while keeping it contained in the allowed area
+     *
+     * @param dx delta x to move by
+     * @param dy delta y to move by
+     */
+    private void translate(float dx, float dy) {
+        params.x += dx;
+        params.y += dy;
 
         if (params.x > 0) {
             params.x = 0;
@@ -448,10 +478,17 @@ public class PlayingArea {
         }
     }
 
-    private void translatePipe(float dx, float dy) {
-        float x = this.dragging.getX() + dx;
-        float y = this.dragging.getY() + dy;
-        float pSize = this.dragging.getImageSize() * this.dragging.getScale();
+    /**
+     * Translate the pipe, while keeping it contained in the playing area
+     *
+     * @param dx   delta x to move by
+     * @param dy   delta y to move by
+     * @param pipe pipe to translate
+     */
+    private void translatePipe(float dx, float dy, Pipe pipe) {
+        float x = pipe.getX() + dx;
+        float y = pipe.getY() + dy;
+        float pSize = pipe.getImageSize() * pipe.getScale();
 
         if (x > 0 && (y - pSize) > 0
                 && (x + pSize) < params.maxLarge && y < params.maxSmall) {
@@ -459,7 +496,12 @@ public class PlayingArea {
         }
     }
 
-    public void scale(float ratio) {
+    /**
+     * Scale the view by the given ratio
+     *
+     * @param ratio amount to scale the view by
+     */
+    private void scale(float ratio) {
         params.scaleFac *= ratio;
         if (params.scaleFac < params.maxLarge / params.maxSmall) {
             params.scaleFac = params.maxLarge / params.maxSmall;

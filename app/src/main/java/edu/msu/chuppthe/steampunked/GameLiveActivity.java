@@ -46,6 +46,18 @@ public class GameLiveActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onInstall(View view) {
+        getPlayingAreaView().installSelection();
+    }
+
+    public void onDiscard(View view) {
+
+    }
+
+    public void onOpenValve(View view) {
+
+    }
+
     public void onSurrender(View view) {
         Intent intent = new Intent(this, GameOverActivity.class);
         startActivity(intent);

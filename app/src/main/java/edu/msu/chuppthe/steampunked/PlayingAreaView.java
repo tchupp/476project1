@@ -77,4 +77,9 @@ public class PlayingAreaView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         return this.playingArea.onTouchEvent(this, event);
     }
+
+    public void installSelection() {
+        this.playingArea.installSelection();
+        invalidate();
+    }
 }
