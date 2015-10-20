@@ -28,7 +28,7 @@ public class Pipe {
     }
 
     public static Pipe createCapPipe(Context context, Player player) {
-        Pipe capPipe = new Pipe(false, false, true, false);
+        Pipe capPipe = new Pipe(false, false, false, true);
         capPipe.setId(context, R.drawable.cap);
 
         capPipe.setPlayer(player);
@@ -36,7 +36,7 @@ public class Pipe {
     }
 
     public static Pipe createTeePipe(Context context, Player player) {
-        Pipe teePipe = new Pipe(true, true, true, false);
+        Pipe teePipe = new Pipe(true, true, false, true);
         teePipe.setId(context, R.drawable.tee);
 
         teePipe.setPlayer(player);
@@ -44,7 +44,7 @@ public class Pipe {
     }
 
     public static Pipe createNinetyPipe(Context context, Player player) {
-        Pipe ninetyPipe = new Pipe(false, true, true, false);
+        Pipe ninetyPipe = new Pipe(true, true, false, false);
         ninetyPipe.setId(context, R.drawable.ninety);
 
         ninetyPipe.setPlayer(player);
@@ -52,7 +52,7 @@ public class Pipe {
     }
 
     public static Pipe createStraightPipe(Context context, Player player) {
-        Pipe straightPipe = new Pipe(true, false, true, false);
+        Pipe straightPipe = new Pipe(false, true, false, true);
         straightPipe.setId(context, R.drawable.straight);
 
         straightPipe.setPlayer(player);
@@ -226,21 +226,7 @@ public class Pipe {
      * @return Pipe object or null if no neighbor
      */
     private Pipe neighbor(int d) {
-        switch (d) {
-            case 0:
-                return playingArea.getPipe(params.x, params.y - 1);
-
-            case 1:
-                return playingArea.getPipe(params.x + 1, params.y);
-
-            case 2:
-                return playingArea.getPipe(params.x, params.y + 1);
-
-            case 3:
-                return playingArea.getPipe(params.x - 1, params.y);
-        }
-
-        return null;
+        return playingArea.neighbor(d, params.x, params.y);
     }
 
     /**
@@ -357,7 +343,7 @@ public class Pipe {
      *
      * @return x location
      */
-    public float getX() {
+    public float getPositionX() {
         return params.xBase + params.xPos;
     }
 
@@ -366,7 +352,7 @@ public class Pipe {
      *
      * @return y location
      */
-    public float getY() {
+    public float getPositionY() {
         return params.yBase + params.yPos;
     }
 
@@ -385,6 +371,10 @@ public class Pipe {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public boolean canConnect(int d) {
+        return connect[d];
     }
 
     /**

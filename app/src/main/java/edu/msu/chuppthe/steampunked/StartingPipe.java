@@ -39,7 +39,7 @@ public class StartingPipe extends Pipe {
         int pHeight = this.pipeImage.getHeight();
 
         canvas.save();
-        canvas.translate(this.getX(), this.getY());
+        canvas.translate(this.getPositionX(), this.getPositionY());
         canvas.scale(this.getScale(), this.getScale());
 
         canvas.save();

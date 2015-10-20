@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 public class GameLiveActivity extends AppCompatActivity {
 
@@ -36,11 +37,19 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onInstall(View view) {
-        getPlayingAreaView().installSelection();
+        if (getPlayingAreaView().installSelection()) {
+            changeTurn();
+        } else {
+            Toast.makeText(this, "Install Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onDiscard(View view) {
-        getPlayingAreaView().discardSelection();
+        if (getPlayingAreaView().discardSelection()) {
+            changeTurn();
+        } else {
+            Toast.makeText(this, "Discard Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onOpenValve(View view) {
@@ -58,6 +67,12 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public Player getActivePlayer() {
         return activePlayer;
+    }
+
+    private void changeTurn() {
+        this.activePlayer = (this.activePlayer == this.playerTwo) ? this.playerOne : this.playerTwo;
+
+        getSelectionAreaView().startTurn(this.activePlayer);
     }
 
     private PlayingAreaView getPlayingAreaView() {

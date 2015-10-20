@@ -89,17 +89,21 @@ public class PlayingAreaView extends View {
     /**
      * Tell the playing area to install the selection and invalidate the view
      */
-    public void installSelection() {
-        this.playingArea.installSelection();
+    public boolean installSelection() {
+        boolean success = this.playingArea.installSelection();
         invalidate();
+
+        return success;
     }
 
     /**
      * Tell the playing area to discard the selection and invalidate the view
      */
-    public void discardSelection() {
-        this.playingArea.discardSelection();
+    public boolean discardSelection() {
+        boolean success = this.playingArea.discardSelection();
         invalidate();
+
+        return success;
     }
 
     /**

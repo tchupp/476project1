@@ -221,8 +221,8 @@ public class SelectionArea {
         float dx = relX - lastRelX;
         float dy = relY - lastRelY;
 
-        float x = dragging.getX() + dx;
-        float y = dragging.getY() + dy;
+        float x = dragging.getPositionX() + dx;
+        float y = dragging.getPositionY() + dy;
         float pSize = dragging.getImageSize() * dragging.getScale();
 
         if ((x > 0) && (y - pSize / 2 > 0)

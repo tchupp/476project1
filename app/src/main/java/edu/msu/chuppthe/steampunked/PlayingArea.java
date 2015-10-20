@@ -330,6 +330,30 @@ public class PlayingArea {
     }
 
     /**
+     * Find the neighbor of this pipe
+     *
+     * @param d Index (north=0, east=1, south=2, west=3)
+     * @return Pipe object or null if no neighbor
+     */
+    public Pipe neighbor(int d, int x, int y) {
+        switch (d) {
+            case 0:
+                return this.getPipe(x, y - 1);
+
+            case 1:
+                return this.getPipe(x + 1, y);
+
+            case 2:
+                return this.getPipe(x, y + 1);
+
+            case 3:
+                return this.getPipe(x - 1, y);
+        }
+
+        return null;
+    }
+
+    /**
      * Install the selected pipe
      */
     public boolean installSelection() {
@@ -337,16 +361,34 @@ public class PlayingArea {
             return false;
         }
 
-        int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
-        int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
+        int gridX = Math.round(selected.getPositionX() * this.width / params.maxSmall);
+        int gridY = Math.round(selected.getPositionY() * this.width / params.maxSmall - 1);
 
-        this.selected.resetMovement();
-        this.selected.setMovable(false);
+        if (this.pipes[gridX][gridY] == null) {
+            for (int d = 0; d < 4; d++) {
+                Pipe n = neighbor(d, gridX, gridY);
+                if (n == null) {
+                    continue;
+                }
 
-        this.add(this.selected, gridX, gridY);
+                int dp = (d + 2) % 4;
+                if ((n.canConnect(dp)) != selected.canConnect(d)) {
+                    return false;
+                }
+                if ((selected.getPlayer() != n.getPlayer())) {
+                    return false;
+                }
+            }
 
-        this.selected = null;
-        return true;
+            // If the piece is good to install
+            this.selected.resetMovement();
+            this.selected.setMovable(false);
+            add(this.selected, gridX, gridY);
+            this.selected = null;
+
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -372,9 +414,8 @@ public class PlayingArea {
 
         float pSize = this.selected.getImageSize();
         float scale = params.maxSmall / (this.width * pSize);
-        float scaledSize = pSize * this.selected.getScale();
 
-        float x = this.selected.getX();
+        float x = this.selected.getPositionX();
         float y = params.maxSmall / params.scaleFac;
 
         this.selected.setBasePosition(x, y, scale);
@@ -529,8 +570,8 @@ public class PlayingArea {
      * @param pipe pipe to translate
      */
     private void translatePipe(float dx, float dy, Pipe pipe) {
-        float x = pipe.getX() + dx;
-        float y = pipe.getY() + dy;
+        float x = pipe.getPositionX() + dx;
+        float y = pipe.getPositionY() + dy;
         float pSize = pipe.getImageSize() * pipe.getScale();
 
         if (x > 0 && (y - pSize) > 0
