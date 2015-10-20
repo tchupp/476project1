@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,7 +14,7 @@ public class PlayingAreaView extends View {
     /**
      * The play area
      */
-    private PlayingArea playingArea;
+    private PlayingArea playingArea = new PlayingArea(0, 0);
 
     /**
      * Paint for the outline
@@ -41,6 +42,13 @@ public class PlayingAreaView extends View {
         this.outlinePaint.setStyle(Paint.Style.STROKE);
     }
 
+    /**
+     * Initialize
+     *
+     * @param gridSize  size of the playing grid. 5, 10, or 20 square
+     * @param playerOne player one name
+     * @param playerTwo player two name
+     */
     public void setupPlayArea(int gridSize, String playerOne, String playerTwo) {
         int totalGridSize = 5 * gridSize;
         int startingX = 0;
@@ -74,15 +82,31 @@ public class PlayingAreaView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         return this.playingArea.onTouchEvent(this, event);
     }
 
+    /**
+     * Tell the playing area to install the selection and invalidate the view
+     */
     public void installSelection() {
         this.playingArea.installSelection();
         invalidate();
     }
 
+    /**
+     * Tell the playing area to discard the selection and invalidate the view
+     */
+    public void discardSelection() {
+        this.playingArea.discardSelection();
+        invalidate();
+    }
+
+    /**
+     * Add the selected pipe from the SelectionArea to the PlayingArea
+     *
+     * @param pipe pipe that has been selected
+     */
     public void notifyPieceSelected(Pipe pipe) {
         this.playingArea.setSelected(pipe);
         invalidate();

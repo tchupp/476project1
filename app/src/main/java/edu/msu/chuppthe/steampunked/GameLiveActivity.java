@@ -51,7 +51,7 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onDiscard(View view) {
-
+        getPlayingAreaView().discardSelection();
     }
 
     public void onOpenValve(View view) {

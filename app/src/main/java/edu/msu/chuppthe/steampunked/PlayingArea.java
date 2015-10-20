@@ -332,18 +332,33 @@ public class PlayingArea {
     /**
      * Install the selected pipe
      */
-    public void installSelection() {
-        if (this.selected != null) {
-            int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
-            int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
-
-            this.selected.resetMovement();
-            this.selected.setMovable(false);
-
-            this.add(this.selected, gridX, gridY);
-
-            this.selected = null;
+    public boolean installSelection() {
+        if (this.selected == null) {
+            return false;
         }
+
+        int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
+        int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
+
+        this.selected.resetMovement();
+        this.selected.setMovable(false);
+
+        this.add(this.selected, gridX, gridY);
+
+        this.selected = null;
+        return true;
+    }
+
+    /**
+     * Discard the selected pipe
+     */
+    public boolean discardSelection() {
+        if (this.selected == null) {
+            return false;
+        }
+
+        this.selected = null;
+        return true;
     }
 
     /**
