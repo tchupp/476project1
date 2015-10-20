@@ -28,7 +28,7 @@ public class Pipe {
     }
 
     public static Pipe createCapPipe(Context context, Player player) {
-        Pipe capPipe = new Pipe(false, false, false, true);
+        Pipe capPipe = new Pipe(false, true, false, false);
         capPipe.setId(context, R.drawable.cap);
 
         capPipe.setPlayer(player);

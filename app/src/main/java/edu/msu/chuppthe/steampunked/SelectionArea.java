@@ -163,6 +163,8 @@ public class SelectionArea {
                     break;
             }
         }
+
+        setAllPipesMovable(player, true);
     }
 
     /**
@@ -233,6 +235,8 @@ public class SelectionArea {
         if (y - pSize / 2 <= 0) {
             view.notifyPieceSelected(this.dragging);
             this.pipeMap.get(player).remove(this.dragging);
+
+            setAllPipesMovable(player, false);
         }
 
         lastRelX = relX;
@@ -240,5 +244,15 @@ public class SelectionArea {
 
         view.invalidate();
         return true;
+    }
+
+
+    private void setAllPipesMovable(Player player, boolean isMovable) {
+        List<Pipe> pipes = this.pipeMap.get(player);
+        if (pipes == null) return;
+
+        for (Pipe pipe : pipes) {
+            pipe.setMovable(isMovable);
+        }
     }
 }

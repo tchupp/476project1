@@ -365,19 +365,8 @@ public class PlayingArea {
         int gridY = Math.round(selected.getPositionY() * this.width / params.maxSmall - 1);
 
         if (this.pipes[gridX][gridY] == null) {
-            for (int d = 0; d < 4; d++) {
-                Pipe n = neighbor(d, gridX, gridY);
-                if (n == null) {
-                    continue;
-                }
-
-                int dp = (d + 2) % 4;
-                if ((n.canConnect(dp)) != selected.canConnect(d)) {
-                    return false;
-                }
-                if ((selected.getPlayer() != n.getPlayer())) {
-                    return false;
-                }
+            if (!checkConnected(gridX, gridY)) {
+                return false;
             }
 
             // If the piece is good to install
@@ -389,6 +378,29 @@ public class PlayingArea {
             return true;
         }
         return false;
+    }
+
+    private boolean checkConnected(int gridX, int gridY) {
+        boolean hasNeighbor = false;
+
+        for (int d = 0; d < 4; d++) {
+            Pipe n = neighbor(d, gridX, gridY);
+            if (n == null) {
+                continue;
+            }
+            hasNeighbor = true;
+
+            int dp = (d + 2) % 4;
+            if (!(n.canConnect(dp) && selected.canConnect(d))) {
+                // Either cannot connect
+                return false;
+            }
+            if ((selected.getPlayer() != n.getPlayer())) {
+                // Pieces have different player
+                return false;
+            }
+        }
+        return hasNeighbor;
     }
 
     /**
