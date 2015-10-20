@@ -14,61 +14,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="20dp"
         android:nestedScrollingEnabled="false"
         android:onClick="onStart"
-        android:text="@string/start_button" />
+        android:text="@string/start_button"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:id="@+id/playerOneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/playerOneTextField"
         android:text="@string/player_one_lable"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_above="@+id/playerTwoTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/playerOneTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/startButton"
-        android:layout_alignParentEnd="false"
-        android:layout_toEndOf="@id/playerOneTextView"
-        android:layout_toLeftOf="@+id/startButton"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_above="@+id/playerTwoTextField"
+        android:layout_alignLeft="@+id/playerTwoTextField"
+        android:layout_alignParentStart="false"
+        android:layout_toStartOf="@id/gridRadioGroup"
+        android:layout_toEndOf="@id/playerOneTextView" />
 
     <TextView
         android:id="@+id/playerTwoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/playerTwoTextField"
         android:text="@string/player_two_lable"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/playerTwoTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="false"
-        android:layout_below="@+id/startButton"
-        android:layout_toEndOf="@id/playerTwoTextView"
-        android:layout_toLeftOf="@+id/startButton"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/playerTwoTextView"
+        android:layout_toEndOf="@+id/playerTwoTextView"
+        android:layout_toStartOf="@id/gridRadioGroup" />
 
     <RadioGroup
         android:id="@+id/gridRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/playerTwoTextField"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/startButton"
+        android:orientation="vertical"
+        android:layout_alignLeft="@+id/startButton"
+        android:layout_alignRight="@+id/startButton">
 
         <RadioButton
             android:id="@+id/gridFiveRadio"
@@ -84,7 +85,6 @@
             android:id="@+id/gridTenRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/ten_grid" />
@@ -93,10 +93,21 @@
             android:id="@+id/gridTwentyRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/twenty_grid" />
     </RadioGroup>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/playerOneTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/startButton"
+        android:contentDescription="@string/splash"
+        android:baselineAlignBottom="false"
+        android:src="@drawable/splash" />
 
 </RelativeLayout>
