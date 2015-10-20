@@ -63,6 +63,10 @@ public class GameLiveActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onPieceSelected(Pipe pipe) {
+        getPlayingAreaView().notifyPieceSelected(pipe);
+    }
+
     private PlayingAreaView getPlayingAreaView() {
         return (PlayingAreaView) findViewById(R.id.playingView);
     }

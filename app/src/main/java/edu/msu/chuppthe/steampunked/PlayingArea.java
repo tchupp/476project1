@@ -285,6 +285,88 @@ public class PlayingArea {
     }
 
     /**
+     * Draw all the pieces to the canvas
+     *
+     * @param canvas canvas to draw to
+     */
+    public void draw(Canvas canvas) {
+        int cWidth = canvas.getWidth();
+        int cHeight = canvas.getHeight();
+        float cSmall = cWidth < cHeight ? cWidth : cHeight;
+        float cBig = cWidth > cHeight ? cWidth : cHeight;
+
+        if (params.start) {
+            params.maxSmall = cSmall;
+            params.maxLarge = cBig;
+            params.scaleFac = cBig / cSmall;
+            params.start = false;
+        }
+
+        canvas.save();
+        canvas.translate(params.x, params.y);
+        canvas.scale(params.scaleFac, params.scaleFac);
+
+        // Draw the pipes
+        for (int x = 0; x < pipes.length; x++) {
+            Pipe[] row = pipes[x];
+            for (int y = 0; y < row.length; y++) {
+                Pipe pipe = row[y];
+                if (pipe != null) {
+                    float pSize = pipe.getImageSize();
+                    float scale = cSmall / (this.width * pSize);
+
+                    float facX = (float) x / this.width;
+                    float facY = (y + 1.f) / this.width;
+
+                    pipe.setBasePosition(facX * cSmall, facY * cSmall, scale);
+                    pipe.draw(canvas);
+                }
+            }
+        }
+
+        if (this.selected != null) this.selected.draw(canvas);
+
+        canvas.restore();
+    }
+
+    /**
+     * Install the selected pipe
+     */
+    public void installSelection() {
+        if (this.selected != null) {
+            int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
+            int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
+
+            this.selected.resetMovement();
+            this.selected.setMovable(false);
+
+            this.add(this.selected, gridX, gridY);
+
+            this.selected = null;
+        }
+    }
+
+    /**
+     * Set the selected piece from the selection area
+     *
+     * @param selected pipe from the selection area
+     */
+    public void setSelected(Pipe selected) {
+        this.selected = selected;
+        this.dragging = selected;
+
+        float pSize = this.selected.getImageSize();
+        float scale = params.maxSmall / (this.width * pSize);
+        float scaledSize = pSize * this.selected.getScale();
+
+        float x = this.selected.getX();
+        float y = params.maxSmall / params.scaleFac;
+
+        this.selected.setBasePosition(x, y, scale);
+        this.selected.resetMovement();
+    }
+
+    /**
      * Handle a touch message. This is when we get an initial touch
      */
     private void onTouched() {
@@ -363,10 +445,13 @@ public class PlayingArea {
             // At least one touch! We are moving
             touch1.computeDeltas();
             if (this.dragging != null) {
-                this.translatePipe(touch1.dX / params.scaleFac, touch1.dY / params.scaleFac, this.dragging);
+                float dx = touch1.dX / params.scaleFac;
+                float dy = touch1.dY / params.scaleFac;
+
+                translatePipe(dx, dy, this.dragging);
                 return;
             } else {
-                this.translate(touch1.dX, touch1.dY);
+                translate(touch1.dX, touch1.dY);
             }
         }
         if (touch2.id >= 0) {
@@ -395,63 +480,6 @@ public class PlayingArea {
         float dx = x2 - x1;
         float dy = y2 - y1;
         return (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    }
-
-    /**
-     * Draw all the pieces to the canvas
-     *
-     * @param canvas canvas to draw to
-     */
-    public void draw(Canvas canvas) {
-        int cWidth = canvas.getWidth();
-        int cHeight = canvas.getHeight();
-        float cSmall = cWidth < cHeight ? cWidth : cHeight;
-        float cBig = cWidth > cHeight ? cWidth : cHeight;
-
-        if (params.start) {
-            params.maxSmall = cSmall;
-            params.maxLarge = cBig;
-            params.scaleFac = cBig / cSmall;
-            params.start = false;
-        }
-
-        canvas.save();
-        canvas.translate(params.x, params.y);
-        canvas.scale(params.scaleFac, params.scaleFac);
-
-        // Draw the pipes
-        for (int x = 0; x < pipes.length; x++) {
-            Pipe[] row = pipes[x];
-            for (int y = 0; y < row.length; y++) {
-                Pipe pipe = row[y];
-                if (pipe != null) {
-                    float pSize = pipe.getImageSize();
-                    float scale = cSmall / (this.width * pSize);
-
-                    float facX = (float) x / this.width;
-                    float facY = (y + 1.f) / this.width;
-
-                    pipe.setBasePosition(facX * cSmall, facY * cSmall, scale);
-                    pipe.draw(canvas);
-                }
-            }
-        }
-
-        if (this.selected != null) this.selected.draw(canvas);
-
-        canvas.restore();
-    }
-
-    public void installSelection() {
-        if (this.selected != null) {
-            int gridX = Math.round(selected.getX() * this.width / params.maxSmall);
-            int gridY = Math.round(selected.getY() * this.width / params.maxSmall - 1);
-
-            this.selected.setMovable(false);
-            this.add(this.selected, gridX, gridY);
-
-            this.selected = null;
-        }
     }
 
     /**
@@ -492,7 +520,7 @@ public class PlayingArea {
 
         if (x > 0 && (y - pSize) > 0
                 && (x + pSize) < params.maxLarge && y < params.maxSmall) {
-            this.dragging.move(dx, dy);
+            pipe.move(dx, dy);
         }
     }
 

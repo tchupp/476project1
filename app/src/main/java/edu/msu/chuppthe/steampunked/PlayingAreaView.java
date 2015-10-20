@@ -82,4 +82,9 @@ public class PlayingAreaView extends View {
         this.playingArea.installSelection();
         invalidate();
     }
+
+    public void notifyPieceSelected(Pipe pipe) {
+        this.playingArea.setSelected(pipe);
+        invalidate();
+    }
 }

@@ -336,6 +336,7 @@ public class Pipe {
 
     /**
      * Get the X location of the pipe
+     *
      * @return x location
      */
     public float getX() {
@@ -344,6 +345,7 @@ public class Pipe {
 
     /**
      * Get the Y location of the pipe
+     *
      * @return y location
      */
     public float getY() {
@@ -352,9 +354,18 @@ public class Pipe {
 
     /**
      * Get the scale of the pipe
+     *
      * @return scale
      */
     public float getScale() {
         return params.scaleBase;
+    }
+
+    /**
+     * Set the x and y position to 0
+     */
+    public void resetMovement() {
+        params.xPos = 0;
+        params.yPos = 0;
     }
 }

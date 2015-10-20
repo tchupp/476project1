@@ -59,4 +59,9 @@ public class SelectionAreaView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         return this.selectionArea.onTouchEvent(this, event);
     }
+
+    public void notifyPieceSelected(Pipe pipe) {
+        GameLiveActivity activity = (GameLiveActivity) getContext();
+        activity.onPieceSelected(pipe);
+    }
 }
