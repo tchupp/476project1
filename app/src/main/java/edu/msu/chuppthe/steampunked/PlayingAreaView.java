@@ -43,13 +43,13 @@ public class PlayingAreaView extends View {
     }
 
     /**
-     * Initialize
+     * Initialize the playing area
      *
      * @param gridSize  size of the playing grid. 5, 10, or 20 square
      * @param playerOne player one name
      * @param playerTwo player two name
      */
-    public void setupPlayArea(int gridSize, String playerOne, String playerTwo) {
+    public void setupPlayArea(int gridSize, Player playerOne, Player playerTwo) {
         int totalGridSize = 5 * gridSize;
         int startingX = 0;
         int endingX = totalGridSize - 1;
@@ -63,8 +63,8 @@ public class PlayingAreaView extends View {
         this.playingArea.add(player1StartPipe, startingX, player1Y);
         this.playingArea.add(player2StartPipe, startingX, player2Y);
 
-        Pipe player1EndPipe = Pipe.createEndingPipe(getContext());
-        Pipe player2EndPipe = Pipe.createEndingPipe(getContext());
+        Pipe player1EndPipe = Pipe.createEndingPipe(getContext(), playerOne);
+        Pipe player2EndPipe = Pipe.createEndingPipe(getContext(), playerTwo);
         this.playingArea.add(player1EndPipe, endingX, player1Y + 1);
         this.playingArea.add(player2EndPipe, endingX, player2Y + 1);
     }

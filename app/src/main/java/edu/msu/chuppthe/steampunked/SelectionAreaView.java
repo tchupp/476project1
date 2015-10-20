@@ -37,7 +37,7 @@ public class SelectionAreaView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        this.selectionArea = new SelectionArea(getContext());
+        this.selectionArea = new SelectionArea();
 
         this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.outlinePaint.setColor(Color.BLACK);
@@ -48,7 +48,7 @@ public class SelectionAreaView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        this.selectionArea.draw(canvas);
+        this.selectionArea.draw(canvas, getActivePlayer());
 
         // Draw the outline
         int cWidth = canvas.getWidth();
@@ -58,11 +58,22 @@ public class SelectionAreaView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        return this.selectionArea.onTouchEvent(this, event);
+        return this.selectionArea.onTouchEvent(this, event, getActivePlayer());
+    }
+
+    public void startTurn(Player player) {
+        this.selectionArea.generatePipes(getContext(), player);
+        invalidate();
     }
 
     public void notifyPieceSelected(Pipe pipe) {
         GameLiveActivity activity = (GameLiveActivity) getContext();
         activity.onPieceSelected(pipe);
     }
+
+    private Player getActivePlayer() {
+        GameLiveActivity activity = (GameLiveActivity) getContext();
+        return activity.getActivePlayer();
+    }
+
 }

@@ -11,38 +11,51 @@ import java.io.Serializable;
 
 public class Pipe {
 
-    public static Pipe createStartingPipe(Context context, String playerName) {
-        return new StartingPipe(context, playerName);
+    public static Pipe createStartingPipe(Context context, Player player) {
+        StartingPipe startingPipe = new StartingPipe(context);
+
+        player.setStartingPipe(startingPipe);
+        return startingPipe;
     }
 
-    public static Pipe createEndingPipe(Context context) {
+    public static Pipe createEndingPipe(Context context, Player player) {
         Pipe endingPipe = new Pipe(false, false, false, true);
         endingPipe.setId(context, R.drawable.gauge);
         endingPipe.setMovable(false);
+
+        endingPipe.setPlayer(player);
         return endingPipe;
     }
 
-    public static Pipe createCapPipe(Context context) {
+    public static Pipe createCapPipe(Context context, Player player) {
         Pipe capPipe = new Pipe(false, false, true, false);
         capPipe.setId(context, R.drawable.cap);
+
+        capPipe.setPlayer(player);
         return capPipe;
     }
 
-    public static Pipe createTeePipe(Context context) {
+    public static Pipe createTeePipe(Context context, Player player) {
         Pipe teePipe = new Pipe(true, true, true, false);
         teePipe.setId(context, R.drawable.tee);
+
+        teePipe.setPlayer(player);
         return teePipe;
     }
 
-    public static Pipe createNinetyPipe(Context context) {
+    public static Pipe createNinetyPipe(Context context, Player player) {
         Pipe ninetyPipe = new Pipe(false, true, true, false);
         ninetyPipe.setId(context, R.drawable.ninety);
+
+        ninetyPipe.setPlayer(player);
         return ninetyPipe;
     }
 
-    public static Pipe createStraightPipe(Context context) {
+    public static Pipe createStraightPipe(Context context, Player player) {
         Pipe straightPipe = new Pipe(true, false, true, false);
         straightPipe.setId(context, R.drawable.straight);
+
+        straightPipe.setPlayer(player);
         return straightPipe;
     }
 
@@ -99,12 +112,17 @@ public class Pipe {
     private PlayingArea playingArea = null;
 
     /**
+     * The player that owns the pipe
+     */
+    private Player player;
+
+    /**
      * Array that indicates which sides of this pipe
      * has flanges. The order is north, east, south, west.
-     * <p>
+     * <p/>
      * As an example, a T that has a horizontal pipe
      * with the T open to the bottom would be:
-     * <p>
+     * <p/>
      * false, true, true, true
      */
     private boolean[] connect = {false, false, false, false};
@@ -150,7 +168,7 @@ public class Pipe {
 
     /**
      * Search to see if there are any downstream of this pipe
-     * <p>
+     * <p/>
      * This does a simple depth-first search to find any connections
      * that are not, in turn, connected to another pipe. It also
      * set the visited flag in all pipes it does visit, so you can
@@ -359,6 +377,14 @@ public class Pipe {
      */
     public float getScale() {
         return params.scaleBase;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     /**

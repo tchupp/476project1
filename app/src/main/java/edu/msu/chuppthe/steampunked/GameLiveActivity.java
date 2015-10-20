@@ -3,11 +3,15 @@ package edu.msu.chuppthe.steampunked;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 public class GameLiveActivity extends AppCompatActivity {
+
+    private Player playerOne;
+
+    private Player playerTwo;
+
+    private Player activePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,29 +25,14 @@ public class GameLiveActivity extends AppCompatActivity {
         String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
         String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
 
-        getPlayingAreaView().setupPlayArea(gridSize, playerOneName, playerTwoName);
-    }
+        this.playerOne = new Player(playerOneName);
+        this.playerTwo = new Player(playerTwoName);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game_live, menu);
-        return true;
-    }
+        getPlayingAreaView().setupPlayArea(gridSize, this.playerOne, this.playerTwo);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        this.activePlayer = this.playerOne;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        getSelectionAreaView().startTurn(this.activePlayer);
     }
 
     public void onInstall(View view) {
@@ -65,6 +54,10 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void onPieceSelected(Pipe pipe) {
         getPlayingAreaView().notifyPieceSelected(pipe);
+    }
+
+    public Player getActivePlayer() {
+        return activePlayer;
     }
 
     private PlayingAreaView getPlayingAreaView() {

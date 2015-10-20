@@ -9,11 +9,6 @@ import android.graphics.Paint;
 
 public class StartingPipe extends Pipe {
     /**
-     * Name of the player
-     */
-    private String playerName;
-
-    /**
      * Image for the pipe
      */
     private Bitmap handleImage;
@@ -26,12 +21,11 @@ public class StartingPipe extends Pipe {
     /**
      * Constructor
      */
-    public StartingPipe(Context context, String playerName) {
+    public StartingPipe(Context context) {
         super(false, true, false, false);
-        this.playerName = playerName;
         this.handleImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
         this.setId(context, R.drawable.straight);
-        params.isMovable = false;
+        this.setMovable(false);
 
         this.namePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.namePaint.setColor(Color.BLACK);
@@ -45,8 +39,8 @@ public class StartingPipe extends Pipe {
         int pHeight = this.pipeImage.getHeight();
 
         canvas.save();
-        canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
-        canvas.scale(params.scaleBase, params.scaleBase);
+        canvas.translate(this.getX(), this.getY());
+        canvas.scale(this.getScale(), this.getScale());
 
         canvas.save();
         canvas.rotate(-90);
@@ -64,7 +58,7 @@ public class StartingPipe extends Pipe {
         canvas.save();
         canvas.translate(pWidth / 2.f, pHeight / 8.f);
 
-        canvas.drawText(this.playerName, 0, 0, this.namePaint);
+        canvas.drawText(this.getPlayer().getName(), 0, 0, this.namePaint);
         canvas.restore();
 
         canvas.restore();

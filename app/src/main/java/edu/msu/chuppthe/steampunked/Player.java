@@ -1,15 +1,25 @@
 package edu.msu.chuppthe.steampunked;
 
-/**
- * Created by abigaelonchiri on 10/20/15.
- */
 public class Player {
 
-    private Player Player1;
-    private Player Player2;
-    private Player ActivePlayer;
+    private String playerName;
 
-    public void setActivePlayer(Player activePlayer) {
-        ActivePlayer = activePlayer;
+    private StartingPipe startingPipe;
+
+    public Player(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getName() {
+        return playerName;
+    }
+
+    public StartingPipe getStartingPipe() {
+        return startingPipe;
+    }
+
+    public void setStartingPipe(StartingPipe startingPipe) {
+        this.startingPipe = startingPipe;
+        startingPipe.setPlayer(this);
     }
 }
