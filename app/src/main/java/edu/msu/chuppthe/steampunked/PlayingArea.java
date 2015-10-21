@@ -5,13 +5,17 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
+
 
 /**
  * A representation of the playing area
  */
 public class PlayingArea {
+
+
+
+
 
     private class Parameters implements Serializable {
         /**
@@ -43,6 +47,8 @@ public class PlayingArea {
          * Do the params need initializing?
          */
         private boolean start = true;
+
+        public boolean leaking = false;
     }
 
     /**
@@ -94,6 +100,14 @@ public class PlayingArea {
             lastY = y;
         }
 
+        public boolean isLeaking() {
+            return params.leaking;
+        }
+
+        public void setLeaking(boolean leaking) {
+            params.leaking = leaking;
+        }
+
         /**
          * Compute the values of dX and dY
          */
@@ -112,6 +126,9 @@ public class PlayingArea {
      * Height of the playing area (integer number of cells)
      */
     private int height;
+
+
+
 
     /**
      * Storage for the pipes
@@ -325,6 +342,8 @@ public class PlayingArea {
                 }
             }
         }
+
+
 
         if (this.selected != null) this.selected.draw(canvas);
 
