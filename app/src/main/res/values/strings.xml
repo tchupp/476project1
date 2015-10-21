@@ -25,4 +25,5 @@
     <string name="ten_grid">10 X 10</string>
     <string name="twenty_grid">20 X 20</string>
     <string name="splash">Steam Punked Splash</string>
+    <string name="rotate_button">Rotate</string>
 </resources>

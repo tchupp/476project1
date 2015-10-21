@@ -59,6 +59,12 @@ public class GameLiveActivity extends AppCompatActivity {
 
     }
 
+    public void onRotate(View view) {
+        if (!getPlayingAreaView().rotateSelected()) {
+            Toast.makeText(this, "Please Select A Pipe First.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void onSurrender(View view) {
         Intent intent = new Intent(this, GameOverActivity.class);
         startActivity(intent);

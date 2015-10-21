@@ -95,6 +95,8 @@ public class Pipe {
          */
         protected float scaleBase = 1f;
 
+        protected float rotation = -90;
+
         /**
          * Can the piece be moved
          */
@@ -238,7 +240,7 @@ public class Pipe {
         canvas.save();
         canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
         canvas.scale(params.scaleBase, params.scaleBase);
-        canvas.rotate(-90);
+        canvas.rotate(params.rotation);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
         canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
@@ -250,6 +252,22 @@ public class Pipe {
             params.xPos += dx;
             params.yPos += dy;
         }
+    }
+
+    public void rotate() {
+        params.rotation += 90;
+
+        /*params.hatAngle += dAngle;
+
+        // Compute the radians angle
+        double rAngle = Math.toRadians(dAngle);
+        float ca = (float) Math.cos(rAngle);
+        float sa = (float) Math.sin(rAngle);
+        float xp = (params.hatX - x1) * ca - (params.hatY - y1) * sa + x1;
+        float yp = (params.hatX - x1) * sa + (params.hatY - y1) * ca + y1;
+
+        params.hatX = xp;
+        params.hatY = yp;*/
     }
 
     public void setBasePosition(float x, float y, float scale) {

@@ -107,6 +107,16 @@ public class PlayingAreaView extends View {
     }
 
     /**
+     * Tell the playing area to rotate the selection and invalidate the view
+     */
+    public boolean rotateSelected() {
+        boolean success = this.playingArea.rotateSelection();
+        invalidate();
+
+        return success;
+    }
+
+    /**
      * Add the selected pipe from the SelectionArea to the PlayingArea
      *
      * @param pipe pipe that has been selected

@@ -56,7 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonInstall"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
 
         <edu.msu.chuppthe.steampunked.PlayingAreaView
             android:id="@+id/playingView"
@@ -71,4 +72,14 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rotate_button"
+        android:id="@+id/buttonRotate"
+        android:layout_toRightOf="@+id/buttonInstall"
+        android:layout_toLeftOf="@+id/buttonOpenValve"
+        android:onClick="onRotate"
+        android:layout_alignBottom="@+id/buttonDiscard" />
 </RelativeLayout>

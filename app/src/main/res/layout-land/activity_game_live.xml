@@ -16,7 +16,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/buttonOpenValve"
         android:onClick="onSurrender"
-        android:text="@string/surrender_button" />
+        android:text="@string/surrender_button"
+        android:layout_alignLeft="@+id/buttonOpenValve" />
 
     <Button
         android:id="@+id/buttonDiscard"
@@ -53,6 +54,15 @@
         android:text="@string/open_valve_button"
         android:onClick="onOpenValve" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rotate_button"
+        android:id="@+id/buttonRotate"
+        android:layout_below="@+id/surrenderButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/surrenderButton"
+        android:onClick="onRotate" />
 
     <LinearLayout
         android:layout_width="match_parent"

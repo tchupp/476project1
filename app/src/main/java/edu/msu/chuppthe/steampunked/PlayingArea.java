@@ -418,6 +418,18 @@ public class PlayingArea {
     }
 
     /**
+     * Rotate the selected pipe
+     */
+    public boolean rotateSelection() {
+        if (this.selected == null) {
+            return false;
+        }
+
+        this.selected.rotate();
+        return true;
+    }
+
+    /**
      * Set the selected piece from the selection area
      *
      * @param selected pipe from the selection area
