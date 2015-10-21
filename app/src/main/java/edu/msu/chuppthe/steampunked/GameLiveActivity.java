@@ -79,16 +79,14 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     private void changeTurn() {
-
-        if (this.activePlayer == this.playerOne)
-        {
+        if (this.activePlayer == this.playerOne) {
             this.activePlayer = this.playerTwo;
-            this.playerTwo.setActive(true);
+
             this.playerOne.setActive(false);
-        }
-        else if (this.activePlayer == this.playerTwo)
-        {
+            this.playerTwo.setActive(true);
+        } else if (this.activePlayer == this.playerTwo) {
             this.activePlayer = this.playerOne;
+
             this.playerOne.setActive(true);
             this.playerTwo.setActive(false);
         }

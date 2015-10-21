@@ -1,12 +1,11 @@
 package edu.msu.chuppthe.steampunked;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A representation of the playing area
@@ -364,7 +363,27 @@ public class PlayingArea {
         }
 
         int gridX = Math.round(selected.getPositionX() * this.width / params.maxSmall);
-        int gridY = Math.round(selected.getPositionY() * this.width / params.maxSmall - 1);
+        int gridY = Math.round(selected.getPositionY() * this.width / params.maxSmall);
+
+        int angle = Math.round(selected.getRotation()) % 4;
+        switch (angle) {
+            case 0:
+//                gridY -= 1;
+                break;
+            case 1:
+                gridY -= 1;
+                break;
+            case 2:
+                gridY -= 1;
+                break;
+            case 3:
+                gridY -= 1;
+                break;
+        }
+
+        Log.i("GridX: ", String.valueOf(gridX));
+        Log.i("GridY: ", String.valueOf(gridY));
+
 
         if (this.pipes[gridX][gridY] == null) {
             if (!checkConnected(gridX, gridY)) {
@@ -373,6 +392,7 @@ public class PlayingArea {
 
             // If the piece is good to install
             this.selected.resetMovement();
+            this.selected.snapRotation();
             this.selected.setMovable(false);
             add(this.selected, gridX, gridY);
             this.selected = null;
@@ -425,7 +445,7 @@ public class PlayingArea {
             return false;
         }
 
-        this.selected.rotate();
+        this.selected.rotate(90);
         return true;
     }
 
@@ -531,7 +551,6 @@ public class PlayingArea {
                 float dy = touch1.dY / params.scaleFac;
 
                 translatePipe(dx, dy, this.dragging);
-                return;
             } else {
                 translate(touch1.dX, touch1.dY);
             }
@@ -539,13 +558,21 @@ public class PlayingArea {
         if (touch2.id >= 0) {
             // Two touches
 
-            /*
-             * Scaling
-             */
-            float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-            float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
-            float ratio = distance2 / distance1;
-            this.scale(ratio);
+            if (this.dragging != null) {
+                // Rotation
+                float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+                float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
+                float da = angle2 - angle1;
+                this.dragging.rotate(da);
+            } else {
+                // Scaling
+                float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+                float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
+                float ratio = distance2 / distance1;
+                this.scale(ratio);
+            }
+
+
         }
     }
 
@@ -562,6 +589,21 @@ public class PlayingArea {
         float dx = x2 - x1;
         float dy = y2 - y1;
         return (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
+    /**
+     * Determine the angle for two touches
+     *
+     * @param x1 Touch 1 x
+     * @param y1 Touch 1 y
+     * @param x2 Touch 2 x
+     * @param y2 Touch 2 y
+     * @return computed angle in degrees
+     */
+    private static float angle(float x1, float y1, float x2, float y2) {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 
     /**
@@ -623,5 +665,4 @@ public class PlayingArea {
             params.y = (params.y - yc) * ratio + yc;
         }
     }
-
 }

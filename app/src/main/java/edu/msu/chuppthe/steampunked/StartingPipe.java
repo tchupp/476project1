@@ -22,7 +22,7 @@ public class StartingPipe extends Pipe {
      * Constructor
      */
     public StartingPipe(Context context) {
-        super(false, true, false, false);
+        super(false, false, true, false);
         this.handleImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
         this.setId(context, R.drawable.straight);
         this.setMovable(false);
@@ -43,7 +43,7 @@ public class StartingPipe extends Pipe {
         canvas.scale(this.getScale(), this.getScale());
 
         canvas.save();
-        canvas.rotate(-90);
+        canvas.rotate(params.rotation * 90);
 
         canvas.drawBitmap(this.pipeImage, 0, 0, null);
         canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
@@ -67,8 +67,7 @@ public class StartingPipe extends Pipe {
     public void setActive(Boolean active) {
         if (active) {
             this.namePaint.setColor(Color.GREEN);
-        }
-        else {
+        } else {
             this.namePaint.setColor(Color.RED);
         }
     }

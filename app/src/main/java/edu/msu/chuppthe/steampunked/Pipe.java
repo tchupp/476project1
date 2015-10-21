@@ -19,7 +19,7 @@ public class Pipe {
     }
 
     public static Pipe createEndingPipe(Context context, Player player) {
-        Pipe endingPipe = new Pipe(false, false, false, true);
+        Pipe endingPipe = new Pipe(true, false, false, false);
         endingPipe.setId(context, R.drawable.gauge);
         endingPipe.setMovable(false);
 
@@ -28,7 +28,7 @@ public class Pipe {
     }
 
     public static Pipe createCapPipe(Context context, Player player) {
-        Pipe capPipe = new Pipe(false, true, false, false);
+        Pipe capPipe = new Pipe(false, false, true, false);
         capPipe.setId(context, R.drawable.cap);
 
         capPipe.setPlayer(player);
@@ -36,7 +36,7 @@ public class Pipe {
     }
 
     public static Pipe createTeePipe(Context context, Player player) {
-        Pipe teePipe = new Pipe(true, true, false, true);
+        Pipe teePipe = new Pipe(true, true, true, false);
         teePipe.setId(context, R.drawable.tee);
 
         teePipe.setPlayer(player);
@@ -44,7 +44,7 @@ public class Pipe {
     }
 
     public static Pipe createNinetyPipe(Context context, Player player) {
-        Pipe ninetyPipe = new Pipe(true, true, false, false);
+        Pipe ninetyPipe = new Pipe(false, true, true, false);
         ninetyPipe.setId(context, R.drawable.ninety);
 
         ninetyPipe.setPlayer(player);
@@ -52,7 +52,7 @@ public class Pipe {
     }
 
     public static Pipe createStraightPipe(Context context, Player player) {
-        Pipe straightPipe = new Pipe(false, true, false, true);
+        Pipe straightPipe = new Pipe(true, false, true, false);
         straightPipe.setId(context, R.drawable.straight);
 
         straightPipe.setPlayer(player);
@@ -95,7 +95,10 @@ public class Pipe {
          */
         protected float scaleBase = 1f;
 
-        protected float rotation = -90;
+        /**
+         * Pipe's rotation angle
+         */
+        protected float rotation = 3;
 
         /**
          * Can the piece be moved
@@ -148,6 +151,11 @@ public class Pipe {
      * The current parameters
      */
     protected Parameters params = new Parameters();
+
+    private float debugLeft;
+    private float debugTop;
+    private float debugRight;
+    private float debugBottom;
 
     /**
      * Constructor
@@ -240,10 +248,19 @@ public class Pipe {
         canvas.save();
         canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
         canvas.scale(params.scaleBase, params.scaleBase);
-        canvas.rotate(params.rotation);
+        canvas.rotate(params.rotation * 90f);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
+        this.outlinePaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
+        canvas.restore();
+
+        if (!params.isMovable) return;
+
+        canvas.save();
+
+        this.outlinePaint.setColor(Color.RED);
+        canvas.drawRect(debugLeft, debugTop, debugRight, debugBottom, this.outlinePaint);
         canvas.restore();
     }
 
@@ -254,20 +271,41 @@ public class Pipe {
         }
     }
 
-    public void rotate() {
-        params.rotation += 90;
+    /**
+     * Rotate the image around the point x1, y1
+     *
+     * @param dAngle Angle to rotate in degrees
+     */
+    public void rotate(float dAngle) {
+        params.rotation += (dAngle / 90f);
+        capRotation();
 
-        /*params.hatAngle += dAngle;
+        float x1 = this.getPositionX();
+        float y1 = this.getPositionY();
 
-        // Compute the radians angle
+        if (params.rotation >= 3f) {
+            x1 -= (this.getImageSize() * params.scaleBase / 2f);
+            y1 -= (this.getImageSize() * params.scaleBase / 2f);
+        } else if (params.rotation >= 2f) {
+            x1 -= (this.getImageSize() * params.scaleBase / 2f);
+            y1 += (this.getImageSize() * params.scaleBase / 2f);
+        } else if (params.rotation >= 1f) {
+            x1 += (this.getImageSize() * params.scaleBase / 2f);
+            y1 += (this.getImageSize() * params.scaleBase / 2f);
+        } else {
+            x1 += (this.getImageSize() * params.scaleBase / 2f);
+            y1 -= (this.getImageSize() * params.scaleBase / 2f);
+        }
+
         double rAngle = Math.toRadians(dAngle);
         float ca = (float) Math.cos(rAngle);
         float sa = (float) Math.sin(rAngle);
-        float xp = (params.hatX - x1) * ca - (params.hatY - y1) * sa + x1;
-        float yp = (params.hatX - x1) * sa + (params.hatY - y1) * ca + y1;
+        float xp = (this.getPositionX() - x1) * ca - (this.getPositionY() - y1) * sa + x1;
+        float yp = (this.getPositionX() - x1) * sa + (this.getPositionY() - y1) * ca + y1;
 
-        params.hatX = xp;
-        params.hatY = yp;*/
+        params.xBase = xp;
+        params.yBase = yp;
+        this.resetMovement();
     }
 
     public void setBasePosition(float x, float y, float scale) {
@@ -281,8 +319,33 @@ public class Pipe {
         float pY = params.yBase + params.yPos;
         float pSize = this.getImageSize() * params.scaleBase;
 
-        return (pX < testX) && (testX < pX + pSize)
-                && (pY - pSize) < testY && (testY < pY);
+        float left = pX - 0.5f * pSize;
+        float right = pX + pSize + 0.5f * pSize;
+        float top = pY - 0.5f * pSize;
+        float bottom = pY + pSize + 0.5f * pSize;
+
+        if (4f > Math.round(params.rotation)) {
+            if (Math.round(params.rotation) >= 3f) {
+                top -= pSize;
+                bottom -= pSize;
+            } else if (Math.round(params.rotation) >= 2f) {
+                left -= pSize;
+                right -= pSize;
+                top -= pSize;
+                bottom -= pSize;
+            } else if (Math.round(params.rotation) >= 1f) {
+                left -= pSize;
+                right -= pSize;
+            }
+        }
+
+        debugLeft = left;
+        debugRight = right;
+        debugTop = top;
+        debugBottom = bottom;
+
+        return (left < testX) && (testX < right)
+                && (top < testY) && (testY < bottom) && params.isMovable;
     }
 
     /**
@@ -383,6 +446,10 @@ public class Pipe {
         return params.scaleBase;
     }
 
+    public float getRotation() {
+        return params.rotation;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -392,6 +459,7 @@ public class Pipe {
     }
 
     public boolean canConnect(int d) {
+        d = (d - Math.round(params.rotation) + 4) % 4;
         return connect[d];
     }
 
@@ -401,5 +469,16 @@ public class Pipe {
     public void resetMovement() {
         params.xPos = 0;
         params.yPos = 0;
+    }
+
+    public void snapRotation() {
+        params.rotation = Math.round(params.rotation);
+    }
+
+    private void capRotation() {
+        if (params.rotation < 0) {
+            params.rotation += 4;
+        }
+        params.rotation %= 4;
     }
 }
