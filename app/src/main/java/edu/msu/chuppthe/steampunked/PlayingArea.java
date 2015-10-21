@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A representation of the playing area
@@ -609,4 +611,5 @@ public class PlayingArea {
             params.y = (params.y - yc) * ratio + yc;
         }
     }
+
 }

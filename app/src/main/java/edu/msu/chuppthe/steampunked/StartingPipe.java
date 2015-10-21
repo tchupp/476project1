@@ -63,4 +63,13 @@ public class StartingPipe extends Pipe {
 
         canvas.restore();
     }
+
+    public void setActive(Boolean active) {
+        if (active) {
+            this.namePaint.setColor(Color.GREEN);
+        }
+        else {
+            this.namePaint.setColor(Color.RED);
+        }
+    }
 }

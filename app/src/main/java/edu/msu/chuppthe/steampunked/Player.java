@@ -22,4 +22,8 @@ public class Player {
         this.startingPipe = startingPipe;
         startingPipe.setPlayer(this);
     }
+
+    public void setActive(Boolean active) {
+        this.startingPipe.setActive(active);
+    }
 }

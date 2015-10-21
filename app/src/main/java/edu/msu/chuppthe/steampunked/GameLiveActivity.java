@@ -33,6 +33,9 @@ public class GameLiveActivity extends AppCompatActivity {
 
         this.activePlayer = this.playerOne;
 
+        this.playerOne.setActive(true);
+        this.playerTwo.setActive(false);
+
         getSelectionAreaView().startTurn(this.activePlayer);
     }
 
@@ -70,7 +73,19 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     private void changeTurn() {
-        this.activePlayer = (this.activePlayer == this.playerTwo) ? this.playerOne : this.playerTwo;
+
+        if (this.activePlayer == this.playerOne)
+        {
+            this.activePlayer = this.playerTwo;
+            this.playerTwo.setActive(true);
+            this.playerOne.setActive(false);
+        }
+        else if (this.activePlayer == this.playerTwo)
+        {
+            this.activePlayer = this.playerOne;
+            this.playerOne.setActive(true);
+            this.playerTwo.setActive(false);
+        }
 
         getSelectionAreaView().startTurn(this.activePlayer);
     }
