@@ -42,6 +42,8 @@ public class PlayingArea {
          * Do the params need initializing?
          */
         private boolean start = true;
+
+        public boolean leaking = false;
     }
 
     /**
@@ -91,6 +93,14 @@ public class PlayingArea {
         public void copyToLast() {
             lastX = x;
             lastY = y;
+        }
+
+        public boolean isLeaking() {
+            return params.leaking;
+        }
+
+        public void setLeaking(boolean leaking) {
+            params.leaking = leaking;
         }
 
         /**
@@ -368,13 +378,10 @@ public class PlayingArea {
         int angle = Math.round(selected.getRotation()) % 4;
         switch (angle) {
             case 0:
-//                gridY -= 1;
                 break;
             case 1:
-                gridY -= 1;
                 break;
             case 2:
-                gridY -= 1;
                 break;
             case 3:
                 gridY -= 1;
