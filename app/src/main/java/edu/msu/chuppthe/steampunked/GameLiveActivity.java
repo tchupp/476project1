@@ -8,11 +8,15 @@ import android.widget.Toast;
 
 public class GameLiveActivity extends AppCompatActivity {
 
+    public static String WINNING_PLAYER = "WINNING_PLAYER";
+
     private Player playerOne;
 
     private Player playerTwo;
 
     private Player activePlayer;
+
+    private Player inactivePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class GameLiveActivity extends AppCompatActivity {
         getPlayingAreaView().setupPlayArea(gridSize, this.playerOne, this.playerTwo);
 
         this.activePlayer = this.playerOne;
+        this.inactivePlayer = this.playerTwo;
 
         this.playerOne.setActive(true);
         this.playerTwo.setActive(false);
@@ -56,6 +61,8 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onOpenValve(View view) {
+        boolean noLeaks = getPlayingAreaView().checkLeaks(activePlayer);
+        gameOver(noLeaks);
     }
 
     public void onRotate(View view) {
@@ -65,8 +72,7 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onSurrender(View view) {
-        Intent intent = new Intent(this, GameOverActivity.class);
-        startActivity(intent);
+        gameOver(false);
     }
 
     public void onPieceSelected(Pipe pipe) {
@@ -77,18 +83,25 @@ public class GameLiveActivity extends AppCompatActivity {
         return activePlayer;
     }
 
+    private void gameOver(boolean activeWon) {
+        Intent intent = new Intent(this, GameOverActivity.class);
+        intent.putExtra(MainMenuActivity.PLAYER_ONE, playerOne.getName());
+        intent.putExtra(MainMenuActivity.PLAYER_TWO, playerTwo.getName());
+        intent.putExtra(MainMenuActivity.GRID_SELECTION, getPlayingAreaView().getPlayingAreaSize());
+
+        Player winner = activeWon ? activePlayer : inactivePlayer;
+        intent.putExtra(WINNING_PLAYER, winner.getName());
+
+        startActivity(intent);
+    }
+
     private void changeTurn() {
-        if (this.activePlayer == this.playerOne) {
-            this.activePlayer = this.playerTwo;
+        Player temp = this.activePlayer;
+        this.activePlayer = this.inactivePlayer;
+        this.inactivePlayer = temp;
 
-            this.playerOne.setActive(false);
-            this.playerTwo.setActive(true);
-        } else if (this.activePlayer == this.playerTwo) {
-            this.activePlayer = this.playerOne;
-
-            this.playerOne.setActive(true);
-            this.playerTwo.setActive(false);
-        }
+        activePlayer.setActive(true);
+        inactivePlayer.setActive(false);
 
         getSelectionAreaView().startTurn(this.activePlayer);
     }

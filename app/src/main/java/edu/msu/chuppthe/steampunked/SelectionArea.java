@@ -141,21 +141,20 @@ public class SelectionArea {
 
         List<Pipe> pipes = this.pipeMap.get(player);
         while (pipes.size() < 5) {
-            switch (random.nextInt(5)) {
+            switch (random.nextInt(6)) {
                 case 0:
                     pipes.add(Pipe.createCapPipe(context, player));
                     break;
                 case 1:
+                case 2:
                     pipes.add(Pipe.createTeePipe(context, player));
                     break;
-                case 2:
-                    pipes.add(Pipe.createStraightPipe(context, player));
-                    break;
                 case 3:
-                    pipes.add(Pipe.createNinetyPipe(context, player));
+                    pipes.add(Pipe.createStraightPipe(context, player));
                     break;
                 case 4:
-                    pipes.add(Pipe.createStraightPipe(context, player));
+                case 5:
+                    pipes.add(Pipe.createNinetyPipe(context, player));
                     break;
                 default:
                     break;

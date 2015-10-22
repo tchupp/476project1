@@ -119,9 +119,12 @@ public class PlayingAreaView extends View {
 
     /**
      * checks for leaks in the playing area
+     *
+     * @param player Player whose pipes to check
+     * @return True if no leaks in the pipe
      */
-    public boolean checkLeaks(Pipe pipe) {
-        boolean success = this.playingArea.search(pipe);
+    public boolean checkLeaks(Player player) {
+        boolean success = this.playingArea.search(player);
         invalidate();
 
         return success;
@@ -135,5 +138,9 @@ public class PlayingAreaView extends View {
     public void notifyPieceSelected(Pipe pipe) {
         this.playingArea.setSelected(pipe);
         invalidate();
+    }
+
+    public int getPlayingAreaSize() {
+        return this.playingArea.getWidth();
     }
 }

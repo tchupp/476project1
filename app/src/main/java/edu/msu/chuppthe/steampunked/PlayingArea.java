@@ -198,17 +198,17 @@ public class PlayingArea {
     /**
      * Search to determine if this pipe has no leaks
      *
-     * @param start Starting pipe to search from
+     * @param player
      * @return true if no leaks
      */
-    public boolean search(Pipe start) {
+    public boolean search(Player player) {
         /*
          * Set the visited flags to false
          */
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null) {
-                    pipe.setVisited(false);
+                    pipe.setVisited(pipe.getPlayer() != player);
                 }
             }
         }
@@ -216,7 +216,7 @@ public class PlayingArea {
         /*
          * The pipe itself does the actual search
          */
-        return start.search();
+        return player.getStartingPipe().search();
     }
 
     /**
