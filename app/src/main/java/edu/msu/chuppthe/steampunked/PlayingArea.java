@@ -392,6 +392,8 @@ public class PlayingArea {
 
     private boolean checkConnected(int gridX, int gridY) {
         boolean hasNeighbor = false;
+        boolean hasConnection = false;
+        boolean openConnection = false;
 
         for (int d = 0; d < 4; d++) {
             Pipe n = neighbor(d, gridX, gridY);
@@ -401,16 +403,23 @@ public class PlayingArea {
             hasNeighbor = true;
 
             int dp = (d + 2) % 4;
-            if (!(n.canConnect(dp) && selected.canConnect(d))) {
-                // Either cannot connect
-                return false;
-            }
-            if ((selected.getPlayer() != n.getPlayer())) {
+
+            if ((n.getPlayer() != selected.getPlayer())) {
                 // Pieces have different player
-                return false;
+                if (n.canConnect(dp) && selected.canConnect(d)) {
+                    // Neither is allowed to connect
+                    return false;
+                }
+            } else {
+                // Pieces have the same player
+                if (n.canConnect(dp) && selected.canConnect(d)) {
+                    hasConnection = true;
+                } else if ((!n.canConnect(dp) && selected.canConnect(d)) || (n.canConnect(dp) && !selected.canConnect(d))) {
+                    openConnection = true;
+                }
             }
         }
-        return hasNeighbor;
+        return hasNeighbor && hasConnection && !openConnection;
     }
 
     /**
@@ -450,7 +459,7 @@ public class PlayingArea {
         float scale = params.maxSmall / (this.width * pSize);
 
         float x = this.selected.getPositionX();
-        float y = params.maxSmall / params.scaleFac - (pSize * selected.getScale());
+        float y = params.maxSmall / params.scaleFac;
 
         this.selected.setBasePosition(x, y, scale);
         this.selected.resetMovement();
