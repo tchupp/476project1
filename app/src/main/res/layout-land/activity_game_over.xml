@@ -12,9 +12,9 @@
         android:id="@+id/gameOverTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
         android:text="@string/game_over"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -22,11 +22,11 @@
         android:id="@+id/newGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/gameOverTextView"
         android:layout_alignLeft="@+id/mainMenuButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignRight="@+id/mainMenuButton"
+        android:layout_below="@+id/gameOverTextView"
         android:onClick="onNewGame"
         android:text="@string/game_over_new_game" />
 
@@ -36,10 +36,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/gameOverTextView"
+        android:layout_below="@+id/newGameButton"
         android:onClick="onMainMenu"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="@string/game_over_main_menu" />
+
+    <TextView
+        android:id="@+id/winningPlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newGameButton"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

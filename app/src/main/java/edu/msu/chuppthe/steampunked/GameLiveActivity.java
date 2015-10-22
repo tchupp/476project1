@@ -87,7 +87,7 @@ public class GameLiveActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameOverActivity.class);
         intent.putExtra(MainMenuActivity.PLAYER_ONE, playerOne.getName());
         intent.putExtra(MainMenuActivity.PLAYER_TWO, playerTwo.getName());
-        intent.putExtra(MainMenuActivity.GRID_SELECTION, getPlayingAreaView().getPlayingAreaSize());
+        intent.putExtra(MainMenuActivity.GRID_SELECTION, (getPlayingAreaView().getPlayingAreaSize() / 5));
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
         intent.putExtra(WINNING_PLAYER, winner.getName());
