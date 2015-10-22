@@ -21,9 +21,6 @@ public class PlayingAreaView extends View {
      */
     private Paint outlinePaint;
 
-
-
-
     public PlayingAreaView(Context context) {
         super(context);
 
@@ -123,7 +120,6 @@ public class PlayingAreaView extends View {
     /**
      * checks for leaks in the playing area
      */
-
     public boolean checkLeaks(Pipe pipe){
       boolean success =  this.playingArea.search(pipe);
         //invalidate();

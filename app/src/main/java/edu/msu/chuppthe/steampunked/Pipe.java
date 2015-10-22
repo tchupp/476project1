@@ -98,7 +98,7 @@ public class Pipe {
         /**
          * Pipe's rotation angle
          */
-        protected float rotation = 3;
+        protected int rotation = 3;
 
         /**
          * Can the piece be moved
@@ -246,6 +246,26 @@ public class Pipe {
      */
     public void draw(Canvas canvas) {
         canvas.save();
+
+        float scaledImage = getScale() * getImageSize();
+        float dx = 0;
+        float dy = 0;
+        switch (params.rotation) {
+            case 0:
+                dy = -scaledImage;
+                break;
+            case 1:
+                dx = scaledImage;
+                dy = -scaledImage;
+                break;
+            case 2:
+                dx = scaledImage;
+                break;
+            case 3:
+                break;
+        }
+
+        canvas.translate(dx, dy);
         canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
         canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(params.rotation * 90f);
@@ -277,25 +297,11 @@ public class Pipe {
      * @param dAngle Angle to rotate in degrees
      */
     public void rotate(float dAngle) {
-        params.rotation += (dAngle / 90f);
+        params.rotation += (dAngle / 90);
         capRotation();
 
         float x1 = this.getPositionX();
         float y1 = this.getPositionY();
-
-        if (params.rotation >= 3f) {
-            x1 -= (this.getImageSize() * params.scaleBase / 2f);
-            y1 -= (this.getImageSize() * params.scaleBase / 2f);
-        } else if (params.rotation >= 2f) {
-            x1 -= (this.getImageSize() * params.scaleBase / 2f);
-            y1 += (this.getImageSize() * params.scaleBase / 2f);
-        } else if (params.rotation >= 1f) {
-            x1 += (this.getImageSize() * params.scaleBase / 2f);
-            y1 += (this.getImageSize() * params.scaleBase / 2f);
-        } else {
-            x1 += (this.getImageSize() * params.scaleBase / 2f);
-            y1 -= (this.getImageSize() * params.scaleBase / 2f);
-        }
 
         double rAngle = Math.toRadians(dAngle);
         float ca = (float) Math.cos(rAngle);
@@ -303,15 +309,7 @@ public class Pipe {
         float xp = (this.getPositionX() - x1) * ca - (this.getPositionY() - y1) * sa + x1;
         float yp = (this.getPositionX() - x1) * sa + (this.getPositionY() - y1) * ca + y1;
 
-        params.xBase = xp;
-        params.yBase = yp;
-        this.resetMovement();
-    }
-
-    public void setBasePosition(float x, float y, float scale) {
-        params.xBase = x;
-        params.yBase = y;
-        params.scaleBase = scale;
+        this.setPosition(xp, yp);
     }
 
     public boolean hit(float testX, float testY) {
@@ -319,25 +317,10 @@ public class Pipe {
         float pY = params.yBase + params.yPos;
         float pSize = this.getImageSize() * params.scaleBase;
 
-        float left = pX - 0.5f * pSize;
-        float right = pX + pSize + 0.5f * pSize;
-        float top = pY - 0.5f * pSize;
-        float bottom = pY + pSize + 0.5f * pSize;
-
-        if (4f > Math.round(params.rotation)) {
-            if (Math.round(params.rotation) >= 3f) {
-                top -= pSize;
-                bottom -= pSize;
-            } else if (Math.round(params.rotation) >= 2f) {
-                left -= pSize;
-                right -= pSize;
-                top -= pSize;
-                bottom -= pSize;
-            } else if (Math.round(params.rotation) >= 1f) {
-                left -= pSize;
-                right -= pSize;
-            }
-        }
+        float left = pX;
+        float right = pX + pSize;
+        float top = pY - pSize;
+        float bottom = pY;
 
         debugLeft = left;
         debugRight = right;
@@ -446,7 +429,7 @@ public class Pipe {
         return params.scaleBase;
     }
 
-    public float getRotation() {
+    public int getRotation() {
         return params.rotation;
     }
 
@@ -463,16 +446,23 @@ public class Pipe {
         return connect[d];
     }
 
+    public void setBasePosition(float x, float y, float scale) {
+        params.xBase = x;
+        params.yBase = y;
+        params.scaleBase = scale;
+    }
+
+    public void setPosition(float x, float y) {
+        setBasePosition(x, y, params.scaleBase);
+        this.resetMovement();
+    }
+
     /**
      * Set the x and y position to 0
      */
     public void resetMovement() {
         params.xPos = 0;
         params.yPos = 0;
-    }
-
-    public void snapRotation() {
-        params.rotation = Math.round(params.rotation);
     }
 
     private void capRotation() {
