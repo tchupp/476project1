@@ -17,6 +17,7 @@ public class StartingPipe extends Pipe {
      * Paint to draw the player name
      */
     private Paint namePaint;
+    private Boolean active;
 
     /**
      * Constructor
@@ -62,13 +63,17 @@ public class StartingPipe extends Pipe {
         canvas.restore();
 
         canvas.restore();
+
+        if (!this.active) return;
+
+        canvas.save();
+        canvas.translate(canvas.getHeight() / 2f, 80);
+
+        canvas.drawText(this.getPlayer().getName(), 0, 0, this.namePaint);
+        canvas.restore();
     }
 
     public void setActive(Boolean active) {
-        if (active) {
-            this.namePaint.setColor(Color.GREEN);
-        } else {
-            this.namePaint.setColor(Color.RED);
-        }
+        this.active = active;
     }
 }
