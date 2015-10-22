@@ -56,13 +56,6 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onOpenValve(View view) {
-
-        //if (getPlayingAreaView().checkLeaks(pipe)) {
-            //getPlayingAreaView().setLeaking(true);
-      /*  } else {
-            getPlayingAreaView().setLeaking(false);
-
-        } */
     }
 
     public void onRotate(View view) {

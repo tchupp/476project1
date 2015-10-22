@@ -88,7 +88,6 @@ public class SelectionArea {
         return false;
     }
 
-
     /**
      * Handle drawing the selection area
      *
@@ -133,7 +132,6 @@ public class SelectionArea {
             pipe.draw(canvas);
         }
     }
-
 
     /**
      * Generate new random pipes
@@ -246,7 +244,10 @@ public class SelectionArea {
         return true;
     }
 
-
+    /**
+     * @param player    Player who owns the pieces to modify
+     * @param isMovable if the pipes should be movable
+     */
     private void setAllPipesMovable(Player player, boolean isMovable) {
         List<Pipe> pipes = this.pipeMap.get(player);
         if (pipes == null) return;

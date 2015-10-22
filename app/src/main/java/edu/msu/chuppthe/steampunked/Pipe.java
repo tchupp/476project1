@@ -59,7 +59,7 @@ public class Pipe {
         return straightPipe;
     }
 
-    protected class Parameters implements Serializable {
+    private class Parameters implements Serializable {
         /**
          * X location in the playing area (index into array)
          */
@@ -138,6 +138,11 @@ public class Pipe {
     private boolean visited = false;
 
     /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
+
+    /**
      * Image for the pipe
      */
     protected Bitmap pipeImage = null;
@@ -146,16 +151,6 @@ public class Pipe {
      * Paint for the outline
      */
     protected Paint outlinePaint;
-
-    /**
-     * The current parameters
-     */
-    protected Parameters params = new Parameters();
-
-    private float debugLeft;
-    private float debugTop;
-    private float debugRight;
-    private float debugBottom;
 
     /**
      * Constructor
@@ -230,65 +225,37 @@ public class Pipe {
     }
 
     /**
-     * Find the neighbor of this pipe
-     *
-     * @param d Index (north=0, east=1, south=2, west=3)
-     * @return Pipe object or null if no neighbor
-     */
-    private Pipe neighbor(int d) {
-        return playingArea.neighbor(d, params.x, params.y);
-    }
-
-    /**
      * Draw the piece to the canvas
      *
      * @param canvas canvas to draw to
      */
     public void draw(Canvas canvas) {
-        canvas.save();
-
-        float scaledImage = getScale() * getImageSize();
         float dx = 0;
         float dy = 0;
         switch (params.rotation) {
             case 0:
-                dy = -scaledImage;
+                dy = -(getScale() * getImageSize());
                 break;
             case 1:
-                dx = scaledImage;
-                dy = -scaledImage;
+                dx = getScale() * getImageSize();
+                dy = -(getScale() * getImageSize());
                 break;
             case 2:
-                dx = scaledImage;
+                dx = getScale() * getImageSize();
                 break;
             case 3:
                 break;
         }
 
+        canvas.save();
         canvas.translate(dx, dy);
         canvas.translate(params.xBase + params.xPos, params.yBase + params.yPos);
         canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(params.rotation * 90f);
 
         canvas.drawBitmap(pipeImage, 0, 0, null);
-        this.outlinePaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
         canvas.restore();
-
-        if (!params.isMovable) return;
-
-        canvas.save();
-
-        this.outlinePaint.setColor(Color.RED);
-        canvas.drawRect(debugLeft, debugTop, debugRight, debugBottom, this.outlinePaint);
-        canvas.restore();
-    }
-
-    public void move(float dx, float dy) {
-        if (params.isMovable) {
-            params.xPos += dx;
-            params.yPos += dy;
-        }
     }
 
     /**
@@ -297,8 +264,7 @@ public class Pipe {
      * @param dAngle Angle to rotate in degrees
      */
     public void rotate(float dAngle) {
-        params.rotation += (dAngle / 90);
-        capRotation();
+        setRotation(dAngle / 90);
 
         float x1 = this.getPositionX();
         float y1 = this.getPositionY();
@@ -312,32 +278,32 @@ public class Pipe {
         this.setPosition(xp, yp);
     }
 
+    /**
+     * @param testX X location to test
+     * @param testY Y locatin to test
+     * @return if the hit was successful
+     */
     public boolean hit(float testX, float testY) {
         float pX = params.xBase + params.xPos;
         float pY = params.yBase + params.yPos;
         float pSize = this.getImageSize() * params.scaleBase;
 
-        float left = pX;
         float right = pX + pSize;
         float top = pY - pSize;
-        float bottom = pY;
 
-        debugLeft = left;
-        debugRight = right;
-        debugTop = top;
-        debugBottom = bottom;
-
-        return (left < testX) && (testX < right)
-                && (top < testY) && (testY < bottom) && params.isMovable;
+        return (pX < testX) && (testX < right)
+                && (top < testY) && (testY < pY) && params.isMovable;
     }
 
     /**
-     * Get the playing area
-     *
-     * @return Playing area object
+     * @param dx Delta X to move the pipe
+     * @param dy Delta Y to move the pipe
      */
-    public PlayingArea getPlayingArea() {
-        return playingArea;
+    public void move(float dx, float dy) {
+        if (params.isMovable) {
+            params.xPos += dx;
+            params.yPos += dy;
+        }
     }
 
     /**
@@ -354,14 +320,21 @@ public class Pipe {
     }
 
     /**
-     * Set the playing area and location for this pipe
+     * Get the playing area
      *
-     * @param context view context
-     * @param id      id of the image
+     * @return Playing area object
      */
-    protected void setId(Context context, int id) {
-        params.id = id;
-        this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
+    public PlayingArea getPlayingArea() {
+        return playingArea;
+    }
+
+    /**
+     * @param d Direction to check
+     * @return if the pipe can connect
+     */
+    public boolean canConnect(int d) {
+        d = (d - params.rotation + 4) % 4;
+        return connect[d];
     }
 
     /**
@@ -369,7 +342,7 @@ public class Pipe {
      *
      * @return True if yes
      */
-    public boolean beenVisited() {
+    public boolean getVisited() {
         return this.visited;
     }
 
@@ -429,46 +402,86 @@ public class Pipe {
         return params.scaleBase;
     }
 
+    /**
+     * @return The rotation quadrant
+     */
     public int getRotation() {
         return params.rotation;
     }
 
+    /**
+     * @param player New Player that owns the pipe
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * @return the player that owns the piece
+     */
     public Player getPlayer() {
         return player;
     }
 
-    public boolean canConnect(int d) {
-        d = (d - Math.round(params.rotation) + 4) % 4;
-        return connect[d];
-    }
-
+    /**
+     * @param x     new base X location
+     * @param y     new base Y location
+     * @param scale new base Scale
+     */
     public void setBasePosition(float x, float y, float scale) {
         params.xBase = x;
         params.yBase = y;
         params.scaleBase = scale;
     }
 
-    public void setPosition(float x, float y) {
-        setBasePosition(x, y, params.scaleBase);
-        this.resetMovement();
-    }
-
     /**
-     * Set the x and y position to 0
+     * Reset the x and y position
      */
     public void resetMovement() {
         params.xPos = 0;
         params.yPos = 0;
     }
 
-    private void capRotation() {
+    /**
+     * Set the playing area and location for this pipe
+     *
+     * @param context view context
+     * @param id      id of the image
+     */
+    protected void setId(Context context, int id) {
+        params.id = id;
+        this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
+    }
+
+    /**
+     * Find the neighbor of this pipe
+     *
+     * @param d Index (north=0, east=1, south=2, west=3)
+     * @return Pipe object or null if no neighbor
+     */
+    private Pipe neighbor(int d) {
+        return playingArea.neighbor(d, params.x, params.y);
+    }
+
+    /**
+     * Make sure the rotation does not go over 3 or below 0
+     *
+     * @param da
+     */
+    private void setRotation(float da) {
+        params.rotation += da;
         if (params.rotation < 0) {
             params.rotation += 4;
         }
         params.rotation %= 4;
+    }
+
+    /**
+     * @param x New X Position
+     * @param y New Y Position
+     */
+    private void setPosition(float x, float y) {
+        setBasePosition(x, y, params.scaleBase);
+        resetMovement();
     }
 }

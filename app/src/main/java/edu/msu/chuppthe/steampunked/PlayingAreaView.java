@@ -120,12 +120,11 @@ public class PlayingAreaView extends View {
     /**
      * checks for leaks in the playing area
      */
-    public boolean checkLeaks(Pipe pipe){
-      boolean success =  this.playingArea.search(pipe);
-        //invalidate();
+    public boolean checkLeaks(Pipe pipe) {
+        boolean success = this.playingArea.search(pipe);
+        invalidate();
 
         return success;
-
     }
 
     /**

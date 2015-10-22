@@ -168,24 +168,6 @@ public class PlayingArea {
     }
 
     /**
-     * Get the playing area height
-     *
-     * @return Height
-     */
-    public int getHeight() {
-        return this.height;
-    }
-
-    /**
-     * Get the playing area width
-     *
-     * @return Width
-     */
-    public int getWidth() {
-        return this.width;
-    }
-
-    /**
      * Get the pipe at a given location.
      * This will return null if outside the playing area.
      *
@@ -390,38 +372,6 @@ public class PlayingArea {
         return false;
     }
 
-    private boolean checkConnected(int gridX, int gridY) {
-        boolean hasNeighbor = false;
-        boolean hasConnection = false;
-        boolean openConnection = false;
-
-        for (int d = 0; d < 4; d++) {
-            Pipe n = neighbor(d, gridX, gridY);
-            if (n == null) {
-                continue;
-            }
-            hasNeighbor = true;
-
-            int dp = (d + 2) % 4;
-
-            if ((n.getPlayer() != selected.getPlayer())) {
-                // Pieces have different player
-                if (n.canConnect(dp) && selected.canConnect(d)) {
-                    // Neither is allowed to connect
-                    return false;
-                }
-            } else {
-                // Pieces have the same player
-                if (n.canConnect(dp) && selected.canConnect(d)) {
-                    hasConnection = true;
-                } else if ((!n.canConnect(dp) && selected.canConnect(d)) || (n.canConnect(dp) && !selected.canConnect(d))) {
-                    openConnection = true;
-                }
-            }
-        }
-        return hasNeighbor && hasConnection && !openConnection;
-    }
-
     /**
      * Discard the selected pipe
      */
@@ -463,6 +413,24 @@ public class PlayingArea {
 
         this.selected.setBasePosition(x, y, scale);
         this.selected.resetMovement();
+    }
+
+    /**
+     * Get the playing area height
+     *
+     * @return Height
+     */
+    public int getHeight() {
+        return this.height;
+    }
+
+    /**
+     * Get the playing area width
+     *
+     * @return Width
+     */
+    public int getWidth() {
+        return this.width;
     }
 
     /**
@@ -637,5 +605,42 @@ public class PlayingArea {
             params.x = (params.x - xc) * ratio + xc;
             params.y = (params.y - yc) * ratio + yc;
         }
+    }
+
+    /**
+     * @param gridX Grid X location to check around
+     * @param gridY Grid Y location to check around
+     * @return If the piece can be placed
+     */
+    private boolean checkConnected(int gridX, int gridY) {
+        boolean hasNeighbor = false;
+        boolean hasConnection = false;
+        boolean openConnection = false;
+
+        for (int d = 0; d < 4; d++) {
+            Pipe n = neighbor(d, gridX, gridY);
+            if (n == null) {
+                continue;
+            }
+            hasNeighbor = true;
+
+            int dp = (d + 2) % 4;
+
+            if ((n.getPlayer() != selected.getPlayer())) {
+                // Pieces have different player
+                if (n.canConnect(dp) && selected.canConnect(d)) {
+                    // Neither is allowed to connect
+                    return false;
+                }
+            } else {
+                // Pieces have the same player
+                if (n.canConnect(dp) && selected.canConnect(d)) {
+                    hasConnection = true;
+                } else if ((!n.canConnect(dp) && selected.canConnect(d)) || (n.canConnect(dp) && !selected.canConnect(d))) {
+                    openConnection = true;
+                }
+            }
+        }
+        return hasNeighbor && hasConnection && !openConnection;
     }
 }
