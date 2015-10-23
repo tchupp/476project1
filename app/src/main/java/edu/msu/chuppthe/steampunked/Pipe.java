@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -22,8 +23,9 @@ public class Pipe {
         Pipe endingPipe = new Pipe(true, false, false, false);
         endingPipe.setId(context, R.drawable.gauge);
         endingPipe.setMovable(false);
-
         endingPipe.setPlayer(player);
+
+        player.setEndingPipe(endingPipe);
         return endingPipe;
     }
 
@@ -394,6 +396,24 @@ public class Pipe {
     }
 
     /**
+     * Get the X location of the pipe on the grid
+     *
+     * @return x location
+     */
+    public int getGridPositionX() {
+        return params.x;
+    }
+
+    /**
+     * Get the Y location of the pipe on the grid
+     *
+     * @return y location
+     */
+    public int getGridPositionY() {
+        return params.y;
+    }
+
+    /**
      * Get the scale of the pipe
      *
      * @return scale
@@ -440,6 +460,20 @@ public class Pipe {
     public void resetMovement() {
         params.xPos = 0;
         params.yPos = 0;
+    }
+
+    /**
+     * Checks to see if steam can be added to the side
+     *
+     * @param d int side to check
+     */
+    public boolean addSteam(int d) {
+        if (!search()) {
+            if (canConnect(d) && neighbor(d) == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

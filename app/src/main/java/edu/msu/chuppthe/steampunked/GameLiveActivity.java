@@ -45,7 +45,7 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onInstall(View view) {
-        if (getPlayingAreaView().installSelection()) {
+        if (getPlayingAreaView().installSelection(this.activePlayer)) {
             changeTurn();
         } else {
             Toast.makeText(this, "Install Failed", Toast.LENGTH_SHORT).show();

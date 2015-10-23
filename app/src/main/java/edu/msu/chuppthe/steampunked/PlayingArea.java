@@ -1,5 +1,6 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
@@ -127,6 +128,8 @@ public class PlayingArea {
      */
     private Pipe[][] pipes;
 
+    private Leak[][] leaks;
+
     /**
      * This variable is set to a piece we are dragging. If
      * we are not dragging, the variable is null.
@@ -165,6 +168,7 @@ public class PlayingArea {
         this.height = height;
 
         this.pipes = new Pipe[width][height];
+        this.leaks = new Leak[width][height];
     }
 
     /**
@@ -190,9 +194,21 @@ public class PlayingArea {
      * @param x    X location
      * @param y    Y location
      */
-    public void add(Pipe pipe, int x, int y) {
+    public void addPipe(Pipe pipe, int x, int y) {
         pipes[x][y] = pipe;
         pipe.setPosition(this, x, y);
+    }
+
+    /**
+     * Add a leak to the playing area
+     *
+     * @param leak Leak to add
+     * @param x    X location
+     * @param y    Y location
+     */
+    public void addLeak(Leak leak, int x, int y) {
+        leaks[x][y] = leak;
+        leak.setPosition(this, x, y);
     }
 
     /**
@@ -316,6 +332,24 @@ public class PlayingArea {
             }
         }
 
+        // Draw the leaks
+        for (int x = 0; x < leaks.length; x++) {
+            Leak[] row = leaks[x];
+            for (int y = 0; y < row.length; y++) {
+                Leak leak = row[y];
+                if (leak != null) {
+                    float pSize = leak.getImageSize();
+                    float scale = cSmall / (this.width * pSize);
+
+                    float facX = (float) x / this.width;
+                    float facY = (y + 1.f) / this.width;
+
+                    leak.setBasePosition(facX * cSmall, facY * cSmall, scale);
+                    leak.draw(canvas);
+                }
+            }
+        }
+
         if (this.selected != null) this.selected.draw(canvas);
 
         canvas.restore();
@@ -347,8 +381,11 @@ public class PlayingArea {
 
     /**
      * Install the selected pipe
+     *
+     * @param context Context
+     * @param activePlayer Player
      */
-    public boolean installSelection() {
+    public boolean installSelection(Context context, Player activePlayer) {
         if (this.selected == null) {
             return false;
         }
@@ -364,8 +401,10 @@ public class PlayingArea {
             // If the piece is good to install
             this.selected.resetMovement();
             this.selected.setMovable(false);
-            add(this.selected, gridX, gridY);
+            addPipe(this.selected, gridX, gridY);
             this.selected = null;
+
+            detectLeaks(context, activePlayer);
 
             return true;
         }
@@ -413,6 +452,57 @@ public class PlayingArea {
 
         this.selected.setBasePosition(x, y, scale);
         this.selected.resetMovement();
+    }
+
+    /**
+     * Sets leaks at appropriate locations on the grid
+     *
+     * @param context Context
+     * @param activePlayer Player
+     */
+    public void detectLeaks(Context context, Player activePlayer) {
+
+        for (int x = 0; x < leaks.length; x++) {
+            Leak[] row = leaks[x];
+            for (int y = 0; y < row.length; y++) {
+                Leak leak = row[y];
+                if (leak != null && leak.getPlayer() == activePlayer) {
+                    leaks[x][y] = null;
+                }
+            }
+        }
+
+        for (int x = 0; x < pipes.length; x++) {
+            Pipe[] row = pipes[x];
+            for (int y = 0; y < row.length; y++) {
+                Pipe pipe = row[y];
+                if (pipe != null && pipe.getPlayer() == activePlayer && pipe != activePlayer.getEndingPipe()) {
+                    if (pipe.addSteam(0)) {
+                        Leak leak = Leak.createLeak(context, activePlayer);
+                        leak.rotate(90);
+                        addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() - 1);
+                    }
+
+                    if (pipe.addSteam(1)) {
+                        Leak leak = Leak.createLeak(context, activePlayer);
+                        leak.rotate(180);
+                        addLeak(leak, pipe.getGridPositionX() + 1, pipe.getGridPositionY());
+                    }
+
+                    if (pipe.addSteam(2)) {
+                        Leak leak = Leak.createLeak(context, activePlayer);
+                        leak.rotate(270);
+                        addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() + 1);
+                    }
+
+                    if (pipe.addSteam(3)) {
+                        Leak leak = Leak.createLeak(context, activePlayer);
+                        leak.rotate(360);
+                        addLeak(leak, pipe.getGridPositionX() - 1, pipe.getGridPositionY());
+                    }
+                }
+            }
+        }
     }
 
     /**

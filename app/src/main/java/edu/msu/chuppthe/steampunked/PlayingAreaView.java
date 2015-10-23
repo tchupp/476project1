@@ -61,13 +61,16 @@ public class PlayingAreaView extends View {
 
         Pipe player1StartPipe = Pipe.createStartingPipe(getContext(), playerOne);
         Pipe player2StartPipe = Pipe.createStartingPipe(getContext(), playerTwo);
-        this.playingArea.add(player1StartPipe, startingX, player1Y);
-        this.playingArea.add(player2StartPipe, startingX, player2Y);
+        this.playingArea.addPipe(player1StartPipe, startingX, player1Y);
+        this.playingArea.addPipe(player2StartPipe, startingX, player2Y);
 
         Pipe player1EndPipe = Pipe.createEndingPipe(getContext(), playerOne);
         Pipe player2EndPipe = Pipe.createEndingPipe(getContext(), playerTwo);
-        this.playingArea.add(player1EndPipe, endingX, player1Y + 1);
-        this.playingArea.add(player2EndPipe, endingX, player2Y + 1);
+        this.playingArea.addPipe(player1EndPipe, endingX, player1Y + 1);
+        this.playingArea.addPipe(player2EndPipe, endingX, player2Y + 1);
+
+        this.playingArea.detectLeaks(getContext(), playerOne);
+        this.playingArea.detectLeaks(getContext(), playerTwo);
     }
 
     @Override
@@ -90,8 +93,8 @@ public class PlayingAreaView extends View {
     /**
      * Tell the playing area to install the selection and invalidate the view
      */
-    public boolean installSelection() {
-        boolean success = this.playingArea.installSelection();
+    public boolean installSelection(Player activePlayer) {
+        boolean success = this.playingArea.installSelection(getContext(), activePlayer);
         invalidate();
 
         return success;
