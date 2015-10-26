@@ -66,9 +66,9 @@ public class SelectionAreaView extends View {
         invalidate();
     }
 
-    public void notifyPieceSelected(Pipe pipe) {
+    public void notifyPieceSelected(Pipe pipe, boolean isPortrait) {
         GameLiveActivity activity = (GameLiveActivity) getContext();
-        activity.onPieceSelected(pipe);
+        activity.onPieceSelected(pipe, isPortrait);
     }
 
     private Player getActivePlayer() {

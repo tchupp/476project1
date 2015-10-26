@@ -136,10 +136,11 @@ public class PlayingAreaView extends View {
     /**
      * Add the selected pipe from the SelectionArea to the PlayingArea
      *
-     * @param pipe pipe that has been selected
+     * @param pipe       pipe that has been selected
+     * @param isPortrait is the device portrait or landscape?
      */
-    public void notifyPieceSelected(Pipe pipe) {
-        this.playingArea.setSelected(pipe);
+    public void notifyPieceSelected(Pipe pipe, boolean isPortrait) {
+        this.playingArea.setSelected(pipe, isPortrait);
         invalidate();
     }
 

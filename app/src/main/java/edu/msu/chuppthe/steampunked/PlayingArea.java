@@ -218,7 +218,7 @@ public class PlayingArea {
     /**
      * Search to determine if this pipe has no leaks
      *
-     * @param player
+     * @param player the current player
      * @return true if no leaks
      */
     public boolean search(Player player) {
@@ -438,17 +438,25 @@ public class PlayingArea {
     /**
      * Set the selected piece from the selection area
      *
-     * @param selected pipe from the selection area
+     * @param selected   pipe from the selection area
+     * @param isPortrait is the device portrait or landscape?
      */
-    public void setSelected(Pipe selected) {
+    public void setSelected(Pipe selected, boolean isPortrait) {
         this.selected = selected;
         this.dragging = selected;
 
-        float pSize = this.selected.getImageSize();
+        float pSize = selected.getImageSize();
         float scale = params.maxSmall / (this.width * pSize);
 
-        float x = this.selected.getPositionX();
-        float y = params.maxSmall / params.scaleFac;
+        float x;
+        float y;
+        if (isPortrait) {
+            x = this.selected.getPositionX();
+            y = params.maxSmall / params.scaleFac;
+        } else {
+            x = (params.maxLarge / params.scaleFac) - (pSize * selected.getScale());
+            y = this.selected.getPositionY();
+        }
 
         this.selected.setBasePosition(x, y, scale);
         this.selected.resetMovement();

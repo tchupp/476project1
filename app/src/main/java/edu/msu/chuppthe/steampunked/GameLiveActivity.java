@@ -75,8 +75,8 @@ public class GameLiveActivity extends AppCompatActivity {
         gameOver(false);
     }
 
-    public void onPieceSelected(Pipe pipe) {
-        getPlayingAreaView().notifyPieceSelected(pipe);
+    public void onPieceSelected(Pipe pipe, boolean isPortrait) {
+        getPlayingAreaView().notifyPieceSelected(pipe, isPortrait);
     }
 
     public Player getActivePlayer() {

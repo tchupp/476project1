@@ -224,14 +224,22 @@ public class SelectionArea {
         float y = dragging.getPositionY() + dy;
         float pSize = dragging.getImageSize() * dragging.getScale();
 
-        if ((x > 0) && (y - pSize / 2 > 0)
+
+        float left = this.cWidth > cHeight ? x : x + pSize / 2;
+        float top = this.cWidth > cHeight ? y - pSize / 2 : y - pSize;
+        float bounds = this.cWidth > cHeight ? top : left;
+        float otherBounds = this.cWidth < cHeight ? top : left;
+
+        List<Pipe> pipes = this.pipeMap.get(player);
+
+        if ((otherBounds > 0)
                 && (x + pSize < cWidth) && (y < cHeight)) {
             this.dragging.move(dx, dy);
         }
 
-        if (y - pSize / 2 <= 0) {
-            view.notifyPieceSelected(this.dragging);
-            this.pipeMap.get(player).remove(this.dragging);
+        if ((bounds <= 0) && (pipes.indexOf(this.dragging) != -1)) {
+            view.notifyPieceSelected(this.dragging, this.cWidth > cHeight);
+            pipes.remove(this.dragging);
 
             setAllPipesMovable(player, false);
         }
@@ -253,6 +261,7 @@ public class SelectionArea {
 
         for (Pipe pipe : pipes) {
             pipe.setMovable(isMovable);
+            pipe.resetMovement();
         }
     }
 }
