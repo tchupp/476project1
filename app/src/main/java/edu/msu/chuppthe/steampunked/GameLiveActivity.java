@@ -18,6 +18,17 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private Player inactivePlayer;
 
+    /**
+     * Save the instance state into a bundle
+     * @param bundle the bundle to save into
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+
+        getPlayingAreaView().saveInstanceState(bundle);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

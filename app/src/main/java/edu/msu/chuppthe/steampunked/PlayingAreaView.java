@@ -3,6 +3,7 @@ package edu.msu.chuppthe.steampunked;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -146,5 +147,13 @@ public class PlayingAreaView extends View {
 
     public int getPlayingAreaSize() {
         return this.playingArea.getWidth();
+    }
+
+    /**
+     * Save the puzzle to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+        playingArea.saveInstanceState(bundle);
     }
 }
