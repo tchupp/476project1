@@ -32,7 +32,7 @@
 
     <EditText
         android:id="@+id/playerOneTextField"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/playerTwoTextField"
         android:layout_alignParentEnd="true"
@@ -51,12 +51,13 @@
 
     <EditText
         android:id="@+id/playerTwoTextField"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/gridRadioGroup"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/playerTwoTextView"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_alignLeft="@+id/playerOneTextField" />
 
     <RadioGroup
         android:id="@+id/gridRadioGroup"
