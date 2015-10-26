@@ -128,6 +128,10 @@ public class PlayingArea {
      */
     private Pipe[][] pipes;
 
+    /**
+     * Storage for the leaks
+     * First level: X, second level Y
+     */
     private Leak[][] leaks;
 
     /**
@@ -218,20 +222,16 @@ public class PlayingArea {
      * @return true if no leaks
      */
     public boolean search(Player player) {
-        /*
-         * Set the visited flags to false
-         */
+        // Set the visited flags to false if the player
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null) {
-                    pipe.setVisited(pipe.getPlayer() != player);
+                    pipe.setVisited(!pipe.getPlayer().equals(player));
                 }
             }
         }
 
-        /*
-         * The pipe itself does the actual search
-         */
+        // The pipe itself does the actual search
         return player.getStartingPipe().search();
     }
 
@@ -382,7 +382,7 @@ public class PlayingArea {
     /**
      * Install the selected pipe
      *
-     * @param context Context
+     * @param context      Context
      * @param activePlayer Player
      */
     public boolean installSelection(Context context, Player activePlayer) {
@@ -457,7 +457,7 @@ public class PlayingArea {
     /**
      * Sets leaks at appropriate locations on the grid
      *
-     * @param context Context
+     * @param context      Context
      * @param activePlayer Player
      */
     public void detectLeaks(Context context, Player activePlayer) {
@@ -472,29 +472,24 @@ public class PlayingArea {
             }
         }
 
-        for (int x = 0; x < pipes.length; x++) {
-            Pipe[] row = pipes[x];
-            for (int y = 0; y < row.length; y++) {
-                Pipe pipe = row[y];
-                if (pipe != null && pipe.getPlayer() == activePlayer && pipe != activePlayer.getEndingPipe()) {
+        for (Pipe[] row : pipes) {
+            for (Pipe pipe : row) {
+                if (pipe != null && pipe.getPlayer() == activePlayer) {
                     if (pipe.addSteam(0)) {
                         Leak leak = Leak.createLeak(context, activePlayer);
                         leak.rotate(90);
                         addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() - 1);
                     }
-
                     if (pipe.addSteam(1)) {
                         Leak leak = Leak.createLeak(context, activePlayer);
                         leak.rotate(180);
                         addLeak(leak, pipe.getGridPositionX() + 1, pipe.getGridPositionY());
                     }
-
                     if (pipe.addSteam(2)) {
                         Leak leak = Leak.createLeak(context, activePlayer);
                         leak.rotate(270);
                         addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() + 1);
                     }
-
                     if (pipe.addSteam(3)) {
                         Leak leak = Leak.createLeak(context, activePlayer);
                         leak.rotate(360);

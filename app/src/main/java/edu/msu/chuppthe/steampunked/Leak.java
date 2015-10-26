@@ -2,9 +2,6 @@ package edu.msu.chuppthe.steampunked;
 
 import android.content.Context;
 
-/**
- * Created by evanhlavaty on 10/22/15.
- */
 public class Leak extends Pipe {
 
     public static Leak createLeak(Context context, Player player) {

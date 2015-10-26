@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.io.Serializable;
 
@@ -186,15 +185,15 @@ public class Pipe {
     public boolean search() {
         visited = true;
 
-        for (int d = 0; d < 4; d++) {
-            /*
-             * If no connection this direction, ignore
-             */
-            if (!connect[d]) {
+        for (int i = 0; i < 4; i++) {
+            int dir = (i - this.getRotation() + 4) % 4;
+
+            // If no connection this direction, ignore
+            if (!connect[dir]) {
                 continue;
             }
 
-            Pipe n = neighbor(d);
+            Pipe n = neighbor(i);
             if (n == null) {
                 // We leak
                 // We have a connection with nothing on the other side
@@ -206,7 +205,7 @@ public class Pipe {
             // we are looking in direction 1 (east),
             // the other pipe must have a connection
             // in direction 3 (west)
-            int dp = (d + 2) % 4;
+            int dp = (i - n.getRotation() + 6) % 4;
             if (!n.connect[dp]) {
                 // We have a bad connection, the other side is not
                 // a flange to connect to
@@ -468,12 +467,7 @@ public class Pipe {
      * @param d int side to check
      */
     public boolean addSteam(int d) {
-        if (!search()) {
-            if (canConnect(d) && neighbor(d) == null) {
-                return true;
-            }
-        }
-        return false;
+        return canConnect(d) && neighbor(d) == null;
     }
 
     /**
