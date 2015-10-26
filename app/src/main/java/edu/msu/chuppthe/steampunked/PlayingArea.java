@@ -2,6 +2,7 @@ package edu.msu.chuppthe.steampunked;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -474,7 +475,7 @@ public class PlayingArea {
 
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
-                if (pipe != null && pipe.getPlayer() == activePlayer) {
+                if (pipe != null && pipe.getPlayer() == activePlayer && pipe != activePlayer.getEndingPipe()) {
                     if (pipe.addSteam(0)) {
                         Leak leak = Leak.createLeak(context, activePlayer);
                         leak.rotate(90);
@@ -727,5 +728,13 @@ public class PlayingArea {
             }
         }
         return hasNeighbor && hasConnection && !openConnection;
+    }
+
+    /**
+     * Save the puzzle to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+
     }
 }
