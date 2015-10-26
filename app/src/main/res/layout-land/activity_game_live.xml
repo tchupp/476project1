@@ -12,57 +12,77 @@
         android:id="@+id/surrenderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonOpenValve"
         android:onClick="onSurrender"
         android:text="@string/surrender_button"
-        android:layout_alignLeft="@+id/buttonOpenValve" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/buttonOpenValve"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/buttonDiscard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/buttonOpenValve"
-        android:layout_alignRight="@+id/buttonOpenValve"
-        android:layout_below="@+id/buttonInstall"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:text="@string/discard_button"
-        android:onClick="onDiscard" />
+        android:onClick="onDiscard"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:layout_above="@+id/buttonOpenValve"
+        android:layout_alignLeft="@+id/buttonOpenValve"
+        android:layout_alignStart="@+id/buttonOpenValve" />
 
     <Button
         android:id="@+id/buttonInstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/buttonDiscard"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/buttonDiscard"
         android:layout_alignWithParentIfMissing="false"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="@string/install_button"
-        android:onClick="onInstall" />
+        android:onClick="onInstall"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_above="@+id/buttonDiscard"
+        android:layout_toRightOf="@+id/linearLayout2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentTop="false" />
 
     <Button
         android:id="@+id/buttonOpenValve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonDiscard"
         android:text="@string/open_valve_button"
-        android:onClick="onOpenValve" />
+        android:onClick="onOpenValve"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="1dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_alignLeft="@+id/surrenderButton"
+        android:layout_alignStart="@+id/surrenderButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/rotate_button"
         android:id="@+id/buttonRotate"
+        android:onClick="onRotate"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:layout_below="@+id/surrenderButton"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/surrenderButton"
-        android:onClick="onRotate" />
+        android:layout_alignRight="@+id/buttonDiscard"
+        android:layout_alignEnd="@+id/buttonDiscard"
+        android:layout_toRightOf="@+id/linearLayout2"
+        android:layout_toEndOf="@+id/linearLayout2"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,7 +93,8 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/buttonDiscard"
         android:layout_toStartOf="@+id/buttonDiscard"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout2">
 
         <edu.msu.chuppthe.steampunked.PlayingAreaView
             android:id="@+id/playingView"
