@@ -178,22 +178,6 @@ public class PlayingArea {
     }
 
     /**
-     * Get the pipe at a given location.
-     * This will return null if outside the playing area.
-     *
-     * @param x X location
-     * @param y Y location
-     * @return Reference to Pipe object or null if none exists
-     */
-    public Pipe getPipe(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            return null;
-        }
-
-        return pipes[x][y];
-    }
-
-    /**
      * Add a pipe to the playing area
      *
      * @param pipe Pipe to add
@@ -213,7 +197,7 @@ public class PlayingArea {
      * @param x    X location
      * @param y    Y location
      */
-    public void addLeak(Leak leak, int x, int y) {
+    private void addLeak(Leak leak, int x, int y) {
         leaks[x][y] = leak;
         leak.setPosition(this, x, y);
     }
@@ -465,55 +449,103 @@ public class PlayingArea {
     }
 
     /**
-     * Sets leaks at appropriate locations on the grid
+     * Save pipes to a bundle
+     *
+     * @param bundle  The bundle we save to
+     * @param player1 reference to player one
      */
-    private void detectLeaks() {
-
-        for (int x = 0; x < leaks.length; x++) {
-            Leak[] row = leaks[x];
-            for (int y = 0; y < row.length; y++) {
-                Leak leak = row[y];
-                if (leak != null) {
-                    leaks[x][y] = null;
-                }
-            }
-        }
+    public void saveToBundle(Bundle bundle, Player player1) {
+        int pipeCount = 0;
 
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
-                if (pipe != null && pipe.getId() != Pipe.ENDING_PIPE) {
-                    if (pipe.addSteam(0)) {
-                        Leak leak = Leak.createLeak(context);
-                        leak.rotate(90);
-                        addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() - 1);
-                    }
-                    if (pipe.addSteam(1)) {
-                        Leak leak = Leak.createLeak(context);
-                        leak.rotate(180);
-                        addLeak(leak, pipe.getGridPositionX() + 1, pipe.getGridPositionY());
-                    }
-                    if (pipe.addSteam(2)) {
-                        Leak leak = Leak.createLeak(context);
-                        leak.rotate(270);
-                        addLeak(leak, pipe.getGridPositionX(), pipe.getGridPositionY() + 1);
-                    }
-                    if (pipe.addSteam(3)) {
-                        Leak leak = Leak.createLeak(context);
-                        leak.rotate(360);
-                        addLeak(leak, pipe.getGridPositionX() - 1, pipe.getGridPositionY());
-                    }
+                if (pipe != null
+                        && pipe.getId() != Pipe.ENDING_PIPE
+                        && pipe.getId() != Pipe.STARTING_PIPE) {
+                    pipeCount++;
                 }
             }
         }
+
+        String[] pipeIds = new String[pipeCount];
+        int[] imageIds = new int[pipeCount];
+        int[] playerIds = new int[pipeCount + 1];
+
+        int index = 0;
+
+        for (int x = 0; x < pipes.length; x++) {
+            Pipe[] row = pipes[x];
+            for (int y = 0; y < row.length; y++) {
+                Pipe pipe = row[y];
+                if (pipe != null
+                        && pipe.getId() != Pipe.ENDING_PIPE
+                        && pipe.getId() != Pipe.STARTING_PIPE) {
+
+                    String pipeKey = "Pipe" + Integer.toString(x) + Integer.toString(y);
+                    pipeIds[index] = pipeKey;
+                    imageIds[index] = pipe.getId();
+                    if (pipe.getPlayer() == player1) {
+                        playerIds[index] = 1;
+                    } else {
+                        playerIds[index] = 2;
+                    }
+                    pipe.saveInstanceState(pipeKey, bundle);
+                    index++;
+                }
+            }
+        }
+
+        // Store the arrays in the bundle
+        bundle.putStringArray(PIPE_IDS, pipeIds);
+        bundle.putIntArray(PIPE_IMAGE_IDS, imageIds);
+        bundle.putIntArray(PLAYER_IDS, playerIds);
     }
 
     /**
-     * Get the playing area height
+     * Read pipes info from a bundle
      *
-     * @return Height
+     * @param bundle  The bundle we save to
+     * @param player1 reference to player one
+     * @param player2 reference to player two
      */
-    public int getHeight() {
-        return this.height;
+    public void getFromBundle(Bundle bundle, Player player1, Player player2) {
+        String[] pipeIds = bundle.getStringArray(PIPE_IDS);
+        int[] imageIds = bundle.getIntArray(PIPE_IMAGE_IDS);
+        int[] playerIds = bundle.getIntArray(PLAYER_IDS);
+
+
+        if (pipeIds == null || imageIds == null || playerIds == null) {
+            return;
+        }
+
+        for (int index = 0; index < pipeIds.length; index++) {
+            Pipe pipe;
+            Player player;
+
+            if (playerIds[index] == 1) {
+                player = player1;
+            } else {
+                player = player2;
+            }
+
+            switch (imageIds[index]) {
+                case Pipe.CAP_PIPE:
+                    pipe = Pipe.createCapPipe(context, player);
+                    break;
+                case Pipe.TEE_PIPE:
+                    pipe = Pipe.createTeePipe(context, player);
+                    break;
+                case Pipe.NINETY_PIPE:
+                    pipe = Pipe.createNinetyPipe(context, player);
+                    break;
+                default:
+                    pipe = Pipe.createStraightPipe(context, player);
+                    break;
+            }
+
+            pipe.getFromBundle(pipeIds[index], bundle);
+            addPipe(pipe, pipe.getGridPositionX(), pipe.getGridPositionY());
+        }
     }
 
     /**
@@ -523,6 +555,45 @@ public class PlayingArea {
      */
     public int getWidth() {
         return this.width;
+    }
+
+    /**
+     * Sets leaks at appropriate locations on the grid
+     */
+    private void detectLeaks() {
+        this.leaks = new Leak[width][height];
+
+        for (Pipe[] row : pipes) {
+            for (Pipe pipe : row) {
+                if (pipe != null && pipe.getId() != Pipe.ENDING_PIPE) {
+                    for (int i = 0; i < 4; i++) {
+                        if (pipe.addSteam(i)) {
+                            Leak leak = Leak.createLeak(context);
+                            leak.rotate(90 * (i + 1));
+
+                            int x = pipe.getGridPositionX();
+                            int y = pipe.getGridPositionY();
+
+                            switch (i) {
+                                case 0:
+                                    y -= 1;
+                                    break;
+                                case 1:
+                                    x += 1;
+                                    break;
+                                case 2:
+                                    y += 1;
+                                    break;
+                                case 3:
+                                    x -= 1;
+                                    break;
+                            }
+                            addLeak(leak, x, y);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -742,105 +813,18 @@ public class PlayingArea {
     }
 
     /**
-     * Save pipes to a bundle
+     * Get the pipe at a given location.
+     * This will return null if outside the playing area.
      *
-     * @param key     Key we save under
-     * @param bundle  The bundle we save to
-     * @param player1 reference to player one
-     * @param player2 reference to player two
+     * @param x X location
+     * @param y Y location
+     * @return Reference to Pipe object or null if none exists
      */
-    public void saveInstanceState(String key, Bundle bundle, Player player1, Player player2) {
-        int pipeCount = 0;
-
-        for (Pipe[] row : pipes) {
-            for (Pipe pipe : row) {
-                if (pipe != null
-                        && pipe.getId() != Pipe.ENDING_PIPE
-                        && pipe.getId() != Pipe.STARTING_PIPE) {
-                    pipeCount++;
-                }
-            }
+    private Pipe getPipe(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
         }
 
-        String[] pipeIds = new String[pipeCount];
-        int[] imageIds = new int[pipeCount];
-        int[] playerIds = new int[pipeCount + 1];
-
-        int index = 0;
-
-        for (int x = 0; x < pipes.length; x++) {
-            Pipe[] row = pipes[x];
-            for (int y = 0; y < row.length; y++) {
-                Pipe pipe = row[y];
-                if (pipe != null
-                        && pipe.getId() != Pipe.ENDING_PIPE
-                        && pipe.getId() != Pipe.STARTING_PIPE) {
-
-                    String pipeKey = "Pipe" + Integer.toString(x) + Integer.toString(y);
-                    pipeIds[index] = pipeKey;
-                    imageIds[index] = pipe.getId();
-                    if (pipe.getPlayer() == player1) {
-                        playerIds[index] = 1;
-                    } else {
-                        playerIds[index] = 2;
-                    }
-                    pipe.saveInstanceState(pipeKey, bundle);
-                    index++;
-                }
-            }
-        }
-
-        // Store the arrays in the bundle
-        bundle.putStringArray(PIPE_IDS, pipeIds);
-        bundle.putIntArray(PIPE_IMAGE_IDS, imageIds);
-        bundle.putIntArray(PLAYER_IDS, playerIds);
-    }
-
-    /**
-     * Read pipes info from a bundle
-     *
-     * @param key     Key we saved under
-     * @param bundle  The bundle we save to
-     * @param player1 reference to player one
-     * @param player2 reference to player two
-     */
-    public void loadInstanceState(String key, Bundle bundle, Player player1, Player player2) {
-        String[] pipeIds = bundle.getStringArray(PIPE_IDS);
-        int[] imageIds = bundle.getIntArray(PIPE_IMAGE_IDS);
-        int[] playerIds = bundle.getIntArray(PLAYER_IDS);
-
-
-        if (pipeIds == null || imageIds == null || playerIds == null) {
-            return;
-        }
-
-        for (int index = 0; index < pipeIds.length; index++) {
-            Pipe pipe;
-            Player player;
-
-            if (playerIds[index] == 1) {
-                player = player1;
-            } else {
-                player = player2;
-            }
-
-            switch (imageIds[index]) {
-                case Pipe.CAP_PIPE:
-                    pipe = Pipe.createCapPipe(context, player);
-                    break;
-                case Pipe.TEE_PIPE:
-                    pipe = Pipe.createTeePipe(context, player);
-                    break;
-                case Pipe.NINETY_PIPE:
-                    pipe = Pipe.createNinetyPipe(context, player);
-                    break;
-                default:
-                    pipe = Pipe.createStraightPipe(context, player);
-                    break;
-            }
-
-            pipe.getFromBundle(pipeIds[index], bundle);
-            addPipe(pipe, pipe.getGridPositionX(), pipe.getGridPositionY());
-        }
+        return pipes[x][y];
     }
 }
