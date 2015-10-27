@@ -20,7 +20,7 @@ public class Pipe {
     }
 
     public static Pipe createEndingPipe(Context context, Player player) {
-        Pipe endingPipe = new Pipe(true, false, false, false);
+        Pipe endingPipe = new Pipe(false, false, false, false);
         endingPipe.setId(context, R.drawable.gauge);
         endingPipe.setMovable(false);
         endingPipe.setPlayer(player);
@@ -126,10 +126,10 @@ public class Pipe {
     /**
      * Array that indicates which sides of this pipe
      * has flanges. The order is north, east, south, west.
-     * <p/>
+     * <p>
      * As an example, a T that has a horizontal pipe
      * with the T open to the bottom would be:
-     * <p/>
+     * <p>
      * false, true, true, true
      */
     private boolean[] connect = {false, false, false, false};
@@ -175,7 +175,7 @@ public class Pipe {
 
     /**
      * Search to see if there are any downstream of this pipe
-     * <p/>
+     * <p>
      * This does a simple depth-first search to find any connections
      * that are not, in turn, connected to another pipe. It also
      * set the visited flag in all pipes it does visit, so you can
@@ -525,6 +525,7 @@ public class Pipe {
 
     /**
      * Save the puzzle to a bundle
+     *
      * @param bundle The bundle we save to
      */
     public void saveInstanceState(Bundle bundle) {
@@ -533,10 +534,11 @@ public class Pipe {
 
     /**
      * Get the view state from a bundle
-     * @param key key name to use in the bundle
+     *
+     * @param key    key name to use in the bundle
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
-        params = (Parameters)bundle.getSerializable(key);
+        params = (Parameters) bundle.getSerializable(key);
     }
 }

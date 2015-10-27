@@ -739,7 +739,6 @@ public class PlayingArea {
      * @return If the piece can be placed
      */
     private boolean checkConnected(int gridX, int gridY) {
-        boolean hasNeighbor = false;
         boolean hasConnection = false;
         boolean openConnection = false;
 
@@ -748,7 +747,6 @@ public class PlayingArea {
             if (n == null) {
                 continue;
             }
-            hasNeighbor = true;
 
             int dp = (d + 2) % 4;
 
@@ -761,17 +759,25 @@ public class PlayingArea {
             } else {
                 // Pieces have the same player
                 if (n.canConnect(dp) && selected.canConnect(d)) {
+                    // If there is a connection
                     hasConnection = true;
-                } else if ((!n.canConnect(dp) && selected.canConnect(d)) || (n.canConnect(dp) && !selected.canConnect(d))) {
-                    openConnection = true;
+                } else {
+                    boolean neighborNotEnd = n.getId() != R.drawable.gauge;
+                    boolean neighborCantConnect = !n.canConnect(dp) && selected.canConnect(d);
+                    boolean selectedCantConnect = n.canConnect(dp) && !selected.canConnect(d);
+
+                    if ((neighborCantConnect && neighborNotEnd) || selectedCantConnect) {
+                        openConnection = true;
+                    }
                 }
             }
         }
-        return hasNeighbor && hasConnection && !openConnection;
+        return hasConnection && !openConnection;
     }
 
     /**
      * Save pipes to a bundle
+     *
      * @param bundle The bundle we save to
      */
     public void saveInstanceState(Bundle bundle) {
@@ -803,16 +809,15 @@ public class PlayingArea {
             for (int y = 0; y < row.length; y++) {
                 Pipe pipe = row[y];
                 if (pipe != null && pipe != playerOne.getStartingPipe()
-                                 && pipe != playerOne.getEndingPipe()
-                                 && pipe != playerTwo.getStartingPipe()
-                                 && pipe != playerTwo.getEndingPipe()) {
+                        && pipe != playerOne.getEndingPipe()
+                        && pipe != playerTwo.getStartingPipe()
+                        && pipe != playerTwo.getEndingPipe()) {
 
                     pipeIds[index] = Integer.toString(x) + Integer.toString(y);
                     imageIds[index] = pipe.getId();
                     if (pipe.getPlayer() == playerOne) {
                         playerIds[index] = 1;
-                    }
-                    else {
+                    } else {
                         playerIds[index] = 2;
                     }
                     pipe.saveInstanceState(bundle);
@@ -824,8 +829,7 @@ public class PlayingArea {
         // Stores active player at end of array
         if (activePlayer == playerOne) {
             playerIds[index++] = 1;
-        }
-        else {
+        } else {
             playerIds[index++] = 2;
         }
 
@@ -836,6 +840,7 @@ public class PlayingArea {
 
     /**
      * Read pipes info from a bundle
+     *
      * @param bundle The bundle we save to
      */
     public void loadInstanceState(Bundle bundle) {
@@ -873,8 +878,7 @@ public class PlayingArea {
         // Gets active player number from end
         if (playerIds[index++] == 1) {
             activePlayer = playerOne;
-        }
-        else {
+        } else {
             activePlayer = playerTwo;
         }
 

@@ -20,6 +20,7 @@ public class GameLiveActivity extends AppCompatActivity {
 
     /**
      * Save the instance state into a bundle
+     *
      * @param bundle the bundle to save into
      */
     @Override
@@ -54,7 +55,7 @@ public class GameLiveActivity extends AppCompatActivity {
 
         getSelectionAreaView().startTurn(this.activePlayer);
 
-        if(bundle != null) {
+        if (bundle != null) {
             // We have saved state
             getPlayingAreaView().loadInstanceState(bundle);
 
@@ -66,8 +67,7 @@ public class GameLiveActivity extends AppCompatActivity {
                 this.playerTwo.setActive(false);
 
                 getSelectionAreaView().startTurn(this.activePlayer);
-            }
-            else {
+            } else {
                 this.activePlayer = this.playerTwo;
                 this.inactivePlayer = this.playerOne;
 

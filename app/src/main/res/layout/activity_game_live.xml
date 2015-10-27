@@ -27,8 +27,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="@string/discard_button"
-        android:onClick="onDiscard" />
+        android:onClick="onDiscard"
+        android:text="@string/discard_button" />
 
     <Button
         android:id="@+id/buttonInstall"
@@ -39,8 +39,8 @@
         android:layout_alignLeft="@+id/buttonDiscard"
         android:layout_alignRight="@+id/buttonDiscard"
         android:layout_alignStart="@+id/buttonDiscard"
-        android:text="@string/install_button"
-        android:onClick="onInstall" />
+        android:onClick="onInstall"
+        android:text="@string/install_button" />
 
     <Button
         android:id="@+id/buttonOpenValve"
@@ -49,15 +49,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/buttonInstall"
-        android:text="@string/open_valve_button"
-        android:onClick="onOpenValve" />
+        android:onClick="onOpenValve"
+        android:text="@string/open_valve_button" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonInstall"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical">
 
         <edu.msu.chuppthe.steampunked.PlayingAreaView
             android:id="@+id/playingView"
@@ -74,12 +74,12 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/buttonRotate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rotate_button"
-        android:id="@+id/buttonRotate"
-        android:layout_toRightOf="@+id/buttonInstall"
+        android:layout_alignBottom="@+id/buttonDiscard"
         android:layout_toLeftOf="@+id/buttonOpenValve"
+        android:layout_toRightOf="@+id/buttonInstall"
         android:onClick="onRotate"
-        android:layout_alignBottom="@+id/buttonDiscard" />
+        android:text="@string/rotate_button" />
 </RelativeLayout>
