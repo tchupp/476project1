@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -76,4 +77,9 @@ public class SelectionAreaView extends View {
         return activity.getActivePlayer();
     }
 
+    public void saveToBundle(String key, Bundle bundle) {
+    }
+
+    public void getFromBundle(String key, Bundle bundle) {
+    }
 }

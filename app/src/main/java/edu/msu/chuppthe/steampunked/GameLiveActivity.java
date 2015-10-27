@@ -10,6 +10,11 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public static String WINNING_PLAYER = "WINNING_PLAYER";
 
+    private static final String PLAYING_AREA = "playingArea";
+    private static final String SELECTION_AREA = "selectionArea";
+    private static final String ACTIVE_PLAYER = "activePlayer";
+    private static final String INACTIVE_PLAYER = "inactivePlayer";
+
     private Player playerOne;
 
     private Player playerTwo;
@@ -27,7 +32,10 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        getPlayingAreaView().saveInstanceState(bundle);
+        getPlayingAreaView().saveToBundle(PLAYING_AREA, bundle, this.playerOne, this.playerTwo);
+        getSelectionAreaView().saveToBundle(SELECTION_AREA, bundle);
+        bundle.putString(ACTIVE_PLAYER, this.activePlayer.getName());
+        bundle.putString(INACTIVE_PLAYER, this.inactivePlayer.getName());
     }
 
     @Override
@@ -50,34 +58,31 @@ public class GameLiveActivity extends AppCompatActivity {
         this.activePlayer = this.playerOne;
         this.inactivePlayer = this.playerTwo;
 
-        this.playerOne.setActive(true);
-        this.playerTwo.setActive(false);
-
-        getSelectionAreaView().startTurn(this.activePlayer);
-
         if (bundle != null) {
             // We have saved state
-            getPlayingAreaView().loadInstanceState(bundle);
+            String activeName = bundle.getString(ACTIVE_PLAYER);
+            String inactiveName = bundle.getString(INACTIVE_PLAYER);
 
-            if (getPlayingAreaView().getActivePlayer() == playerOne) {
+            if (activeName == null || inactiveName == null) {
+                return;
+            }
+
+            if (activeName.equals(this.playerOne.getName())) {
                 this.activePlayer = this.playerOne;
                 this.inactivePlayer = this.playerTwo;
-
-                this.playerOne.setActive(true);
-                this.playerTwo.setActive(false);
-
-                getSelectionAreaView().startTurn(this.activePlayer);
             } else {
                 this.activePlayer = this.playerTwo;
                 this.inactivePlayer = this.playerOne;
-
-                this.playerOne.setActive(false);
-                this.playerTwo.setActive(true);
-
-                getSelectionAreaView().startTurn(this.activePlayer);
             }
 
+            getPlayingAreaView().getFromBundle(PLAYING_AREA, bundle, this.playerOne, this.playerTwo);
+            getSelectionAreaView().getFromBundle(SELECTION_AREA, bundle);
         }
+
+        this.activePlayer.setActive(true);
+        this.inactivePlayer.setActive(false);
+
+        getSelectionAreaView().startTurn(this.activePlayer);
     }
 
     public void onInstall(View view) {
@@ -136,10 +141,8 @@ public class GameLiveActivity extends AppCompatActivity {
         this.activePlayer = this.inactivePlayer;
         this.inactivePlayer = temp;
 
-        activePlayer.setActive(true);
-        inactivePlayer.setActive(false);
-
-        getPlayingAreaView().setActivePlayer(activePlayer);
+        this.activePlayer.setActive(true);
+        this.inactivePlayer.setActive(false);
 
         getSelectionAreaView().startTurn(this.activePlayer);
     }

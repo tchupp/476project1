@@ -58,7 +58,7 @@ public class PlayingAreaView extends View {
         int player1Y = gridSize;
         int player2Y = 3 * gridSize;
 
-        this.playingArea = new PlayingArea(playerOne, playerTwo, getContext(), totalGridSize, totalGridSize);
+        this.playingArea = new PlayingArea(getContext(), totalGridSize, totalGridSize);
 
         Pipe player1StartPipe = Pipe.createStartingPipe(getContext(), playerOne);
         Pipe player2StartPipe = Pipe.createStartingPipe(getContext(), playerTwo);
@@ -69,9 +69,6 @@ public class PlayingAreaView extends View {
         Pipe player2EndPipe = Pipe.createEndingPipe(getContext(), playerTwo);
         this.playingArea.addPipe(player1EndPipe, endingX, player1Y + 1);
         this.playingArea.addPipe(player2EndPipe, endingX, player2Y + 1);
-
-        this.playingArea.detectLeaks();
-        setActivePlayer(playerOne);
     }
 
     @Override
@@ -152,26 +149,24 @@ public class PlayingAreaView extends View {
     /**
      * Save the playing area to a bundle
      *
-     * @param bundle The bundle we save to
+     * @param key       Key to save the bundle under
+     * @param bundle    The bundle we save to
+     * @param playerOne reference to player one
+     * @param playerTwo reference to player two
      */
-    public void saveInstanceState(Bundle bundle) {
-        playingArea.saveInstanceState(bundle);
+    public void saveToBundle(String key, Bundle bundle, Player playerOne, Player playerTwo) {
+        playingArea.saveInstanceState(key, bundle, playerOne, playerTwo);
     }
 
     /**
      * Load the playing area from a bundle
      *
-     * @param bundle The bundle we save to
+     * @param key       Key to retrieve the bundle by
+     * @param bundle    The bundle we saved to
+     * @param playerOne reference to player one
+     * @param playerTwo reference to player two
      */
-    public void loadInstanceState(Bundle bundle) {
-        playingArea.loadInstanceState(bundle);
-    }
-
-    public void setActivePlayer(Player activePlayer) {
-        this.playingArea.setActivePlayer(activePlayer);
-    }
-
-    public Player getActivePlayer() {
-        return this.playingArea.getActivePlayer();
+    public void getFromBundle(String key, Bundle bundle, Player playerOne, Player playerTwo) {
+        playingArea.loadInstanceState(key, bundle, playerOne, playerTwo);
     }
 }
