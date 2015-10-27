@@ -55,19 +55,19 @@ public class PlayingAreaView extends View {
         int totalGridSize = 5 * gridSize;
         int startingX = 0;
         int endingX = totalGridSize - 1;
-        int player1Y = gridSize;
+        int player1Y = gridSize + 1;
         int player2Y = 3 * gridSize;
 
         this.playingArea = new PlayingArea(getContext(), totalGridSize, totalGridSize);
 
         Pipe player1StartPipe = Pipe.createStartingPipe(getContext(), playerOne);
         Pipe player2StartPipe = Pipe.createStartingPipe(getContext(), playerTwo);
-        this.playingArea.addPipe(player1StartPipe, startingX, player1Y);
+        this.playingArea.addPipe(player1StartPipe, startingX, player1Y - 1);
         this.playingArea.addPipe(player2StartPipe, startingX, player2Y);
 
         Pipe player1EndPipe = Pipe.createEndingPipe(getContext(), playerOne);
         Pipe player2EndPipe = Pipe.createEndingPipe(getContext(), playerTwo);
-        this.playingArea.addPipe(player1EndPipe, endingX, player1Y + 1);
+        this.playingArea.addPipe(player1EndPipe, endingX, player1Y);
         this.playingArea.addPipe(player2EndPipe, endingX, player2Y + 1);
     }
 
@@ -142,6 +142,9 @@ public class PlayingAreaView extends View {
         invalidate();
     }
 
+    /**
+     * @return size of the playing area grid
+     */
     public int getPlayingAreaSize() {
         return this.playingArea.getWidth();
     }
@@ -149,24 +152,21 @@ public class PlayingAreaView extends View {
     /**
      * Save the playing area to a bundle
      *
-     * @param key       Key to save the bundle under
      * @param bundle    The bundle we save to
      * @param playerOne reference to player one
-     * @param playerTwo reference to player two
      */
-    public void saveToBundle(String key, Bundle bundle, Player playerOne, Player playerTwo) {
-        playingArea.saveInstanceState(key, bundle, playerOne, playerTwo);
+    public void saveToBundle(Bundle bundle, Player playerOne) {
+        playingArea.saveToBundle(bundle, playerOne);
     }
 
     /**
      * Load the playing area from a bundle
      *
-     * @param key       Key to retrieve the bundle by
      * @param bundle    The bundle we saved to
      * @param playerOne reference to player one
      * @param playerTwo reference to player two
      */
-    public void getFromBundle(String key, Bundle bundle, Player playerOne, Player playerTwo) {
-        playingArea.loadInstanceState(key, bundle, playerOne, playerTwo);
+    public void getFromBundle(Bundle bundle, Player playerOne, Player playerTwo) {
+        playingArea.getFromBundle(bundle, playerOne, playerTwo);
     }
 }
