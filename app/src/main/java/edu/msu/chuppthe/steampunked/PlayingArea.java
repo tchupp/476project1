@@ -7,11 +7,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * A representation of the playing area
  */
-public class PlayingArea {
+public class PlayingArea extends PipeArea {
 
     private class Parameters implements Serializable {
         /**
@@ -451,99 +452,57 @@ public class PlayingArea {
     /**
      * Save pipes to a bundle
      *
-     * @param bundle  The bundle we save to
-     * @param player1 reference to player one
+     * @param bundle The bundle we save to
      */
-    public void saveToBundle(Bundle bundle, Player player1) {
-        int pipeCount = 0;
+    public void saveToBundle(Bundle bundle) {
+        ArrayList<String> pipeIds = new ArrayList<>();
+        ArrayList<Integer> imageIds = new ArrayList<>();
+        ArrayList<String> playerIds = new ArrayList<>();
 
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
                 if (pipe != null
                         && pipe.getId() != Pipe.ENDING_PIPE
                         && pipe.getId() != Pipe.STARTING_PIPE) {
-                    pipeCount++;
-                }
-            }
-        }
-
-        String[] pipeIds = new String[pipeCount];
-        int[] imageIds = new int[pipeCount];
-        int[] playerIds = new int[pipeCount + 1];
-
-        int index = 0;
-
-        for (int x = 0; x < pipes.length; x++) {
-            Pipe[] row = pipes[x];
-            for (int y = 0; y < row.length; y++) {
-                Pipe pipe = row[y];
-                if (pipe != null
-                        && pipe.getId() != Pipe.ENDING_PIPE
-                        && pipe.getId() != Pipe.STARTING_PIPE) {
-
-                    String pipeKey = "Pipe" + Integer.toString(x) + Integer.toString(y);
-                    pipeIds[index] = pipeKey;
-                    imageIds[index] = pipe.getId();
-                    if (pipe.getPlayer() == player1) {
-                        playerIds[index] = 1;
-                    } else {
-                        playerIds[index] = 2;
-                    }
-                    pipe.saveInstanceState(pipeKey, bundle);
-                    index++;
+                    pipe.saveToBundle(bundle, pipeIds, imageIds, playerIds);
                 }
             }
         }
 
         // Store the arrays in the bundle
-        bundle.putStringArray(PIPE_IDS, pipeIds);
-        bundle.putIntArray(PIPE_IMAGE_IDS, imageIds);
-        bundle.putIntArray(PLAYER_IDS, playerIds);
+        bundle.putStringArray(PIPE_IDS, pipeIds.toArray(new String[pipeIds.size()]));
+        bundle.putIntArray(PIPE_IMAGE_IDS, toIntArray(imageIds));
+        bundle.putStringArray(PLAYER_IDS, playerIds.toArray(new String[playerIds.size()]));
     }
 
     /**
      * Read pipes info from a bundle
      *
-     * @param bundle  The bundle we save to
-     * @param player1 reference to player one
-     * @param player2 reference to player two
+     * @param bundle    The bundle we save to
+     * @param playerOne reference to player one
+     * @param playerTwo reference to player two
      */
-    public void getFromBundle(Bundle bundle, Player player1, Player player2) {
+    public void getFromBundle(Bundle bundle, Player playerOne, Player playerTwo) {
         String[] pipeIds = bundle.getStringArray(PIPE_IDS);
         int[] imageIds = bundle.getIntArray(PIPE_IMAGE_IDS);
-        int[] playerIds = bundle.getIntArray(PLAYER_IDS);
-
+        String[] playerIds = bundle.getStringArray(PLAYER_IDS);
 
         if (pipeIds == null || imageIds == null || playerIds == null) {
             return;
         }
 
         for (int index = 0; index < pipeIds.length; index++) {
-            Pipe pipe;
             Player player;
 
-            if (playerIds[index] == 1) {
-                player = player1;
+            if (playerIds[index].equals(playerOne.getName())) {
+                player = playerOne;
             } else {
-                player = player2;
+                player = playerTwo;
             }
 
-            switch (imageIds[index]) {
-                case Pipe.CAP_PIPE:
-                    pipe = Pipe.createCapPipe(context, player);
-                    break;
-                case Pipe.TEE_PIPE:
-                    pipe = Pipe.createTeePipe(context, player);
-                    break;
-                case Pipe.NINETY_PIPE:
-                    pipe = Pipe.createNinetyPipe(context, player);
-                    break;
-                default:
-                    pipe = Pipe.createStraightPipe(context, player);
-                    break;
-            }
-
+            Pipe pipe = createPipe(context, imageIds[index], player);
             pipe.getFromBundle(pipeIds[index], bundle);
+
             addPipe(pipe, pipe.getGridPositionX(), pipe.getGridPositionY());
         }
     }

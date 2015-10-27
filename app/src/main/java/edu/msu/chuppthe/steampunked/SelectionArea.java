@@ -3,6 +3,7 @@ package edu.msu.chuppthe.steampunked;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -10,8 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
-public class SelectionArea {
+public class SelectionArea extends PipeArea {
+
+    private final static String PIPE_IDS = "SelectionPipe.ids";
+    private final static String PIPE_IMAGE_IDS = "SelectionPipe.image.ids";
+    private final static String PLAYER_IDS = "SelectionPipe.player.ids";
+
     /**
      * Paint for the selection area
      */
@@ -53,7 +60,10 @@ public class SelectionArea {
      */
     private float cHeight;
 
-    public SelectionArea() {
+    private Context context;
+
+    public SelectionArea(Context context) {
+        this.context = context;
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.selectionAreaPaint.setColor(0xffadf99d);
 
@@ -136,8 +146,10 @@ public class SelectionArea {
     /**
      * Generate new random pipes
      */
-    public void generatePipes(Context context, Player player) {
-        if (this.pipeMap.get(player) == null) this.pipeMap.put(player, new ArrayList<Pipe>());
+    public void generatePipes(Player player) {
+        if (this.pipeMap.get(player) == null) {
+            this.pipeMap.put(player, new ArrayList<Pipe>());
+        }
 
         List<Pipe> pipes = this.pipeMap.get(player);
         while (pipes.size() < 5) {
@@ -162,6 +174,54 @@ public class SelectionArea {
         }
 
         setAllPipesMovable(player, true);
+    }
+
+    public void saveToBundle(Bundle bundle) {
+        ArrayList<String> pipeIds = new ArrayList<>();
+        ArrayList<Integer> imageIds = new ArrayList<>();
+        ArrayList<String> playerIds = new ArrayList<>();
+
+        Set<Map.Entry<Player, List<Pipe>>> entrySet = this.pipeMap.entrySet();
+        for (Map.Entry<Player, List<Pipe>> entry : entrySet) {
+            for (Pipe pipe : entry.getValue()) {
+                pipe.saveToBundle(bundle, pipeIds, imageIds, playerIds);
+            }
+        }
+
+        // Store the arrays in the bundle
+        bundle.putStringArray(PIPE_IDS, pipeIds.toArray(new String[pipeIds.size()]));
+        bundle.putIntArray(PIPE_IMAGE_IDS, toIntArray(imageIds));
+        bundle.putStringArray(PLAYER_IDS, playerIds.toArray(new String[playerIds.size()]));
+    }
+
+    public void getFromBundle(Bundle bundle, Player playerOne, Player playerTwo) {
+        this.pipeMap.clear();
+
+        String[] pipeIds = bundle.getStringArray(PIPE_IDS);
+        int[] imageIds = bundle.getIntArray(PIPE_IMAGE_IDS);
+        String[] playerIds = bundle.getStringArray(PLAYER_IDS);
+
+        if (pipeIds == null || imageIds == null || playerIds == null) {
+            return;
+        }
+
+        for (int index = 0; index < pipeIds.length; index++) {
+            Player player;
+
+            if (playerIds[index].equals(playerOne.getName())) {
+                player = playerOne;
+            } else {
+                player = playerTwo;
+            }
+
+            Pipe pipe = createPipe(context, imageIds[index], player);
+            pipe.getFromBundle(pipeIds[index], bundle);
+
+            if (this.pipeMap.get(player) == null) {
+                this.pipeMap.put(player, new ArrayList<Pipe>());
+            }
+            this.pipeMap.get(player).add(pipe);
+        }
     }
 
     /**

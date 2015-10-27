@@ -10,7 +10,6 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public static String WINNING_PLAYER = "WINNING_PLAYER";
 
-    private static final String SELECTION_AREA = "selectionArea";
     private static final String ACTIVE_PLAYER = "activePlayer";
 
     private Player playerOne;
@@ -30,8 +29,8 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        getPlayingAreaView().saveToBundle(bundle, this.playerOne);
-        getSelectionAreaView().saveToBundle(SELECTION_AREA, bundle);
+        getPlayingAreaView().saveToBundle(bundle);
+        getSelectionAreaView().saveToBundle(bundle);
         bundle.putString(ACTIVE_PLAYER, this.activePlayer.getName());
     }
 
@@ -68,7 +67,7 @@ public class GameLiveActivity extends AppCompatActivity {
             }
 
             getPlayingAreaView().getFromBundle(bundle, this.playerOne, this.playerTwo);
-            getSelectionAreaView().getFromBundle(SELECTION_AREA, bundle);
+            getSelectionAreaView().getFromBundle(bundle, this.playerOne, this.playerTwo);
         }
 
         changeTurn();

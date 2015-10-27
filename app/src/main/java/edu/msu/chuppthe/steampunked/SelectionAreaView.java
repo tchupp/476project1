@@ -38,7 +38,7 @@ public class SelectionAreaView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        this.selectionArea = new SelectionArea();
+        this.selectionArea = new SelectionArea(getContext());
 
         this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.outlinePaint.setColor(Color.BLACK);
@@ -63,7 +63,7 @@ public class SelectionAreaView extends View {
     }
 
     public void startTurn(Player player) {
-        this.selectionArea.generatePipes(getContext(), player);
+        this.selectionArea.generatePipes(player);
         invalidate();
     }
 
@@ -77,9 +77,11 @@ public class SelectionAreaView extends View {
         return activity.getActivePlayer();
     }
 
-    public void saveToBundle(String key, Bundle bundle) {
+    public void saveToBundle(Bundle bundle) {
+        this.selectionArea.saveToBundle(bundle);
     }
 
-    public void getFromBundle(String key, Bundle bundle) {
+    public void getFromBundle(Bundle bundle, Player playerOne, Player playerTwo) {
+        this.selectionArea.getFromBundle(bundle, playerOne, playerTwo);
     }
 }

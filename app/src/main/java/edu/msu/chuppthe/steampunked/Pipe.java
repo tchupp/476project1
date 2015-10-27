@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Pipe {
 
@@ -113,11 +114,6 @@ public class Pipe {
          * Can the piece be moved
          */
         protected boolean isMovable = true;
-
-        /**
-         * ID for the pipe image
-         */
-        protected int id;
     }
 
     /**
@@ -160,6 +156,11 @@ public class Pipe {
      * Paint for the outline
      */
     protected Paint outlinePaint;
+
+    /**
+     * ID for the pipe image
+     */
+    protected int id;
 
     /**
      * Constructor
@@ -485,7 +486,7 @@ public class Pipe {
      * @param id      id of the image
      */
     protected void setId(Context context, int id) {
-        params.id = id;
+        this.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
@@ -495,7 +496,7 @@ public class Pipe {
      * @return id
      */
     protected int getId() {
-        return params.id;
+        return this.id;
     }
 
     /**
@@ -533,11 +534,19 @@ public class Pipe {
     /**
      * Save the puzzle to a bundle
      *
-     * @param key    Key to save under
-     * @param bundle The bundle we save to
+     * @param bundle    The bundle we save to
+     * @param pipeIds   list of pipe ids to add to
+     * @param imageIds  list of image ids to add to
+     * @param playerIds list of player ids to add to
      */
-    public void saveInstanceState(String key, Bundle bundle) {
-        bundle.putSerializable(key, params);
+    public void saveToBundle(Bundle bundle, List<String> pipeIds, List<Integer> imageIds, List<String> playerIds) {
+        String pipeKey = "Pipe" + this.hashCode();
+
+        bundle.putSerializable(pipeKey, params);
+
+        pipeIds.add(pipeKey);
+        imageIds.add(this.getId());
+        playerIds.add(this.player.getName());
     }
 
     /**

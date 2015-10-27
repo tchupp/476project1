@@ -152,11 +152,10 @@ public class PlayingAreaView extends View {
     /**
      * Save the playing area to a bundle
      *
-     * @param bundle    The bundle we save to
-     * @param playerOne reference to player one
+     * @param bundle The bundle we save to
      */
-    public void saveToBundle(Bundle bundle, Player playerOne) {
-        playingArea.saveToBundle(bundle, playerOne);
+    public void saveToBundle(Bundle bundle) {
+        playingArea.saveToBundle(bundle);
     }
 
     /**
