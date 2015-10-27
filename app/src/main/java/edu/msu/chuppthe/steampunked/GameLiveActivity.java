@@ -30,8 +30,8 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.activity_game_live);
 
         Intent intent = getIntent();
@@ -53,6 +53,31 @@ public class GameLiveActivity extends AppCompatActivity {
         this.playerTwo.setActive(false);
 
         getSelectionAreaView().startTurn(this.activePlayer);
+
+        if(bundle != null) {
+            // We have saved state
+            getPlayingAreaView().loadInstanceState(bundle);
+
+            if (getPlayingAreaView().getActivePlayer() == playerOne) {
+                this.activePlayer = this.playerOne;
+                this.inactivePlayer = this.playerTwo;
+
+                this.playerOne.setActive(true);
+                this.playerTwo.setActive(false);
+
+                getSelectionAreaView().startTurn(this.activePlayer);
+            }
+            else {
+                this.activePlayer = this.playerTwo;
+                this.inactivePlayer = this.playerOne;
+
+                this.playerOne.setActive(false);
+                this.playerTwo.setActive(true);
+
+                getSelectionAreaView().startTurn(this.activePlayer);
+            }
+
+        }
     }
 
     public void onInstall(View view) {
@@ -113,6 +138,8 @@ public class GameLiveActivity extends AppCompatActivity {
 
         activePlayer.setActive(true);
         inactivePlayer.setActive(false);
+
+        getPlayingAreaView().setActivePlayer(activePlayer);
 
         getSelectionAreaView().startTurn(this.activePlayer);
     }

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 
 import java.io.Serializable;
 
@@ -471,7 +472,7 @@ public class Pipe {
     }
 
     /**
-     * Set the playing area and location for this pipe
+     * Set image id
      *
      * @param context view context
      * @param id      id of the image
@@ -479,6 +480,15 @@ public class Pipe {
     protected void setId(Context context, int id) {
         params.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
+    }
+
+    /**
+     * Get the id for pipe image
+     *
+     * @return id
+     */
+    protected int getId() {
+        return params.id;
     }
 
     /**
@@ -511,5 +521,22 @@ public class Pipe {
     private void setPosition(float x, float y) {
         setBasePosition(x, y, params.scaleBase);
         resetMovement();
+    }
+
+    /**
+     * Save the puzzle to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+        bundle.putSerializable(Integer.toString(params.x) + Integer.toString(params.y), params);
+    }
+
+    /**
+     * Get the view state from a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to load from
+     */
+    public void getFromBundle(String key, Bundle bundle) {
+        params = (Parameters)bundle.getSerializable(key);
     }
 }

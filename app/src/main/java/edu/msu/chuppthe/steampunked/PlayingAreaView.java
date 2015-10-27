@@ -15,7 +15,7 @@ public class PlayingAreaView extends View {
     /**
      * The play area
      */
-    private PlayingArea playingArea = new PlayingArea(0, 0);
+    private PlayingArea playingArea;
 
     /**
      * Paint for the outline
@@ -58,7 +58,7 @@ public class PlayingAreaView extends View {
         int player1Y = gridSize;
         int player2Y = 3 * gridSize;
 
-        this.playingArea = new PlayingArea(totalGridSize, totalGridSize);
+        this.playingArea = new PlayingArea(playerOne, playerTwo, getContext(), totalGridSize, totalGridSize);
 
         Pipe player1StartPipe = Pipe.createStartingPipe(getContext(), playerOne);
         Pipe player2StartPipe = Pipe.createStartingPipe(getContext(), playerTwo);
@@ -70,8 +70,8 @@ public class PlayingAreaView extends View {
         this.playingArea.addPipe(player1EndPipe, endingX, player1Y + 1);
         this.playingArea.addPipe(player2EndPipe, endingX, player2Y + 1);
 
-        this.playingArea.detectLeaks(getContext(), playerOne);
-        this.playingArea.detectLeaks(getContext(), playerTwo);
+        this.playingArea.detectLeaks();
+        setActivePlayer(playerOne);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class PlayingAreaView extends View {
      * Tell the playing area to install the selection and invalidate the view
      */
     public boolean installSelection(Player activePlayer) {
-        boolean success = this.playingArea.installSelection(getContext(), activePlayer);
+        boolean success = this.playingArea.installSelection(activePlayer);
         invalidate();
 
         return success;
@@ -150,10 +150,26 @@ public class PlayingAreaView extends View {
     }
 
     /**
-     * Save the puzzle to a bundle
+     * Save the playing area to a bundle
      * @param bundle The bundle we save to
      */
     public void saveInstanceState(Bundle bundle) {
         playingArea.saveInstanceState(bundle);
+    }
+
+    /**
+     * Load the playing area from a bundle
+     * @param bundle The bundle we save to
+     */
+    public void loadInstanceState(Bundle bundle) {
+        playingArea.loadInstanceState(bundle);
+    }
+
+    public void setActivePlayer(Player activePlayer) {
+        this.playingArea.setActivePlayer(activePlayer);
+    }
+
+    public Player getActivePlayer() {
+        return this.playingArea.getActivePlayer();
     }
 }
