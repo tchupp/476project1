@@ -74,6 +74,9 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void onInstall(View view) {
+
+        activePlayer.setLeak(false);
+
         if (getPlayingAreaView().installSelection(this.activePlayer)) {
             changeTurn();
         } else {

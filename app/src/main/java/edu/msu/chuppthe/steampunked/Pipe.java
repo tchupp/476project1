@@ -11,7 +11,7 @@ import android.os.Bundle;
 import java.io.Serializable;
 import java.util.List;
 
-public class Pipe {
+public class Pipe implements Serializable {
 
     public static final int STARTING_PIPE = R.drawable.handle;
     public static final int ENDING_PIPE = R.drawable.gauge;
@@ -119,12 +119,12 @@ public class Pipe {
     /**
      * Playing area this pipe is a member of
      */
-    private PlayingArea playingArea = null;
+    private transient PlayingArea playingArea = null;
 
     /**
      * The player that owns the pipe
      */
-    private Player player;
+    private transient Player player;
 
     /**
      * Array that indicates which sides of this pipe
@@ -150,14 +150,14 @@ public class Pipe {
     /**
      * Image for the pipe
      */
-    protected Bitmap pipeImage = null;
+    protected transient Bitmap pipeImage = null;
 
     /**
      * Paint for the outline
      */
-    protected Paint outlinePaint;
+    protected transient Paint outlinePaint;
 
-    private  Paint linefill ;
+    private  transient Paint linefill ;
 
     private float gaugePositionX ;
 
@@ -336,7 +336,7 @@ public class Pipe {
         }
     }
 
-    public void moveGage() {
+    public void moveGauge() {
         this.gaugePositionX = this.getImageSize()-20 ;
         this.gaugePositionY = this.getImageSize()*.75f;
     }

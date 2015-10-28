@@ -390,8 +390,8 @@ public class PlayingArea extends PipeArea {
             this.selected.setMovable(false);
             addPipe(this.selected, gridX, gridY);
 
-            if (!detectLeaks()) {
-                this.selected.getPlayer().getEndingPipe().moveGage();
+            if (!this.selected.getPlayer().hasLeak()) {
+                this.selected.getPlayer().getEndingPipe().moveGauge();
             }
 
             this.selected = null;
@@ -522,10 +522,8 @@ public class PlayingArea extends PipeArea {
     /**
      * Sets leaks at appropriate locations on the grid
      */
-    private boolean detectLeaks() {
+    private void detectLeaks() {
         this.leaks = new Leak[width][height];
-
-        boolean leakDetected = false;
 
         for (Pipe[] row : pipes) {
             for (Pipe pipe : row) {
@@ -552,14 +550,13 @@ public class PlayingArea extends PipeArea {
                                     x -= 1;
                                     break;
                             }
-                            leakDetected = true;
+                            pipe.getPlayer().setLeak(true);
                             addLeak(leak, x, y);
                         }
                     }
                 }
             }
         }
-        return leakDetected;
     }
 
     /**
