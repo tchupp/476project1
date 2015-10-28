@@ -428,6 +428,8 @@ public class PlayingArea extends PipeArea {
      * @param isPortrait is the device portrait or landscape?
      */
     public void setSelected(Pipe selected, boolean isPortrait) {
+        touch1.id = 0;
+
         this.selected = selected;
         this.dragging = selected;
 

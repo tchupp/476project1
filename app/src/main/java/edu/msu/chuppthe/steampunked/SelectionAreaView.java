@@ -72,6 +72,11 @@ public class SelectionAreaView extends View {
         activity.onPieceSelected(pipe, isPortrait);
     }
 
+    public boolean passTouch(MotionEvent event) {
+        GameLiveActivity activity = (GameLiveActivity) getContext();
+        return activity.passTouch(event);
+    }
+
     private Player getActivePlayer() {
         GameLiveActivity activity = (GameLiveActivity) getContext();
         return activity.getActivePlayer();

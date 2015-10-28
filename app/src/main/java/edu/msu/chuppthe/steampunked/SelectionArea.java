@@ -62,6 +62,8 @@ public class SelectionArea extends PipeArea {
 
     private Context context;
 
+    private boolean passMovement = false;
+
     public SelectionArea(Context context) {
         this.context = context;
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -92,6 +94,9 @@ public class SelectionArea extends PipeArea {
                 return onReleased();
 
             case MotionEvent.ACTION_MOVE:
+                if (passMovement) {
+                    return view.passTouch(event);
+                }
                 return translatePipe(view, relX, relY, player);
 
         }
@@ -256,6 +261,7 @@ public class SelectionArea extends PipeArea {
      * @return if the release was successful
      */
     private boolean onReleased() {
+        passMovement = false;
         if (dragging != null) {
             dragging = null;
             return true;
@@ -302,6 +308,7 @@ public class SelectionArea extends PipeArea {
             pipes.remove(this.dragging);
 
             setAllPipesMovable(player, false);
+            passMovement = true;
         }
 
         lastRelX = relX;

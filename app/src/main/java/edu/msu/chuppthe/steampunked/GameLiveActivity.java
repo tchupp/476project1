@@ -3,6 +3,7 @@ package edu.msu.chuppthe.steampunked;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -141,5 +142,9 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private SelectionAreaView getSelectionAreaView() {
         return (SelectionAreaView) findViewById(R.id.selectionView);
+    }
+
+    public boolean passTouch(MotionEvent event) {
+        return getPlayingAreaView().onTouchEvent(event);
     }
 }
