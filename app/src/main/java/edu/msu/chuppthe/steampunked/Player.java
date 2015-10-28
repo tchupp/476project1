@@ -7,18 +7,8 @@ public class Player {
     private StartingPipe startingPipe;
     private Pipe endingPipe;
 
-    private boolean leak = true;
-
     public Player(String playerName) {
         this.playerName = playerName;
-    }
-
-    public boolean isLeaking() {
-        return leak;
-    }
-
-    public void setLeak(boolean leak) {
-        this.leak = leak;
     }
 
     public String getName() {

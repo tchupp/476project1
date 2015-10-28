@@ -11,7 +11,7 @@ import android.os.Bundle;
 import java.io.Serializable;
 import java.util.List;
 
-public class Pipe implements Serializable {
+public class Pipe {
 
     public static final int STARTING_PIPE = R.drawable.handle;
     public static final int ENDING_PIPE = R.drawable.gauge;
@@ -255,11 +255,6 @@ public class Pipe implements Serializable {
                 break;
             case 3:
                 break;
-        }
-
-        if (id == ENDING_PIPE) {
-            Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            canvas.drawLine(0,  0, 400, 100, linePaint);
         }
 
         canvas.save();
