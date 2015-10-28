@@ -28,8 +28,11 @@ public class Pipe {
     }
 
     public void moveGage(){
+
         this.gaugePositionX = this.getImageSize()-20 ;
         this.gaugePositionY = this.getImageSize()*.75f ;
+
+
     }
 
     public static Pipe createEndingPipe(Context context, Player player) {
@@ -282,11 +285,16 @@ public class Pipe {
 
 
 
-        if(this.getId()== ENDING_PIPE) {
+        if(this.getId()== ENDING_PIPE){
+
+
+
             canvas.drawBitmap(pipeImage, 0, 0, null);
+
             canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
             canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
+
         }
         else {
             canvas.drawBitmap(pipeImage, 0, 0, null);
