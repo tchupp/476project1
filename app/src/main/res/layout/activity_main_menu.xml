@@ -122,6 +122,8 @@
         android:layout_below="@+id/gridRadioGroup"
         android:onClick="onHowtoPlay"
         android:layout_toLeftOf="@+id/playerTwoTextField"
-        android:layout_toStartOf="@+id/playerTwoTextField" />
+        android:layout_toStartOf="@+id/playerTwoTextField"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" />
 
 </RelativeLayout>
