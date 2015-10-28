@@ -26,7 +26,8 @@ public class GameOverActivity extends AppCompatActivity {
         this.playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
         this.playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
         String winningPlayerName = extras.getString(GameLiveActivity.WINNING_PLAYER);
-        getWinningPlayerText().setText("Player '" + winningPlayerName + "' Won!");
+        String winningLabelText = "Player '" + winningPlayerName + "' Won!";
+        getWinningPlayerText().setText(winningLabelText);
     }
 
     public void onNewGame(View view) {
