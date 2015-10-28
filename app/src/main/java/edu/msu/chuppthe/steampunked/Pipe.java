@@ -155,9 +155,9 @@ public class Pipe implements Serializable {
     /**
      * Paint for the outline
      */
-    protected Paint outlinePaint;
+    protected transient Paint outlinePaint;
 
-    private  Paint linefill ;
+    private  transient Paint linefill ;
 
     private float gaugePositionX ;
 
