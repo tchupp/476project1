@@ -263,9 +263,24 @@ public class Pipe {
         canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(params.rotation * 90f);
 
-        canvas.drawBitmap(pipeImage, 0, 0, null);
-        canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
-        canvas.restore();
+
+
+        if(this.getId()== ENDING_PIPE){
+
+            Paint p = new Paint();
+            p.setStrokeWidth(10);
+            canvas.drawBitmap(pipeImage, 0, 0, null);
+            p.setColor(Color.RED);
+            canvas.drawLine(this.getImageSize(), this.getImageSize(), 1, 1, p);
+            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
+            canvas.restore();
+
+        }
+        else {
+            canvas.drawBitmap(pipeImage, 0, 0, null);
+            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
+            canvas.restore();
+        }
     }
 
     /**
