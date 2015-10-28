@@ -152,11 +152,6 @@ public class Pipe {
      */
     protected Bitmap pipeImage = null;
 
-    /**
-     * Paint for the outline
-     */
-    protected Paint outlinePaint;
-
     private  Paint linefill ;
 
     private float gaugePositionX ;
@@ -183,10 +178,6 @@ public class Pipe {
         connect[1] = east;
         connect[2] = south;
         connect[3] = west;
-
-        this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.outlinePaint.setColor(Color.BLACK);
-        this.outlinePaint.setStyle(Paint.Style.STROKE);
 
         this.linefill = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.linefill.setStrokeWidth(10);
@@ -278,12 +269,10 @@ public class Pipe {
         if(this.getId()== ENDING_PIPE) {
             canvas.drawBitmap(pipeImage, 0, 0, null);
             canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
-            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
         }
         else {
             canvas.drawBitmap(pipeImage, 0, 0, null);
-            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
         }
     }

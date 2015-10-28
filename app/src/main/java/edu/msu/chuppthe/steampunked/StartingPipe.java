@@ -47,7 +47,6 @@ public class StartingPipe extends Pipe {
         canvas.rotate(this.getRotation() * 90);
 
         canvas.drawBitmap(this.handleImage, 0, 0, null);
-        canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
         canvas.restore();
 
         canvas.save();

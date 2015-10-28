@@ -395,6 +395,7 @@ public class PlayingArea extends PipeArea {
             }
 
             this.selected = null;
+            this.dragging = null;
 
             return true;
         }
@@ -410,6 +411,7 @@ public class PlayingArea extends PipeArea {
         }
 
         this.selected = null;
+        this.dragging = null;
         return true;
     }
 
