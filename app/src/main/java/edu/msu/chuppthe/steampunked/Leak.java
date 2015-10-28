@@ -4,11 +4,9 @@ import android.content.Context;
 
 public class Leak extends Pipe {
 
-    public static Leak createLeak(Context context, Player player) {
+    public static Leak createLeak(Context context) {
         Leak leak = new Leak();
         leak.setId(context, R.drawable.leak);
-
-        leak.setPlayer(player);
         return leak;
     }
 

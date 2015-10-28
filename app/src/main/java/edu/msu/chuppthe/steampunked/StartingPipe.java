@@ -24,8 +24,8 @@ public class StartingPipe extends Pipe {
      */
     public StartingPipe(Context context) {
         super(false, false, true, false);
-        this.handleImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
-        this.setId(context, R.drawable.straight);
+        this.handleImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        this.setId(context, R.drawable.handle);
         this.setMovable(false);
 
         this.namePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -46,14 +46,14 @@ public class StartingPipe extends Pipe {
         canvas.save();
         canvas.rotate(this.getRotation() * 90);
 
-        canvas.drawBitmap(this.pipeImage, 0, 0, null);
+        canvas.drawBitmap(this.handleImage, 0, 0, null);
         canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
         canvas.restore();
 
         canvas.save();
         canvas.translate(0, -pHeight);
 
-        canvas.drawBitmap(this.handleImage, 0, 0, null);
+        canvas.drawBitmap(this.pipeImage, 0, 0, null);
         canvas.restore();
 
         canvas.save();

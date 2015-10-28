@@ -9,8 +9,16 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Pipe {
+
+    public static final int STARTING_PIPE = R.drawable.handle;
+    public static final int ENDING_PIPE = R.drawable.gauge;
+    public static final int CAP_PIPE = R.drawable.cap;
+    public static final int TEE_PIPE = R.drawable.tee;
+    public static final int NINETY_PIPE = R.drawable.ninety;
+    public static final int STRAIGHT_PIPE = R.drawable.straight;
 
     public static Pipe createStartingPipe(Context context, Player player) {
         StartingPipe startingPipe = new StartingPipe(context);
@@ -20,8 +28,8 @@ public class Pipe {
     }
 
     public static Pipe createEndingPipe(Context context, Player player) {
-        Pipe endingPipe = new Pipe(true, false, false, false);
-        endingPipe.setId(context, R.drawable.gauge);
+        Pipe endingPipe = new Pipe(false, false, false, false);
+        endingPipe.setId(context, ENDING_PIPE);
         endingPipe.setMovable(false);
         endingPipe.setPlayer(player);
 
@@ -31,7 +39,7 @@ public class Pipe {
 
     public static Pipe createCapPipe(Context context, Player player) {
         Pipe capPipe = new Pipe(false, false, true, false);
-        capPipe.setId(context, R.drawable.cap);
+        capPipe.setId(context, CAP_PIPE);
 
         capPipe.setPlayer(player);
         return capPipe;
@@ -39,7 +47,7 @@ public class Pipe {
 
     public static Pipe createTeePipe(Context context, Player player) {
         Pipe teePipe = new Pipe(true, true, true, false);
-        teePipe.setId(context, R.drawable.tee);
+        teePipe.setId(context, TEE_PIPE);
 
         teePipe.setPlayer(player);
         return teePipe;
@@ -47,7 +55,7 @@ public class Pipe {
 
     public static Pipe createNinetyPipe(Context context, Player player) {
         Pipe ninetyPipe = new Pipe(false, true, true, false);
-        ninetyPipe.setId(context, R.drawable.ninety);
+        ninetyPipe.setId(context, NINETY_PIPE);
 
         ninetyPipe.setPlayer(player);
         return ninetyPipe;
@@ -55,7 +63,7 @@ public class Pipe {
 
     public static Pipe createStraightPipe(Context context, Player player) {
         Pipe straightPipe = new Pipe(true, false, true, false);
-        straightPipe.setId(context, R.drawable.straight);
+        straightPipe.setId(context, STRAIGHT_PIPE);
 
         straightPipe.setPlayer(player);
         return straightPipe;
@@ -106,11 +114,6 @@ public class Pipe {
          * Can the piece be moved
          */
         protected boolean isMovable = true;
-
-        /**
-         * ID for the pipe image
-         */
-        protected int id;
     }
 
     /**
@@ -153,6 +156,11 @@ public class Pipe {
      * Paint for the outline
      */
     protected Paint outlinePaint;
+
+    /**
+     * ID for the pipe image
+     */
+    protected int id;
 
     /**
      * Constructor
@@ -478,7 +486,7 @@ public class Pipe {
      * @param id      id of the image
      */
     protected void setId(Context context, int id) {
-        params.id = id;
+        this.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
@@ -488,7 +496,7 @@ public class Pipe {
      * @return id
      */
     protected int getId() {
-        return params.id;
+        return this.id;
     }
 
     /**
@@ -504,7 +512,7 @@ public class Pipe {
     /**
      * Make sure the rotation does not go over 3 or below 0
      *
-     * @param da
+     * @param da change in angle
      */
     private void setRotation(float da) {
         params.rotation += da;
@@ -525,18 +533,29 @@ public class Pipe {
 
     /**
      * Save the puzzle to a bundle
-     * @param bundle The bundle we save to
+     *
+     * @param bundle    The bundle we save to
+     * @param pipeIds   list of pipe ids to add to
+     * @param imageIds  list of image ids to add to
+     * @param playerIds list of player ids to add to
      */
-    public void saveInstanceState(Bundle bundle) {
-        bundle.putSerializable(Integer.toString(params.x) + Integer.toString(params.y), params);
+    public void saveToBundle(Bundle bundle, List<String> pipeIds, List<Integer> imageIds, List<String> playerIds) {
+        String pipeKey = "Pipe" + this.hashCode();
+
+        bundle.putSerializable(pipeKey, params);
+
+        pipeIds.add(pipeKey);
+        imageIds.add(this.getId());
+        playerIds.add(this.player.getName());
     }
 
     /**
      * Get the view state from a bundle
-     * @param key key name to use in the bundle
+     *
+     * @param key    key name to use in the bundle
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
-        params = (Parameters)bundle.getSerializable(key);
+        params = (Parameters) bundle.getSerializable(key);
     }
 }
