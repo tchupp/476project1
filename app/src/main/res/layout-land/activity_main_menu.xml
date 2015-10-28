@@ -34,11 +34,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_above="@+id/playerTwoTextField"
-        android:layout_alignLeft="@+id/playerTwoTextField"
         android:layout_alignParentStart="false"
-        android:layout_toStartOf="@id/gridRadioGroup"
-        android:layout_toEndOf="@id/playerOneTextView" />
+        android:layout_alignParentEnd="false"
+        android:layout_toRightOf="@+id/playerOneTextView"
+        android:layout_above="@+id/playerTwoTextField"
+        android:layout_toLeftOf="@+id/gridRadioGroup" />
 
     <TextView
         android:id="@+id/playerTwoTextView"
@@ -55,10 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/playerTwoTextView"
-        android:layout_toEndOf="@+id/playerTwoTextView"
-        android:layout_toStartOf="@id/gridRadioGroup" />
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/gridRadioGroup" />
 
     <RadioGroup
         android:id="@+id/gridRadioGroup"
