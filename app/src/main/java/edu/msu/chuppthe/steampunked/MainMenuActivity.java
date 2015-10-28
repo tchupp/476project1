@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.app.AlertDialog;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -41,6 +42,24 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onHowtoPlay(View view) {
+
+        // Instantiate a dialog box builder
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(view.getContext());
+
+        // Parameterize the builder
+        builder.setTitle(R.string.instructions);
+        builder.setMessage(R.string.gamerules);
+        builder.setPositiveButton(android.R.string.ok, null);
+
+        // Create the dialog box and show it
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 
     public void onStart(View view) {
