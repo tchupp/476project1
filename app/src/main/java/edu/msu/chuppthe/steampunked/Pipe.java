@@ -27,6 +27,14 @@ public class Pipe {
         return startingPipe;
     }
 
+    public void moveGage(){
+
+        this.gaugePositionX = this.getImageSize()-20 ;
+        this.gaugePositionY = this.getImageSize()*.75f ;
+
+
+    }
+
     public static Pipe createEndingPipe(Context context, Player player) {
         Pipe endingPipe = new Pipe(false, false, false, false);
         endingPipe.setId(context, ENDING_PIPE);
@@ -157,6 +165,14 @@ public class Pipe {
      */
     protected Paint outlinePaint;
 
+    private  Paint linefill ;
+
+    private float gaugePositionX ;
+
+    private float gaugePositionY ;
+
+
+
     /**
      * ID for the pipe image
      */
@@ -179,6 +195,10 @@ public class Pipe {
         this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.outlinePaint.setColor(Color.BLACK);
         this.outlinePaint.setStyle(Paint.Style.STROKE);
+
+        this.linefill = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.linefill.setStrokeWidth(10);
+        this.linefill.setColor(Color.RED);
     }
 
     /**
@@ -267,11 +287,11 @@ public class Pipe {
 
         if(this.getId()== ENDING_PIPE){
 
-            Paint p = new Paint();
-            p.setStrokeWidth(10);
+
+
             canvas.drawBitmap(pipeImage, 0, 0, null);
-            p.setColor(Color.RED);
-            canvas.drawLine(this.getImageSize(), this.getImageSize(), 1, 1, p);
+
+            canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
             canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
 
@@ -503,6 +523,8 @@ public class Pipe {
     protected void setId(Context context, int id) {
         this.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
+        this.gaugePositionX = this.getImageSize()-20;
+        this.gaugePositionY = this.getImageSize()/4 ;
     }
 
     /**
