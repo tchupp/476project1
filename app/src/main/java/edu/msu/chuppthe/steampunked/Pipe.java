@@ -27,14 +27,6 @@ public class Pipe {
         return startingPipe;
     }
 
-    public void moveGage(){
-
-        this.gaugePositionX = this.getImageSize()-20 ;
-        this.gaugePositionY = this.getImageSize()*.75f ;
-
-
-    }
-
     public static Pipe createEndingPipe(Context context, Player player) {
         Pipe endingPipe = new Pipe(false, false, false, false);
         endingPipe.setId(context, ENDING_PIPE);
@@ -283,18 +275,11 @@ public class Pipe {
         canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(params.rotation * 90f);
 
-
-
-        if(this.getId()== ENDING_PIPE){
-
-
-
+        if(this.getId()== ENDING_PIPE) {
             canvas.drawBitmap(pipeImage, 0, 0, null);
-
             canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
             canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
-
         }
         else {
             canvas.drawBitmap(pipeImage, 0, 0, null);
@@ -349,6 +334,11 @@ public class Pipe {
             params.xPos += dx;
             params.yPos += dy;
         }
+    }
+
+    public void moveGage() {
+        this.gaugePositionX = this.getImageSize()-20 ;
+        this.gaugePositionY = this.getImageSize()*.75f;
     }
 
     /**
