@@ -389,7 +389,11 @@ public class PlayingArea extends PipeArea {
             this.selected.resetMovement();
             this.selected.setMovable(false);
             addPipe(this.selected, gridX, gridY);
-            this.selected.getPlayer().setLeak(detectLeaks());
+
+            if (!detectLeaks()) {
+                this.selected.getPlayer().getEndingPipe().moveGage();
+            }
+
             this.selected = null;
 
             return true;
