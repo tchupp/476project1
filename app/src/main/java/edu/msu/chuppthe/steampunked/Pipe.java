@@ -153,16 +153,13 @@ public class Pipe implements Serializable {
     protected transient Bitmap pipeImage = null;
 
     /**
-     * Paint for the outline
+     * Paint for the line gauge
      */
-    protected transient Paint outlinePaint;
+    private transient Paint linePaint;
 
-    private  transient Paint linefill ;
+    private float gaugePositionX;
 
-    private float gaugePositionX ;
-
-    private float gaugePositionY ;
-
+    private float gaugePositionY;
 
 
     /**
@@ -184,9 +181,9 @@ public class Pipe implements Serializable {
         connect[2] = south;
         connect[3] = west;
 
-        this.linefill = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.linefill.setStrokeWidth(10);
-        this.linefill.setColor(Color.RED);
+        this.linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.linePaint.setStrokeWidth(10);
+        this.linePaint.setColor(Color.RED);
     }
 
     /**
@@ -223,7 +220,7 @@ public class Pipe implements Serializable {
             // the other pipe must have a connection
             // in direction 3 (west)
             int dp = (i - n.getRotation() + 6) % 4;
-            if (!n.connect[dp]) {
+            if (!n.connect[dp] && n.getId() != Pipe.ENDING_PIPE) {
                 // We have a bad connection, the other side is not
                 // a flange to connect to
                 return false;
@@ -271,15 +268,13 @@ public class Pipe implements Serializable {
         canvas.scale(params.scaleBase, params.scaleBase);
         canvas.rotate(params.rotation * 90f);
 
-        if(this.getId()== ENDING_PIPE) {
-            canvas.drawBitmap(pipeImage, 0, 0, null);
-            canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
-            canvas.restore();
+        canvas.drawBitmap(pipeImage, 0, 0, null);
+
+        if (this.getId() == ENDING_PIPE) {
+            canvas.drawLine(this.getImageSize() + 20, this.getImageSize() / 2, gaugePositionX, gaugePositionY, linePaint);
         }
-        else {
-            canvas.drawBitmap(pipeImage, 0, 0, null);
-            canvas.restore();
-        }
+
+        canvas.restore();
     }
 
     /**
@@ -331,8 +326,8 @@ public class Pipe implements Serializable {
     }
 
     public void moveGauge() {
-        this.gaugePositionX = this.getImageSize()-20 ;
-        this.gaugePositionY = this.getImageSize()*.75f;
+        this.gaugePositionX = this.getImageSize() - 20;
+        this.gaugePositionY = this.getImageSize() * .75f;
     }
 
     /**
@@ -507,8 +502,8 @@ public class Pipe implements Serializable {
     protected void setId(Context context, int id) {
         this.id = id;
         this.pipeImage = BitmapFactory.decodeResource(context.getResources(), id);
-        this.gaugePositionX = this.getImageSize()-20;
-        this.gaugePositionY = this.getImageSize()/4 ;
+        this.gaugePositionX = this.getImageSize() - 20;
+        this.gaugePositionY = this.getImageSize() / 4;
     }
 
     /**
