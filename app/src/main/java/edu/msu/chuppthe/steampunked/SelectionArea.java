@@ -131,16 +131,18 @@ public class SelectionArea extends PipeArea {
 
             float pSize = pipe.getImageSize();
             float scale = cSize / (gridSize * pSize);
-            float fac = (float) i / (gridSize - 1f);
-            float dx = horizontal * fac;
-            float dy = vertical * fac;
+            float facX = (i) / (gridSize - 1f);
+            float facY = (i + 1f) / (gridSize - 1f);
+
+            float dx = horizontal * facX;
+            float dy = vertical * facY;
 
             if (cWidth > cHeight) {
-                dx += (pSize * 0.1f);
-                dy += (pSize * 1.1f);
+                dx += Math.abs(cWidth - pSize) / 32;
+                dy = 7 * Math.abs(cHeight - dy) / 8;
             } else {
-                dx += (pSize * 0.25f);
-                dy += (pSize * 0.8f);
+                dx = Math.abs(cWidth - pSize);
+                dy -= Math.abs(cWidth - pSize) / 8;
             }
 
             pipe.setBasePosition(dx, dy, scale);
