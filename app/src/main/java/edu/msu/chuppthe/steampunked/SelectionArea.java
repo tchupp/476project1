@@ -62,6 +62,8 @@ public class SelectionArea extends PipeArea {
 
     private Context context;
 
+    private boolean passMovement = false;
+
     public SelectionArea(Context context) {
         this.context = context;
         this.selectionAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -92,6 +94,9 @@ public class SelectionArea extends PipeArea {
                 return onReleased();
 
             case MotionEvent.ACTION_MOVE:
+                if (passMovement) {
+                    return view.passTouch(event);
+                }
                 return translatePipe(view, relX, relY, player);
 
         }
@@ -126,16 +131,18 @@ public class SelectionArea extends PipeArea {
 
             float pSize = pipe.getImageSize();
             float scale = cSize / (gridSize * pSize);
-            float fac = (float) i / (gridSize - 1f);
-            float dx = horizontal * fac;
-            float dy = vertical * fac;
+            float facX = (i) / (gridSize - 1f);
+            float facY = (i + 1f) / (gridSize - 1f);
+
+            float dx = horizontal * facX;
+            float dy = vertical * facY;
 
             if (cWidth > cHeight) {
-                dx += (pSize * 0.1f);
-                dy += (pSize * 1.1f);
+                dx += Math.abs(cWidth - pSize) / 32;
+                dy = 7 * Math.abs(cHeight - dy) / 8;
             } else {
-                dx += (pSize * 0.25f);
-                dy += (pSize * 0.8f);
+                dx = Math.abs(cWidth - pSize);
+                dy -= Math.abs(cWidth - pSize) / 8;
             }
 
             pipe.setBasePosition(dx, dy, scale);
@@ -256,6 +263,7 @@ public class SelectionArea extends PipeArea {
      * @return if the release was successful
      */
     private boolean onReleased() {
+        passMovement = false;
         if (dragging != null) {
             dragging = null;
             return true;
@@ -302,6 +310,7 @@ public class SelectionArea extends PipeArea {
             pipes.remove(this.dragging);
 
             setAllPipesMovable(player, false);
+            passMovement = true;
         }
 
         lastRelX = relX;

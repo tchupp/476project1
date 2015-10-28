@@ -155,9 +155,9 @@ public class Pipe implements Serializable {
     /**
      * Paint for the outline
      */
-    protected transient Paint outlinePaint;
+    protected Paint outlinePaint;
 
-    private  transient Paint linefill ;
+    private  Paint linefill ;
 
     private float gaugePositionX ;
 
@@ -183,10 +183,6 @@ public class Pipe implements Serializable {
         connect[1] = east;
         connect[2] = south;
         connect[3] = west;
-
-        this.outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.outlinePaint.setColor(Color.BLACK);
-        this.outlinePaint.setStyle(Paint.Style.STROKE);
 
         this.linefill = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.linefill.setStrokeWidth(10);
@@ -278,12 +274,10 @@ public class Pipe implements Serializable {
         if(this.getId()== ENDING_PIPE) {
             canvas.drawBitmap(pipeImage, 0, 0, null);
             canvas.drawLine(this.getImageSize()+20, this.getImageSize()/2 , gaugePositionX, gaugePositionY, linefill);
-            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
         }
         else {
             canvas.drawBitmap(pipeImage, 0, 0, null);
-            canvas.drawRect(0, 0, this.getImageSize(), this.getImageSize(), this.outlinePaint);
             canvas.restore();
         }
     }
