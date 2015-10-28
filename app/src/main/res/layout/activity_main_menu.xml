@@ -13,11 +13,12 @@
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:nestedScrollingEnabled="false"
         android:onClick="onStart"
-        android:text="@string/start_button" />
+        android:text="@string/start_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/gridRadioGroup"
+        android:layout_alignEnd="@+id/gridRadioGroup" />
 
     <TextView
         android:id="@+id/playerOneTextView"
@@ -111,5 +112,16 @@
         android:src="@drawable/splash"
         android:contentDescription="@string/splash"
         android:focusable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/howtoplay"
+        android:id="@+id/buttonInstructions"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/gridRadioGroup"
+        android:onClick="onHowtoPlay"
+        android:layout_toLeftOf="@+id/playerTwoTextField"
+        android:layout_toStartOf="@+id/playerTwoTextField" />
 
 </RelativeLayout>
