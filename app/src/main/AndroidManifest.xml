@@ -24,6 +24,10 @@
             android:name=".GameLiveActivity"
             android:label="@string/title_activity_game_live" >
         </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_register" >
+        </activity>
     </application>
 
 </manifest>

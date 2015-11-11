@@ -31,7 +31,7 @@ public class StartingPipe extends Pipe {
         this.namePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.namePaint.setColor(Color.BLACK);
         this.namePaint.setTextSize(40);
-        this.namePaint.setTextAlign(Paint.Align.CENTER);
+        this.namePaint.setTextAlign(Paint.Align.LEFT);
     }
 
     @Override

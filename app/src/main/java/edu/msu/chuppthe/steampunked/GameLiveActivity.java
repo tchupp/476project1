@@ -44,11 +44,11 @@ public class GameLiveActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
 
         int gridSize = extras.getInt(MainMenuActivity.GRID_SELECTION);
-        String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
-        String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
+        //String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
+        //String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
 
-        this.playerOne = new Player(playerOneName);
-        this.playerTwo = new Player(playerTwoName);
+        //this.playerOne = new Player(playerOneName);
+        //this.playerTwo = new Player(playerTwoName);
 
         getPlayingAreaView().setupPlayArea(gridSize, this.playerOne, this.playerTwo);
 
@@ -118,8 +118,8 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private void gameOver(boolean activeWon) {
         Intent intent = new Intent(this, GameOverActivity.class);
-        intent.putExtra(MainMenuActivity.PLAYER_ONE, playerOne.getName());
-        intent.putExtra(MainMenuActivity.PLAYER_TWO, playerTwo.getName());
+        //intent.putExtra(MainMenuActivity.PLAYER_ONE, playerOne.getName());
+        //intent.putExtra(MainMenuActivity.PLAYER_TWO, playerTwo.getName());
         intent.putExtra(MainMenuActivity.GRID_SELECTION, (getPlayingAreaView().getPlayingAreaSize() / 5));
 
         Player winner = activeWon ? activePlayer : inactivePlayer;

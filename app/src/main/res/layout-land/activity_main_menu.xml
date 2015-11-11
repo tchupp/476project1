@@ -10,64 +10,63 @@
     tools:context=".MainMenuActivity">
 
     <Button
-        android:id="@+id/startButton"
+        android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:nestedScrollingEnabled="false"
-        android:onClick="onStart"
-        android:text="@string/start_button"
-        android:layout_marginTop="20dp" />
+        android:text="@string/register_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onRegister" />
 
     <TextView
-        android:id="@+id/playerOneTextView"
+        android:id="@+id/usernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/player_one_lable"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_above="@+id/playerTwoTextField"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/username_label"
+        android:layout_above="@+id/passwordTextField"
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/playerOneTextField"
+        android:id="@+id/usernameTextField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:inputType="text"
+        android:layout_above="@+id/passwordTextField"
+        android:layout_toRightOf="@+id/usernameTextView" />
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/passwordTextField"
         android:inputType="text"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentEnd="false"
-        android:layout_toRightOf="@+id/playerOneTextView"
-        android:layout_above="@+id/playerTwoTextField"
-        android:layout_toLeftOf="@+id/gridRadioGroup" />
+        android:layout_above="@+id/loginButton"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/passwordTextView" />
 
     <TextView
-        android:id="@+id/playerTwoTextView"
+        android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/player_two_lable"
+        android:text="@string/password_label"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/playerTwoTextField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_toRightOf="@+id/playerTwoTextView"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/gridRadioGroup" />
+        android:layout_alignParentLeft="false"
+        android:layout_alignBottom="@+id/passwordTextField"
+        android:layout_centerHorizontal="true" />
 
     <RadioGroup
         android:id="@+id/gridRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
-        android:layout_below="@+id/startButton"
-        android:orientation="vertical"
-        android:layout_alignLeft="@+id/startButton"
-        android:layout_alignRight="@+id/startButton">
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/registerButton">
 
         <RadioButton
             android:id="@+id/gridFiveRadio"
@@ -83,6 +82,7 @@
             android:id="@+id/gridTenRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/ten_grid" />
@@ -91,32 +91,52 @@
             android:id="@+id/gridTwentyRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/twenty_grid" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/howtoplay"
-            android:id="@+id/buttonInstructions"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/gridRadioGroup"
-            android:layout_toLeftOf="@+id/playerTwoTextField"
-            android:layout_toStartOf="@+id/playerTwoTextField"
-            android:onClick="onHowtoPlay" />
     </RadioGroup>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/imageView"
-        android:layout_above="@+id/playerOneTextField"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/startButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageMainMenu"
+        android:src="@drawable/splash"
         android:contentDescription="@string/splash"
-        android:baselineAlignBottom="false"
-        android:src="@drawable/splash" />
+        android:focusable="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/usernameTextView"
+        android:layout_above="@+id/gridRadioGroup" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/howtoplay"
+        android:id="@+id/buttonInstructions"
+        android:onClick="onHowtoPlay"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remember_me"
+        android:id="@+id/rememberCheckBox"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_above="@+id/gridRadioGroup"
+        android:layout_alignLeft="@+id/passwordTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:id="@+id/loginButton"
+        android:layout_above="@+id/gridRadioGroup"
+        android:layout_alignParentRight="true"
+        android:onClick="onLogin" />
 
 </RelativeLayout>

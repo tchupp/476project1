@@ -23,16 +23,17 @@ public class GameOverActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
 
         this.gridSize = extras.getInt(MainMenuActivity.GRID_SELECTION);
-        this.playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
-        this.playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
+        //this.playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
+        //this.playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
         String winningPlayerName = extras.getString(GameLiveActivity.WINNING_PLAYER);
-        getWinningPlayerText().setText("Player '" + winningPlayerName + "' Won!");
+        String winningText = "Player '" + winningPlayerName + "' Won!";
+        getWinningPlayerText().setText(winningText);
     }
 
     public void onNewGame(View view) {
         Intent intent = new Intent(this, GameLiveActivity.class);
-        intent.putExtra(MainMenuActivity.PLAYER_ONE, this.playerOneName);
-        intent.putExtra(MainMenuActivity.PLAYER_TWO, this.playerTwoName);
+        //intent.putExtra(MainMenuActivity.PLAYER_ONE, this.playerOneName);
+        //intent.putExtra(MainMenuActivity.PLAYER_TWO, this.playerTwoName);
         intent.putExtra(MainMenuActivity.GRID_SELECTION, this.gridSize);
 
         startActivity(intent);

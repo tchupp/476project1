@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/registerMainLayout">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordConfirmField"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/confirmPasswordText"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/passwordField" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordField"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/passwordConfirmField"
+        android:layout_below="@+id/usernameField" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameField"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/registerTitle"
+        android:layout_alignLeft="@+id/passwordField" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_button"
+        android:id="@+id/registerButton"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_below="@+id/passwordConfirmField"
+        android:onClick="onRegister" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/register_title"
+        android:id="@+id/registerTitle"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/abc_text_size_display_1_material"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/confirm_password"
+        android:id="@+id/confirmPasswordText"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="10dp"
+        android:layout_alignBottom="@+id/passwordConfirmField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/passwordConfirmField"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/password_label"
+        android:id="@+id/passwordText"
+        android:layout_alignBottom="@+id/passwordField"
+        android:layout_alignParentStart="false"
+        android:gravity="center_vertical"
+        android:layout_alignTop="@+id/passwordField"
+        android:layout_toLeftOf="@+id/passwordField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/username_label"
+        android:id="@+id/usernameText"
+        android:gravity="center_vertical"
+        android:layout_alignTop="@+id/usernameField"
+        android:layout_alignBottom="@+id/usernameField"
+        android:layout_toLeftOf="@+id/passwordField" />
+
+</RelativeLayout>
