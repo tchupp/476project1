@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/usernameLabel"
+        android:id="@+id/loginUsernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/loginUsernameText"
@@ -24,17 +24,17 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="10dp"
-        android:layout_toEndOf="@+id/usernameLabel"
-        android:layout_toRightOf="@+id/usernameLabel"
+        android:layout_toEndOf="@+id/loginUsernameLabel"
+        android:layout_toRightOf="@+id/loginUsernameLabel"
         android:inputType="text" />
 
     <TextView
-        android:id="@+id/passwordLabel"
+        android:id="@+id/loginPasswordLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/loginPasswordText"
-        android:layout_alignEnd="@+id/usernameLabel"
-        android:layout_alignRight="@+id/usernameLabel"
+        android:layout_alignEnd="@+id/loginUsernameLabel"
+        android:layout_alignRight="@+id/loginUsernameLabel"
         android:layout_alignTop="@+id/loginPasswordText"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
@@ -49,8 +49,8 @@
         android:layout_below="@+id/loginUsernameText"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="10dp"
-        android:layout_toEndOf="@+id/usernameLabel"
-        android:layout_toRightOf="@+id/usernameLabel"
+        android:layout_toEndOf="@+id/loginUsernameLabel"
+        android:layout_toRightOf="@+id/loginUsernameLabel"
         android:ems="10"
         android:inputType="textPassword" />
 

@@ -7,35 +7,43 @@
 
     <!-- Main Menu-->
     <string name="login">Login</string>
-    <string name="register_button">Register</string>
+    <string name="register">Register</string>
+
     <string name="username_label">Username:</string>
     <string name="password_label">Password:</string>
-    <string name="instructions">How To Play!!!</string>
-    <string name="gamerules">The object of the game is to place pipe that will connect a steam source to a steam engine so it can power your airship. Of course, you want to do this before your opponent does.
-        The winner is the first one to connect steam to their engine with no leaks and turn on the valve.</string>
+    <string name="splash">Steampunked Splash</string>
+
+    <!-- Login dlg -->
+    <string name="remember_me">Remember Me</string>
+
+    <!-- Register dlg -->
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="register_title">Registration Info</string>
+    <string name="register_fail">Registration Failed!</string>
+    <string name="register_failed_confirm">Registration failed: passwords don\'t match</string>
+
+    <!-- How to play dlg -->
+    <string name="how_to_play">How To Play</string>
+    <string name="how_to_play_dlg_title">How To Play!!!</string>
+    <string name="gamerules">The object of the game is to place pipe that will connect a steam source to a steam engine so it can power your airship.
+        \nOf course, you want to do this before your opponent does.
+        \nThe winner is the first one to connect steam to their engine with no leaks and turn on the valve.</string>
+
+    <!-- Lobby -->
+    <string name="five_grid">5 X 5</string>
+    <string name="ten_grid">10 X 10</string>
+    <string name="twenty_grid">20 X 20</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>
     <string name="install_button">Install</string>
     <string name="discard_button">Discard</string>
     <string name="open_valve_button">Open Valve</string>
+    <string name="rotate_button">Rotate</string>
 
     <!-- Game Over -->
     <string name="game_over">Game Over Man!</string>
     <string name="game_over_new_game">New Game</string>
     <string name="game_over_main_menu">Main Menu</string>
 
-
-
-
-    <string name="five_grid">5 X 5</string>
-    <string name="ten_grid">10 X 10</string>
-    <string name="twenty_grid">20 X 20</string>
-    <string name="splash">Steam Punked Splash</string>
-    <string name="rotate_button">Rotate</string>
-    <string name="howtoplay">How To Play</string>
-    <string name="remember_me">Remember Me</string>
-
-    <string name="register_title">Registration Info</string>
-    <string name="confirm_password">Confirm Password:</string>
 </resources>

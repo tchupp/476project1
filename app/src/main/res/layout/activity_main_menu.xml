@@ -7,14 +7,14 @@
 
     <ImageView
         android:id="@+id/imageMainMenu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:contentDescription="@string/splash"
         android:focusable="false"
         android:src="@drawable/splash"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:onClick="onRegister"
-        android:text="@string/register_button"
+        android:text="@string/register"
         android:layout_alignLeft="@+id/howToPlayButton"
         android:layout_alignRight="@+id/howToPlayButton"
         android:layout_above="@+id/howToPlayButton"
@@ -36,13 +36,13 @@
         android:id="@+id/howToPlayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onHowtoPlay"
+        android:onClick="onHowToPlay"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:text="@string/howtoplay"
+        android:text="@string/how_to_play"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp" />
+        android:layout_marginBottom="300dp" />
 
     <Button
         android:id="@+id/loginButton"
