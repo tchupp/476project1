@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class RegisterDlg extends DialogFragment {
@@ -68,7 +69,7 @@ public class RegisterDlg extends DialogFragment {
                         }
                     });
                 } else {
-                    register(username, password, view);
+                    register(username, password);
                 }
             }
         });
@@ -78,7 +79,14 @@ public class RegisterDlg extends DialogFragment {
         return dlg;
     }
 
-    private void register(final String username, final String password, final View view) {
+    private void register(final String username, final String password) {
+        if (!(getActivity() instanceof MainMenuActivity)) {
+            return;
+        }
+
+        final MainMenuActivity activity = (MainMenuActivity) getActivity();
+        final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -91,6 +99,13 @@ public class RegisterDlg extends DialogFragment {
                         public void run() {
                             // If we fail to register, display a toast
                             Toast.makeText(view.getContext(), R.string.register_fail, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(view.getContext(), "Register Successful!", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

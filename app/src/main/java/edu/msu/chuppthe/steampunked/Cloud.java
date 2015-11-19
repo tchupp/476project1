@@ -15,9 +15,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Cloud {
-    private static final String MAGIC = "TechItHa$RuzeM8";
-    private static final String LOGIN_URL = "https://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
-    private static final String REGISTER_URL = "https://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register.php";
+    private static final String MAGIC = "TechItHa6RuzeM8";
+    private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
+    private static final String REGISTER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register.php";
     private static final String UTF8 = "UTF-8";
 
     /**
@@ -62,7 +62,6 @@ public class Cloud {
             }
 
             stream = conn.getInputStream();
-            logStream(stream);
 
             /**
              * Create an XML parser for the result
@@ -121,7 +120,6 @@ public class Cloud {
             }
 
             stream = conn.getInputStream();
-            logStream(stream);
 
             /**
              * Create an XML parser for the result

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class LoginDlg extends DialogFragment {
@@ -60,7 +61,7 @@ public class LoginDlg extends DialogFragment {
                         }
                     });
                 } else {
-                    login(username, password, view);
+                    login(username, password);
                 }
             }
         });
@@ -70,7 +71,14 @@ public class LoginDlg extends DialogFragment {
         return dlg;
     }
 
-    private void login(final String username, final String password, final View view) {
+    private void login(final String username, final String password) {
+        if (!(getActivity() instanceof MainMenuActivity)) {
+            return;
+        }
+
+        final MainMenuActivity activity = (MainMenuActivity) getActivity();
+        final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,7 +90,7 @@ public class LoginDlg extends DialogFragment {
                         @Override
                         public void run() {
                             // If we fail to login, display a toast
-                            Toast.makeText(view.getContext(), R.string.login, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), R.string.login_fail, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -90,6 +98,12 @@ public class LoginDlg extends DialogFragment {
                         // TODO: save username and pw to device
                     }
                     // TODO: Continue to lobby
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(view.getContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }).start();
