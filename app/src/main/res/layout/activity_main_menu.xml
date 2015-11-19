@@ -17,8 +17,7 @@
         android:layout_marginRight="10dp"
         android:contentDescription="@string/splash"
         android:focusable="false"
-        android:src="@drawable/splash"
-        android:layout_above="@+id/loginButton" />
+        android:src="@drawable/splash" />
 
     <Button
         android:id="@+id/registerButton"
@@ -27,10 +26,10 @@
         android:nestedScrollingEnabled="false"
         android:onClick="onRegister"
         android:text="@string/register"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/loginButton"
         android:layout_alignLeft="@+id/howToPlayButton"
-        android:layout_alignRight="@+id/howToPlayButton"
-        android:layout_above="@+id/howToPlayButton"
-        android:layout_marginBottom="50dp" />
+        android:layout_alignRight="@+id/howToPlayButton" />
 
     <Button
         android:id="@+id/howToPlayButton"
@@ -41,8 +40,7 @@
         android:paddingTop="5dp"
         android:text="@string/how_to_play"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="300dp" />
+        android:layout_below="@+id/registerButton" />
 
     <Button
         android:id="@+id/loginButton"
@@ -50,9 +48,10 @@
         android:layout_height="wrap_content"
         android:onClick="onLogin"
         android:text="@string/login"
-        android:layout_alignRight="@+id/registerButton"
-        android:layout_alignLeft="@+id/registerButton"
-        android:layout_above="@+id/registerButton"
-        android:layout_marginBottom="10dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageMainMenu"
+        android:layout_marginTop="20dp"
+        android:layout_alignRight="@+id/howToPlayButton"
+        android:layout_alignLeft="@+id/howToPlayButton" />
 
 </RelativeLayout>
