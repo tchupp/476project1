@@ -1,6 +1,7 @@
 package edu.msu.chuppthe.steampunked;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,10 +33,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void onLogin(View view) {
-        //TODO: VALIDATE USER CREDENTIALS
-        //TODO: MOVE TO LOBBY OR MOVE TO ACTIVE GAME
-        //TODO: SET REMEMBER ME IN DEVICE
-
         LoginDlg loginDlg = new LoginDlg();
         loginDlg.show(getFragmentManager(), "login");
     }
@@ -43,5 +40,10 @@ public class MainMenuActivity extends AppCompatActivity {
     public void onRegister(View view) {
         RegisterDlg registerDlg = new RegisterDlg();
         registerDlg.show(getFragmentManager(), "register");
+    }
+
+    public void moveToLobby() {
+        Intent intent = new Intent(this, LobbyActivity.class);
+        startActivity(intent);
     }
 }

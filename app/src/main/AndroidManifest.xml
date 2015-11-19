@@ -28,8 +28,8 @@
             android:label="@string/title_activity_game_live" >
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:label="@string/title_register" >
+            android:name=".LobbyActivity"
+            android:label="@string/title_activity_lobby" >
         </activity>
     </application>
 

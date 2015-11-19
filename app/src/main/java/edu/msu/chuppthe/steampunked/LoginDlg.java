@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,13 +98,7 @@ public class LoginDlg extends DialogFragment {
                     if (isRememberMeChecked()) {
                         // TODO: save username and pw to device
                     }
-                    // TODO: Continue to lobby
-                    view.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(view.getContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    activity.moveToLobby();
                 }
             }
         }).start();

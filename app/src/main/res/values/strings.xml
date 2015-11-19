@@ -48,5 +48,9 @@
     <string name="game_over">Game Over Man!</string>
     <string name="game_over_new_game">New Game</string>
     <string name="game_over_main_menu">Main Menu</string>
+    <string name="title_activity_lobby">LobbyActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
