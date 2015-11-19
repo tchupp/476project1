@@ -5,51 +5,53 @@
     android:layout_height="match_parent"
     tools:context=".MainMenuActivity">
 
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:onClick="onRegister"
-        android:text="@string/register"
-        android:layout_alignParentEnd="false"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp" />
-
     <ImageView
         android:id="@+id/imageMainMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:layout_toLeftOf="@+id/howToPlayButton"
         android:contentDescription="@string/splash"
         android:focusable="false"
-        android:src="@drawable/splash"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/howToPlayButton"
-        android:layout_margin="10dp" />
+        android:src="@drawable/splash" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/howToPlayButton"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/howToPlayButton"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:nestedScrollingEnabled="false"
+        android:onClick="onRegister"
+        android:text="@string/register" />
 
     <Button
         android:id="@+id/howToPlayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/registerButton"
+        android:layout_marginRight="10dp"
         android:onClick="onHowToPlay"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:text="@string/how_to_play"
-        android:layout_below="@+id/registerButton"
-        android:layout_alignLeft="@+id/registerButton"
-        android:layout_alignRight="@+id/registerButton" />
+        android:text="@string/how_to_play" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onLogin"
-        android:text="@string/login"
-        android:layout_alignRight="@+id/registerButton"
+        android:layout_above="@+id/registerButton"
         android:layout_alignLeft="@+id/registerButton"
-        android:layout_above="@+id/registerButton" />
+        android:layout_alignRight="@+id/registerButton"
+        android:onClick="onLogin"
+        android:text="@string/login" />
 
 </RelativeLayout>

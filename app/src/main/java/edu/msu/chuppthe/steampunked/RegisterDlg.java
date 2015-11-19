@@ -44,16 +44,22 @@ public class RegisterDlg extends DialogFragment {
         });
 
         // Add a login button
-        builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 String username = getUsername();
                 String password = getPassword();
                 String confirm = getConfirm();
 
-                if (password.equals(confirm)) {
-                    register(username, password);
-                } else {
+                if (username.isEmpty() || password.isEmpty()) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(view.getContext(), R.string.register_failed_empty,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (!password.equals(confirm)) {
                     view.post(new Runnable() {
                         @Override
                         public void run() {
@@ -61,6 +67,8 @@ public class RegisterDlg extends DialogFragment {
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
+                } else {
+                    register(username, password, view);
                 }
             }
         });
@@ -70,8 +78,24 @@ public class RegisterDlg extends DialogFragment {
         return dlg;
     }
 
-    private void register(String username, String password) {
-        // TODO: Register user
+    private void register(final String username, final String password, final View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Create a cloud object
+                Cloud cloud = new Cloud();
+                final boolean ok = cloud.registerToCloud(username, password);
+                if (!ok) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // If we fail to register, display a toast
+                            Toast.makeText(view.getContext(), R.string.register_fail, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     private String getUsername() {

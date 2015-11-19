@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginDlg extends DialogFragment {
 
@@ -30,7 +32,7 @@ public class LoginDlg extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         // Pass null as the parent view because its going in the dialog layout
-        @SuppressLint("InflateParams")
+        @SuppressLint("InflateParams") final
         View view = inflater.inflate(R.layout.login_dlg, null);
         builder.setView(view);
 
@@ -46,7 +48,20 @@ public class LoginDlg extends DialogFragment {
         builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                login(getUsername(), getPassword());
+                String username = getUsername();
+                String password = getPassword();
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(view.getContext(), R.string.login_failed_empty,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    login(username, password, view);
+                }
             }
         });
 
@@ -55,10 +70,29 @@ public class LoginDlg extends DialogFragment {
         return dlg;
     }
 
-    private void login(String username, String password) {
-        // TODO: login to server
-        // If OK, head to lobby
-        // If BAD, remove password
+    private void login(final String username, final String password, final View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Create a cloud object
+                Cloud cloud = new Cloud();
+                final boolean ok = cloud.loginToCloud(username, password);
+                if (!ok) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // If we fail to login, display a toast
+                            Toast.makeText(view.getContext(), R.string.login, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    if (isRememberMeChecked()) {
+                        // TODO: save username and pw to device
+                    }
+                    // TODO: Continue to lobby
+                }
+            }
+        }).start();
     }
 
     private String getUsername() {
@@ -69,5 +103,11 @@ public class LoginDlg extends DialogFragment {
     private String getPassword() {
         EditText passwordEdit = (EditText) dlg.findViewById(R.id.loginPasswordText);
         return passwordEdit.getText().toString();
+    }
+
+    private boolean isRememberMeChecked() {
+        CheckBox rememberMeCheck = (CheckBox) dlg.findViewById(R.id.rememberMeCheck);
+        return rememberMeCheck.isChecked();
+
     }
 }
