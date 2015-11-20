@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +15,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.content.Intent;
 
 public class LoginDlg extends DialogFragment {
 
     private AlertDialog dlg;
+
+    private SharedPreferences preferences;
+
+    public static final String USERNAME_KEY = "username";
+    public static final String PASSWORD_KEY = "password";
 
     /**
      * Create the dialog box
@@ -37,6 +45,14 @@ public class LoginDlg extends DialogFragment {
         @SuppressLint("InflateParams") final
         View view = inflater.inflate(R.layout.login_dlg, null);
         builder.setView(view);
+
+        // Get shared preferences for user login info
+        preferences = view.getContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+
+        // Auto fill functions
+        setUsername(view);
+        setPassword(view);
+        checkRememberMe(view);
 
         // Add a cancel button
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -95,9 +111,19 @@ public class LoginDlg extends DialogFragment {
                         }
                     });
                 } else {
+                    SharedPreferences.Editor editor = preferences.edit();
+
                     if (isRememberMeChecked()) {
-                        // TODO: save username and pw to device
+                        editor.putString(USERNAME_KEY, username);
+                        editor.putString(PASSWORD_KEY, password);
                     }
+                    else {
+                        editor.putString(USERNAME_KEY, "");
+                        editor.putString(PASSWORD_KEY, "");
+                    }
+
+                    editor.commit();
+
                     activity.moveToLobby();
                 }
             }
@@ -109,14 +135,36 @@ public class LoginDlg extends DialogFragment {
         return usernameEdit.getText().toString();
     }
 
+    public void setUsername(View view) {
+        EditText usernameEdit = (EditText) view.findViewById(R.id.loginUsernameText);
+
+        usernameEdit.setText(preferences.getString(USERNAME_KEY, ""));
+    }
+
     private String getPassword() {
         EditText passwordEdit = (EditText) dlg.findViewById(R.id.loginPasswordText);
         return passwordEdit.getText().toString();
     }
 
+    public void setPassword(View view) {
+        EditText passwordEdit = (EditText) view.findViewById(R.id.loginPasswordText);
+
+        passwordEdit.setText(preferences.getString(PASSWORD_KEY, ""));
+    }
+
     private boolean isRememberMeChecked() {
         CheckBox rememberMeCheck = (CheckBox) dlg.findViewById(R.id.rememberMeCheck);
         return rememberMeCheck.isChecked();
+    }
 
+    private void checkRememberMe(View view) {
+        CheckBox rememberMeCheck = (CheckBox) view.findViewById(R.id.rememberMeCheck);
+
+        if (preferences.getString(USERNAME_KEY, "").isEmpty()) {
+            rememberMeCheck.setChecked(false);
+        }
+        else {
+            rememberMeCheck.setChecked(true);
+        }
     }
 }
