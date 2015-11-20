@@ -34,7 +34,6 @@ public class MainMenuActivity extends AppCompatActivity {
     public void onLogin(View view) {
         //TODO: VALIDATE USER CREDENTIALS
         //TODO: MOVE TO LOBBY OR MOVE TO ACTIVE GAME
-        //TODO: SET REMEMBER ME IN DEVICE
 
         LoginDlg loginDlg = new LoginDlg();
         loginDlg.show(getFragmentManager(), "login");
