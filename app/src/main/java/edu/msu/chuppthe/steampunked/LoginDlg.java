@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.content.Intent;
 
 public class LoginDlg extends DialogFragment {
 
@@ -77,7 +78,12 @@ public class LoginDlg extends DialogFragment {
                     });
                 } else {
                     login(username, password);
+
+                    Intent myIntent = new Intent(((Dialog) dialog).getContext(), LobbyActivity.class);
+                    startActivity(myIntent);
                 }
+
+
             }
         });
 
@@ -127,6 +133,8 @@ public class LoginDlg extends DialogFragment {
                         @Override
                         public void run() {
                             Toast.makeText(view.getContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
+
+
                         }
                     });
                 }
