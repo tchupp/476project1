@@ -21,6 +21,7 @@
     <!-- Register dlg -->
     <string name="confirm_password">Confirm Password:</string>
     <string name="register_title">Registration Info</string>
+    <string name="register_success">Register Successful!</string>
     <string name="register_fail">Registration Failed!</string>
     <string name="register_failed_confirm">Registration failed: passwords don\'t match</string>
     <string name="register_failed_empty">Registration failed: username or password is empty</string>

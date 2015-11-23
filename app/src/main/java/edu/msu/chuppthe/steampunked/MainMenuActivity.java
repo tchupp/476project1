@@ -42,7 +42,7 @@ public class MainMenuActivity extends AppCompatActivity {
         registerDlg.show(getFragmentManager(), "register");
     }
 
-    public void moveToLobby() {
+    public void moveToLobby(String username, String authToken) {
         Intent intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
     }

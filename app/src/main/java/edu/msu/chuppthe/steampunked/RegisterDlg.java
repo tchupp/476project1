@@ -87,7 +87,7 @@ public class RegisterDlg extends DialogFragment {
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
 
-        new Thread(new Runnable() {
+        Runnable registerRunnable = new Runnable() {
             @Override
             public void run() {
                 // Create a cloud object
@@ -105,12 +105,14 @@ public class RegisterDlg extends DialogFragment {
                     view.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(view.getContext(), "Register Successful!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), R.string.register_success, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
-        }).start();
+        };
+
+        new Thread(registerRunnable).start();
     }
 
     private String getUsername() {

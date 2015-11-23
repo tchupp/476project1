@@ -48,7 +48,8 @@ public class Cloud {
      * @param password password to login with
      * @return true if login is successful
      */
-    public boolean loginToCloud(String username, String password) {
+    public String loginToCloud(String username, String password) {
+        String authToken = null;
         String query = LOGIN_URL + "?user=" + username + "&pw=" + password + "&magic=" + MAGIC;
 
         InputStream stream = null;
@@ -58,7 +59,7 @@ public class Cloud {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
-                return false;
+                return null;
             }
 
             stream = conn.getInputStream();
@@ -75,16 +76,16 @@ public class Cloud {
 
                 String status = xmlR.getAttributeValue(null, "status");
                 if (status.equals("no")) {
-                    return false;
+                    return null;
                 }
             } catch (XmlPullParserException e) {
-                return false;
+                return null;
             }
         } catch (MalformedURLException e) {
             // Should never happen
-            return false;
+            return null;
         } catch (IOException ex) {
-            return false;
+            return null;
         } finally {
             if (stream != null) {
                 try {
@@ -95,7 +96,7 @@ public class Cloud {
             }
         }
 
-        return true;
+        return authToken;
     }
 
     /**
