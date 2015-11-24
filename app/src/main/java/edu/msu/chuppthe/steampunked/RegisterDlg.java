@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +104,12 @@ public class RegisterDlg extends DialogFragment {
                         }
                     });
                 } else {
+                    SharedPreferences preferences = view.getContext().getSharedPreferences(LoginDlg.SHARED_PREFERENCE_ID, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(LoginDlg.USERNAME_KEY, getUsername());
+                    editor.putString(LoginDlg.PASSWORD_KEY, getPassword());
+                    editor.apply();
+
                     view.post(new Runnable() {
                         @Override
                         public void run() {
