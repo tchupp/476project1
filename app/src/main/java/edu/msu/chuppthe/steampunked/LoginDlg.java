@@ -123,6 +123,9 @@ public class LoginDlg extends DialogFragment {
 
                     editor.apply();
 
+                    // Attempts to register device token for notifications
+                    new RegistrationTask(activity).execute();
+
                     activity.moveToLobby(username, authToken);
                 }
             }
