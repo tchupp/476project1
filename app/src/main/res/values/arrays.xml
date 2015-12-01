@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grid_sizes">
+        <item>5 x 5</item>
+        <item>10 x 10</item>
+        <item>20 x 20</item>
+    </string-array>
+
+</resources>

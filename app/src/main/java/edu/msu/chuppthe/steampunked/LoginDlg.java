@@ -46,7 +46,6 @@ public class LoginDlg extends DialogFragment {
         builder.setView(view);
 
         // Get shared preferences for user login info
-
         preferences = view.getContext().getSharedPreferences(SHARED_PREFERENCE_ID, Context.MODE_PRIVATE);
 
         // Auto fill functions
@@ -107,7 +106,8 @@ public class LoginDlg extends DialogFragment {
                         @Override
                         public void run() {
                             // If we fail to login, display a toast
-                            Toast.makeText(view.getContext(), R.string.login_fail, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(),
+                                    R.string.login_fail, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {

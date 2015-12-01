@@ -26,6 +26,11 @@
     <string name="register_failed_confirm">Registration failed: passwords don\'t match</string>
     <string name="register_failed_empty">Registration failed: username or password is empty</string>
 
+    <!-- Create Game dlg -->
+    <string name="game_name_label">Game Name:</string>
+    <string name="create_game_fail">Failed to create game</string>
+
+
     <!-- How to play dlg -->
     <string name="how_to_play">How To Play</string>
     <string name="how_to_play_dlg_title">How To Play!!!</string>

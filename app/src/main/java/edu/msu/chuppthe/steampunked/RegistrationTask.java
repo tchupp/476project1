@@ -7,8 +7,6 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -16,10 +14,7 @@ import java.util.logging.Logger;
 
 import edu.msu.chuppthe.steampunked.gcm.registration.Registration;
 
-/**
- * Created by evanhlavaty on 11/24/15.
- */
-class RegistrationTask extends AsyncTask<Void, Void, String> {
+public class RegistrationTask extends AsyncTask<Void, Void, String> {
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     private Context context;

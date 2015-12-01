@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Cloud {
+    public static final int FAIL_GAME_ID = -1;
+
     private static final String MAGIC = "TechItHa6RuzeM8";
     private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
     private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";

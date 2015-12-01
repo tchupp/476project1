@@ -13,6 +13,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void onCreateGame(View view) {
-
+        CreateGameDlg createGameDlg = new CreateGameDlg();
+        createGameDlg.show(getFragmentManager(), "create_game");
     }
 }
