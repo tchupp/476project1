@@ -94,7 +94,7 @@ public class RegisterDlg extends DialogFragment {
             public void run() {
                 // Create a cloud object
                 Cloud cloud = new Cloud();
-                final boolean ok = cloud.registerToCloud(username, password);
+                final boolean ok = cloud.registerUserToCloud(username, password);
                 if (!ok) {
                     view.post(new Runnable() {
                         @Override
