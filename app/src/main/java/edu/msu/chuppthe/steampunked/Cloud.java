@@ -78,6 +78,8 @@ public class Cloud {
                 if (status.equals("no")) {
                     return null;
                 }
+
+                authToken = xmlR.getAttributeValue(null, "auth");
             } catch (XmlPullParserException e) {
                 return null;
             }

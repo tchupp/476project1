@@ -37,6 +37,7 @@
     <string name="five_grid">5 X 5</string>
     <string name="ten_grid">10 X 10</string>
     <string name="twenty_grid">20 X 20</string>
+    <string name="create_game">Create Game</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>
