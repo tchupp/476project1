@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/game_flavor"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/gameName"
+        android:text="Dummy"
+        android:textAlignment="gravity"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Dummy"
+        android:id="@+id/gridSize"
+        android:layout_toRightOf="@+id/gameName"
+        android:layout_toEndOf="@+id/gameName"
+        android:layout_marginLeft="5dp"
+        android:textAlignment="gravity"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/gameName"
+        android:layout_alignTop="@+id/gameName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Dummy"
+        android:id="@+id/gameCreator"
+        android:layout_alignTop="@+id/gameName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/gameName"
+        android:gravity="center_vertical"
+        android:textAlignment="gravity" />
+</RelativeLayout>

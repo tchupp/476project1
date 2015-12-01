@@ -2,6 +2,12 @@ package edu.msu.chuppthe.steampunked;
 
 import android.util.Log;
 import android.util.Xml;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,16 +19,191 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cloud {
-    public static final int FAIL_GAME_ID = -1;
-
     private static final String MAGIC = "TechItHa6RuzeM8";
     private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
     private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
     private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
     private static final String CREATE_GAME_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-create-game.php";
+    private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-catalog.php";
     private static final String UTF8 = "UTF-8";
+
+    /**
+     * Nested class to store one catalog row
+     */
+    private static class Item {
+        public String grid = "";
+        public String creator = "";
+        public String name = "";
+        public String id = "";
+    }
+
+    public static final int FAIL_GAME_ID = -1;
+
+    public static class CatalogAdapter extends BaseAdapter {
+        /**
+         * The items we display in the list box. Initially this is
+         * empty until we get items from the server.
+         */
+        private List<Item> items = new ArrayList<>();
+
+        public CatalogAdapter(final View view) {
+
+            // Create a thread to load the catalog
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Item> newItems = getCatalog("placeholderUsername");
+                    if (newItems != null) {
+                        items = newItems;
+
+                        view.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                // Tell the adapter the data set has been changed
+                                notifyDataSetChanged();
+                            }
+                        });
+                    } else {
+                        // Error condition!
+                        view.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(view.getContext(), R.string.catalog_fail, Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                    }
+                }
+            }).start();
+        }
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return items.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            if (view == null) {
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.catalog_game, parent, false);
+            }
+
+            TextView nameView = (TextView) view.findViewById(R.id.gameName);
+            nameView.setText(items.get(position).name);
+
+            TextView userView = (TextView) view.findViewById(R.id.gameCreator);
+            userView.setText(items.get(position).creator);
+
+            TextView gridSizeView = (TextView) view.findViewById(R.id.gridSize);
+            gridSizeView.setText(getGridSize(position));
+
+            return view;
+        }
+
+        private String getGridSize(int position) {
+            String grid = items.get(position).grid;
+            switch (grid) {
+                case "10":
+                    return "10 x 10";
+                case "20":
+                    return "20 x 20";
+                default:
+                    return "5 x 5";
+            }
+        }
+
+        private List<Item> getCatalog(String username) {
+            //TODO: Add auth token to the request header
+
+            String query = CATALOG_URL + "?user=" + username;
+
+            ArrayList<Item> newItems = new ArrayList<>();
+
+            /**
+             * Open the connection
+             */
+            InputStream stream;
+            try {
+                URL url = new URL(query);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                int responseCode = conn.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                stream = conn.getInputStream();
+
+                /**
+                 * Create an XML parser for the result
+                 */
+                try {
+                    XmlPullParser xml = Xml.newPullParser();
+                    xml.setInput(stream, "UTF-8");
+
+                    xml.nextTag();      // Advance to first tag
+                    xml.require(XmlPullParser.START_TAG, null, "steam");
+
+                    String status = xml.getAttributeValue(null, "status");
+                    if (status.equals("no")) {
+                        return null;
+                    }
+
+                    while (xml.nextTag() == XmlPullParser.START_TAG) {
+                        if (xml.getName().equals("game")) {
+                            Item item = new Item();
+
+                            item.grid = xml.getAttributeValue(null, "grid");
+                            item.creator = xml.getAttributeValue(null, "creator");
+                            item.name = xml.getAttributeValue(null, "name");
+                            item.id = xml.getAttributeValue(null, "id");
+
+                            newItems.add(item);
+                        }
+                        skipToEndTag(xml);
+                    }
+
+                    // We are done
+                } catch (XmlPullParserException ex) {
+                    return null;
+                } catch (IOException ex) {
+                    return null;
+                } finally {
+                    try {
+                        stream.close();
+                    } catch (IOException ignored) {
+                    }
+                }
+            } catch (MalformedURLException e) {
+                // Should never happen
+                return null;
+            } catch (IOException ex) {
+                return null;
+            }
+
+            return newItems;
+        }
+
+        public String getId(int position) {
+            return items.get(position).id;
+        }
+    }
 
     /**
      * Skip the XML parser to the end tag for whatever
@@ -285,6 +466,8 @@ public class Cloud {
         return gameId;
     }
 
+
+    //TODO: DELETE THIS
     public static void logStream(InputStream stream) {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream));

@@ -30,7 +30,6 @@
     <string name="game_name_label">Game Name:</string>
     <string name="create_game_fail">Failed to create game</string>
 
-
     <!-- How to play dlg -->
     <string name="how_to_play">How To Play</string>
     <string name="how_to_play_dlg_title">How To Play!!!</string>
@@ -39,10 +38,12 @@
         \nThe winner is the first one to connect steam to their engine with no leaks and turn on the valve.</string>
 
     <!-- Lobby -->
-    <string name="five_grid">5 X 5</string>
-    <string name="ten_grid">10 X 10</string>
-    <string name="twenty_grid">20 X 20</string>
+    <string name="five_grid">5 x 5</string>
+    <string name="ten_grid">10 x 10</string>
+    <string name="twenty_grid">20 x 20</string>
     <string name="create_game">Create Game</string>
+    <string name="game_flavor">GameThumbnail</string>
+    <string name="catalog_fail">Failed to load game catalog</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>
