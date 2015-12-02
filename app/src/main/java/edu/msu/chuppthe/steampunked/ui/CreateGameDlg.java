@@ -52,7 +52,7 @@ public class CreateGameDlg extends DialogFragment {
             }
         });
 
-        // Add a login button
+        // Add the created game
         builder.setPositiveButton(R.string.create_game, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
@@ -67,6 +67,7 @@ public class CreateGameDlg extends DialogFragment {
                         }
                     });
                 } else {
+
                     createGame(gameName, getGridSize());
                 }
             }
@@ -106,8 +107,12 @@ public class CreateGameDlg extends DialogFragment {
             return;
         }
 
+        GameCreateLoadingDlg gameCreateLoadingDlg  = new GameCreateLoadingDlg();
+        gameCreateLoadingDlg.show(getActivity().getFragmentManager(), "create loading");
+
         final LobbyActivity activity = (LobbyActivity) getActivity();
         final ListView view = (ListView) activity.findViewById(R.id.gameList);
+
 
         Runnable createGameRunnable = new Runnable() {
             @Override
@@ -119,16 +124,19 @@ public class CreateGameDlg extends DialogFragment {
                     view.post(new Runnable() {
                         @Override
                         public void run() {
-                            // If we fail to login, display a toast
+                            // If we fail to create a game , display a toast
                             Toast.makeText(view.getContext(),
                                     R.string.create_game_fail, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
+
                     activity.update();
                 }
             }
         };
+
+
 
         new Thread(createGameRunnable).start();
     }
