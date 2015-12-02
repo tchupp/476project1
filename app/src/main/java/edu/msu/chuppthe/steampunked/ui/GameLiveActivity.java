@@ -22,6 +22,12 @@ public class GameLiveActivity extends AppCompatActivity {
     private static final String ACTIVE_PLAYER = "activePlayer";
     public static final String RECEIVE = "edu.msu.chuppthe.steampunked.ui.GameLiveActivity.receive";
 
+    // Bundle keys
+    public static final String PLAYER_ONE_NAME = "player_one_name";
+    public static final String PLAYER_TWO_NAME = "player_two_name";
+    public static final String GAME_ID = "player_two_name";
+    public static final String GRID_SIZE = "player_two_name";
+
     private BroadcastReceiver receiver;
 
     private Player playerOne;
@@ -54,14 +60,19 @@ public class GameLiveActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        int gridSize = extras.getInt(MainMenuActivity.GRID_SELECTION);
-        //String playerOneName = extras.getString(MainMenuActivity.PLAYER_ONE);
-        //String playerTwoName = extras.getString(MainMenuActivity.PLAYER_TWO);
+        String playerOneName = extras.getString(PLAYER_ONE_NAME);
+        String playerTwoName = extras.getString(PLAYER_TWO_NAME);
 
-        //this.playerOne = new Player(playerOneName);
-        //this.playerTwo = new Player(playerTwoName);
+        this.playerOne = new Player(playerOneName);
 
-        getPlayingAreaView().setupPlayArea(gridSize, this.playerOne, this.playerTwo);
+        if (playerTwoName != null) {
+            this.playerTwo = new Player(playerTwoName);
+        }
+        else {
+            this.playerTwo = new Player("");
+        }
+
+        getPlayingAreaView().setupPlayArea(extras.getInt(GRID_SIZE), this.playerOne, this.playerTwo);
 
         this.activePlayer = this.playerTwo;
         this.inactivePlayer = this.playerOne;

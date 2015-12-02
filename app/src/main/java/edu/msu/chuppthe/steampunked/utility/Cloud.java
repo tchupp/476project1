@@ -1,5 +1,6 @@
 package edu.msu.chuppthe.steampunked.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.ui.LobbyActivity;
 
 public class Cloud {
     private static final String MAGIC = "TechItHa6RuzeM8";
@@ -63,7 +65,6 @@ public class Cloud {
         public CatalogAdapter(final View view) {
             this.view = view;
             this.preferences = new Preferences(view.getContext());
-
             update();
         }
 
@@ -374,7 +375,7 @@ public class Cloud {
      * @return true if register is successful
      */
     public boolean registerDeviceToCloud(String deviceToken) {
-        String query = REGISTER_DEVICE_URL + "&device=" + deviceToken;
+        String query = REGISTER_DEVICE_URL + "?device=" + deviceToken;
 
         InputStream stream = null;
         try {

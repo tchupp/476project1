@@ -1,5 +1,6 @@
 package edu.msu.chuppthe.steampunked.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -33,8 +34,9 @@ public class LobbyActivity extends AppCompatActivity {
                 // Get the id of the one we want to delete
                 String gameId = adapter.getId(position);
 
-                //TODO: Send notification to game creator
-                //TODO: Move to game live
+                //TODO: Send toast notification to game creator
+                //TODO: Add player to game in DB
+                moveToGame(gameId);
             }
         });
     }
@@ -50,4 +52,20 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void update() { adapter.update(); }
+
+    public void moveToGame(String gameId) {
+        Intent intent = new Intent(this, GameLiveActivity.class);
+
+        //TODO: Get game details from DB and add to extras
+        // Temp extras for testing
+        Bundle extras = new Bundle();
+        extras.putString(GameLiveActivity.GAME_ID, gameId);
+        extras.putString(GameLiveActivity.PLAYER_ONE_NAME, "P1");
+        //extras.putString(GameLiveActivity.PLAYER_TWO_NAME, "P2");
+        extras.putInt(GameLiveActivity.GRID_SIZE, 10);
+
+        intent.putExtras(extras);
+
+        startActivity(intent);
+    }
 }

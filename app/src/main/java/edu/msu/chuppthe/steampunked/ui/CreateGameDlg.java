@@ -129,8 +129,9 @@ public class CreateGameDlg extends DialogFragment {
                                     R.string.create_game_fail, Toast.LENGTH_SHORT).show();
                         }
                     });
-                } else {
                     activity.update();
+                } else {
+                    activity.moveToGame(Integer.toString(gameId));
                 }
 
                 gameCreateLoadingDlg.dismiss();
