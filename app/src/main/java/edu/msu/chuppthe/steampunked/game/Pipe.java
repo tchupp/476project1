@@ -7,11 +7,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import org.xmlpull.v1.XmlSerializer;
+import android.util.Xml;
+import java.io.StringWriter;
+import java.io.IOException;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+
+
 
 import java.io.Serializable;
 import java.util.List;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.ui.PlayingAreaView;
 
 public class Pipe implements Serializable {
 
@@ -572,8 +582,69 @@ public class Pipe implements Serializable {
      *
      * @param key    key name to use in the bundle
      * @param bundle bundle to load from
-     */
+*/
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters) bundle.getSerializable(key);
     }
+
+
+
+    public void savePipeXml(String name, XmlSerializer xml) throws IOException {
+
+
+        xml.attribute(null, "id", Integer.toString(id)); // associated with type of pipe ?
+       // xml.attribute(null, "uri", pipeImage); // need to add pipe image
+        xml.attribute(null, "isVisited", visited ? "yes" : "no");
+        xml.attribute(null, "connect_north", connect[0] ? "yes" : "no" );
+        xml.attribute(null, "connect_east", connect[1] ? "yes" : "no" );
+        xml.attribute(null, "connect_south", connect[2] ? "yes" : "no" );
+        xml.attribute(null, "connect_west", connect[3] ? "yes" : "no" );
+
+
+        //Params
+        xml.attribute(null, "x", Integer.toString(params.x));
+        xml.attribute(null, "y", Integer.toString(params.y));
+        xml.attribute(null, "xPos", Float.toString(params.xPos));
+        xml.attribute(null, "yPos", Float.toString(params.yPos));
+        xml.attribute(null, "xBase", Float.toString(params.xBase));
+        xml.attribute(null, "yBase", Float.toString(params.yBase));
+        xml.attribute(null, "scaleBase", Float.toString(params.scaleBase));
+        xml.attribute(null, "rotation", Float.toString(params.rotation));
+        xml.attribute(null, "isMovable", params.isMovable ? "yes" : "no");
+
+
+    }
+
+
+    public void setConnect(boolean[] connect) {
+        this.connect = connect;
+    }
+
+
+
+    public static Pipe createPipefromXml(XmlPullParser xml, Context context) throws IOException, XmlPullParserException {
+
+
+
+     boolean[] newconnect = {false,false,false,false};
+     int newid = 0;
+
+      newid =  Integer.parseInt(xml.getAttributeValue(null, "id"));
+      newconnect[0] =  xml.getAttributeValue(null, "connect_north").equals("yes");
+      newconnect[1] =  xml.getAttributeValue(null, "connect_east").equals("yes");
+      newconnect[2] =  xml.getAttributeValue(null, "connect_south").equals("yes");
+      newconnect[3] =  xml.getAttributeValue(null, "connect_west").equals("yes");
+
+      Pipe newPipe = new Pipe( newconnect[0], newconnect[1], newconnect[2], newconnect[3]);
+      newPipe.setId(context, newid);
+
+      return newPipe ;
+
+
+    }
+
+
+
+
+
 }
