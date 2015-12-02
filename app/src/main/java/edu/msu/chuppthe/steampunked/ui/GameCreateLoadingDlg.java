@@ -19,7 +19,7 @@ public class GameCreateLoadingDlg extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Set the title
-        builder.setTitle(R.string.loading_game);
+        builder.setTitle(R.string.loading_create_game);
 
         builder.setNegativeButton(android.R.string.cancel,
                 new DialogInterface.OnClickListener() {

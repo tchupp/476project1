@@ -74,10 +74,6 @@ public class LoginDlg extends DialogFragment {
                         }
                     });
                 } else {
-
-
-
-
                     login(username, password);
                 }
             }
@@ -93,7 +89,7 @@ public class LoginDlg extends DialogFragment {
             return;
         }
 
-        LoginLoadingDlg loginDlg = new LoginLoadingDlg();
+        final LoginLoadingDlg loginDlg = new LoginLoadingDlg();
         loginDlg.show(getActivity().getFragmentManager(), "loading");
 
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
@@ -132,6 +128,8 @@ public class LoginDlg extends DialogFragment {
 
                     activity.moveToLobby();
                 }
+
+                loginDlg.dismiss();
             }
         };
 
