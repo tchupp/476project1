@@ -44,6 +44,7 @@
     <string name="create_game">Create Game</string>
     <string name="game_flavor">GameThumbnail</string>
     <string name="catalog_fail">Failed to load game catalog</string>
+    <string name="game_created_warning">An open game is already available</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
@@ -32,17 +33,21 @@ public class LobbyActivity extends AppCompatActivity {
                 // Get the id of the one we want to delete
                 String gameId = adapter.getId(position);
 
-                //TODO: Load the game with its id
+                //TODO: Send notification to game creator
+                //TODO: Move to game live
             }
         });
     }
 
     public void onCreateGame(View view) {
-        CreateGameDlg createGameDlg = new CreateGameDlg();
-        createGameDlg.show(getFragmentManager(), "create_game");
+        if (adapter.isEmpty()) {
+            CreateGameDlg createGameDlg = new CreateGameDlg();
+            createGameDlg.show(getFragmentManager(), "create_game");
+        }
+        else {
+            Toast.makeText(view.getContext(), R.string.game_created_warning, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void update() {
-        adapter.update();
-    }
+    public void update() { adapter.update(); }
 }
