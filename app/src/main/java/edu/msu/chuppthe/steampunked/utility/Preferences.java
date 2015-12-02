@@ -10,6 +10,7 @@ public class Preferences {
     public static final String REMEMBER_ME_KEY = "Login_Remember_Me";
     public static final String AUTH_USERNAME_KEY = "Auth_Username";
     public static final String AUTH_TOKEN_KEY = "Auth_Token";
+    public static final String DEVICE_TOKEN_KEY = "Device_Token";
 
     /**
      * Shared preferences for the app
@@ -70,6 +71,16 @@ public class Preferences {
     public void setAuthToken(String authToken) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(AUTH_TOKEN_KEY, authToken);
+        editor.apply();
+    }
+
+    public String getDeviceToken() {
+        return this.preferences.getString(DEVICE_TOKEN_KEY, "");
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(DEVICE_TOKEN_KEY, deviceToken);
         editor.apply();
     }
 }

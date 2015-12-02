@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.msu.chuppthe.steampunked.gcm.registration.Registration;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
+import edu.msu.chuppthe.steampunked.utility.Preferences;
 
 public class RegistrationTask extends AsyncTask<Void, Void, String> {
     private static Registration regService = null;
@@ -22,8 +24,13 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
 
     private static final String SENDER_ID = "1002849100494";
 
+    private Preferences preferences;
+    private Cloud cloud;
+
     public RegistrationTask(Context context) {
         this.context = context;
+        this.preferences = new Preferences(context);
+        this.cloud = new Cloud(context);
     }
 
     @Override
@@ -53,11 +60,13 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String msg) {
-        //TODO: Check if device token has changed before sending to DB
-        //TODO: Send device token to our server
-        // Temp Toast
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-        Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
+    protected void onPostExecute(String token) {
+
+        if (!preferences.getDeviceToken().equals(token)) {
+            preferences.setDeviceToken(token);
+            cloud.registerDeviceToCloud(token);
+        }
+
+        Logger.getLogger("DEVICE TOKEN").log(Level.INFO, token);
     }
 }
