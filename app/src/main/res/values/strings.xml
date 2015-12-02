@@ -44,6 +44,7 @@
     <string name="create_game">Create Game</string>
     <string name="game_flavor">GameThumbnail</string>
     <string name="catalog_fail">Failed to load game catalog</string>
+    <string name="game_created_warning">An open game is already available</string>
 
     <!-- Game Live -->
     <string name="surrender_button">Surrender</string>
@@ -63,9 +64,9 @@
     <string name="action_settings">Settings</string>
 
     <!-- loading -->
-    <string name="loading_game">Loading Created Game</string>
-    <string name="loading_login">Loading Login</string>
-    <string name="loading_catalog">Loading Catalog</string>
+    <string name="loading_create_game">Creating Game..</string>
+    <string name="loading_login">Logging In..</string>
+    <string name="loading_catalog">Loading Catalog..</string>
 
 
 </resources>

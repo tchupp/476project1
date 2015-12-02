@@ -107,8 +107,8 @@ public class CreateGameDlg extends DialogFragment {
             return;
         }
 
-        GameCreateLoadingDlg gameCreateLoadingDlg  = new GameCreateLoadingDlg();
-        gameCreateLoadingDlg.show(getActivity().getFragmentManager(), "create loading");
+        final GameCreateLoadingDlg gameCreateLoadingDlg  = new GameCreateLoadingDlg();
+        gameCreateLoadingDlg.show(getActivity().getFragmentManager(), "create_loading");
 
         final LobbyActivity activity = (LobbyActivity) getActivity();
         final ListView view = (ListView) activity.findViewById(R.id.gameList);
@@ -130,9 +130,10 @@ public class CreateGameDlg extends DialogFragment {
                         }
                     });
                 } else {
-
                     activity.update();
                 }
+
+                gameCreateLoadingDlg.dismiss();
             }
         };
 
