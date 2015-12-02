@@ -25,8 +25,8 @@ public class GCMIntentService extends IntentService {
 
     // Cases that match notification title
     public static final String TOAST_CASE = "show_toast";
-    public static final String REFRESH_CASE = "refresh_board";
-    public static final String MOVE_TO_GAME_LIVE_CASE = "lobby_to_game";
+    public static final String PLAYER_JOINED_CASE = "player_joined";
+    public static final String NEW_MOVE_CASE = "new_move";
     public static final String ACTION_KEY = "action";
 
 
@@ -50,13 +50,17 @@ public class GCMIntentService extends IntentService {
                     case TOAST_CASE:
                         showToast(extras.getString("message"));
                         break;
-                    case REFRESH_CASE:
-                        Intent i = new Intent(GameLiveActivity.RECEIVE);
-                        i.putExtra(ACTION_KEY, REFRESH_CASE);
-                        sendBroadcast(i);
+                    case NEW_MOVE_CASE:
+                        showToast(extras.getString("message"));
+                        Intent moveIntent = new Intent(GameLiveActivity.RECEIVE);
+                        moveIntent.putExtra(ACTION_KEY, NEW_MOVE_CASE);
+                        sendBroadcast(moveIntent);
                         break;
-                    case MOVE_TO_GAME_LIVE_CASE:
-                        launchGameLiveActivity(extras);
+                    case PLAYER_JOINED_CASE:
+                        showToast(extras.getString("message"));
+                        Intent joinIntent = new Intent(GameLiveActivity.RECEIVE);
+                        joinIntent.putExtra(ACTION_KEY, PLAYER_JOINED_CASE);
+                        sendBroadcast(joinIntent);
                         break;
                     default:
                         showToast("Unrecognized Notification");
@@ -65,13 +69,6 @@ public class GCMIntentService extends IntentService {
             }
         }
         GCMBroadcastReceiver.completeWakefulIntent(intent);
-    }
-
-    private void launchGameLiveActivity(Bundle extras) {
-        Intent intent = new Intent(getBaseContext(), GameLiveActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-        intent.putExtras(extras);
-        getBaseContext().getApplicationContext().startActivity(intent);
     }
 
     private void showToast(final String message) {

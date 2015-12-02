@@ -106,8 +106,11 @@ public class GameLiveActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getExtras().getString(GCMIntentService.ACTION_KEY)) {
-                    case GCMIntentService.REFRESH_CASE:
-                        refresh();
+                    case GCMIntentService.NEW_MOVE_CASE:
+                        addMove();
+                        break;
+                    case GCMIntentService.PLAYER_JOINED_CASE:
+                        addPlayer();
                     default:
                     //TODO: Add more cases if needed
                 }
@@ -124,9 +127,14 @@ public class GameLiveActivity extends AppCompatActivity {
         this.unregisterReceiver(this.receiver);
     }
 
-    public void refresh() {
-        //TODO: PULL LATEST MOVE FROM DB
-        Log.i("REFRESH", "test refresh log message");
+    public void addPlayer() {
+        //TODO: Add Player two
+        Log.i("ADD PLAYER", "test add player log message");
+    }
+
+    public void addMove() {
+        //TODO: Add move to board
+        Log.i("ADD BOARD", "test add board log message");
     }
 
     public void onInstall(View view) {
