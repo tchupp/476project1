@@ -12,11 +12,13 @@ import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.game.Pipe;
 
 public class Cloud {
     private static final String MAGIC = "TechItHa6RuzeM8";
@@ -68,6 +71,10 @@ public class Cloud {
         }
 
         public void update() {
+
+            // add loading catalog dlg here
+
+
             // Create a thread to load the catalog
             new Thread(new Runnable() {
                 @Override
@@ -507,4 +514,45 @@ public class Cloud {
         } catch (IOException ignored) {
         }
     }
+
+    /**
+     *
+     * @param name , the piper XML string
+     * @param pipe , the view we are loading the pipe into
+     * @return
+     */
+    public boolean savePipetoCloud(String name, Pipe pipe ) {
+        name = name.trim();
+        if(name.length() == 0) {
+            return false;
+        }
+
+        // Create an XML packet with the information about the current image
+        XmlSerializer xml = Xml.newSerializer();
+        StringWriter writer = new StringWriter();
+
+        try {
+            xml.setOutput(writer);
+
+            xml.startDocument("UTF-8", true);
+
+            xml.startTag(null, "pipe");
+
+            pipe.savePipeXml(name, xml);
+
+
+            xml.endTag(null, "pipe");
+
+            xml.endDocument();
+
+        } catch (IOException e) {
+            // This won't occur when writing to a string
+            return false;
+        }
+
+        final String xmlStr = writer.toString();
+        return true;
+    }
+
+
 }
