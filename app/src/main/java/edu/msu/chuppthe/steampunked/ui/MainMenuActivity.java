@@ -1,10 +1,13 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.gcm.RegistrationTask;
 
 public class MainMenuActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.utility;
 
 import android.content.Context;
 import android.util.Log;
@@ -22,6 +22,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.msu.chuppthe.steampunked.R;
 
 public class Cloud {
     private static final String MAGIC = "TechItHa6RuzeM8";

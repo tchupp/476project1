@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import java.io.Serializable;
 import java.util.List;
+
+import edu.msu.chuppthe.steampunked.R;
 
 public class Pipe implements Serializable {
 

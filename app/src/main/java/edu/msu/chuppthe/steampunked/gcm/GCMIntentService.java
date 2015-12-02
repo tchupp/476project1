@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.gcm;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -15,9 +15,9 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by evanhlavaty on 11/24/15.
- */
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.ui.LobbyActivity;
+
 public class GCMIntentService extends IntentService {
 
     public static final int MESSAGE_NOTIFICATION_ID = 435345;

@@ -1,10 +1,13 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
 
 public class LobbyActivity extends AppCompatActivity {
 

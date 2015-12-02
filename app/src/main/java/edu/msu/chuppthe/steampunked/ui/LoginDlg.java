@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -12,6 +12,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import edu.msu.chuppthe.steampunked.utility.Preferences;
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
 
 public class LoginDlg extends DialogFragment {
 

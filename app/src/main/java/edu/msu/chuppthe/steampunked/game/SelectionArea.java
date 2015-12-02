@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.game;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
+import edu.msu.chuppthe.steampunked.game.Pipe;
+import edu.msu.chuppthe.steampunked.game.PipeArea;
+import edu.msu.chuppthe.steampunked.game.Player;
+import edu.msu.chuppthe.steampunked.ui.SelectionAreaView;
 
 public class SelectionArea extends PipeArea {
 

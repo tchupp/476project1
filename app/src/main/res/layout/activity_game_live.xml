@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.msu.chuppthe.steampunked.GameLiveActivity"
+    tools:context="edu.msu.chuppthe.steampunked.ui.GameLiveActivity"
     >
 
     <Button
@@ -60,14 +60,14 @@
         android:layout_above="@+id/buttonInstall"
         android:orientation="vertical">
 
-        <edu.msu.chuppthe.steampunked.PlayingAreaView
+        <edu.msu.chuppthe.steampunked.ui.PlayingAreaView
             android:id="@+id/playingView"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="4.4"
             android:background="@android:color/white" />
 
-        <edu.msu.chuppthe.steampunked.SelectionAreaView
+        <edu.msu.chuppthe.steampunked.ui.SelectionAreaView
             android:id="@+id/selectionView"
             android:layout_width="fill_parent"
             android:layout_height="0dp"

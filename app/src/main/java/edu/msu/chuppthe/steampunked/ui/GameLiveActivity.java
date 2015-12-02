@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
+import edu.msu.chuppthe.steampunked.game.Pipe;
+import edu.msu.chuppthe.steampunked.game.Player;
+import edu.msu.chuppthe.steampunked.R;
 
 public class GameLiveActivity extends AppCompatActivity {
 

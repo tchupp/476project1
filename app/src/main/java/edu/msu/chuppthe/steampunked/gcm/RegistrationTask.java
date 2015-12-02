@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.gcm;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -35,7 +35,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
             regService = builder.build();
         }
 
-        String msg = "";
+        String msg;
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);

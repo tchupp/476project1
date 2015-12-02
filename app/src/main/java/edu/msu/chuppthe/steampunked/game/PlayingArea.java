@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.game;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,6 +8,8 @@ import android.view.View;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import edu.msu.chuppthe.steampunked.R;
 
 /**
  * A representation of the playing area

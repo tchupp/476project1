@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
 
 public class CreateGameDlg extends DialogFragment {
 

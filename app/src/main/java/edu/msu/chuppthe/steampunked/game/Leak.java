@@ -1,6 +1,8 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.game;
 
 import android.content.Context;
+
+import edu.msu.chuppthe.steampunked.R;
 
 public class Leak extends Pipe {
 

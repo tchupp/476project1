@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.game.Pipe;
 
 public class StartingPipe extends Pipe {
     /**

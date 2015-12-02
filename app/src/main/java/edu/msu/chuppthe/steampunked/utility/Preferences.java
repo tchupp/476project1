@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;

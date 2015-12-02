@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainMenuActivity"
+            android:name=".ui.MainMenuActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,26 +29,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameOverActivity"
+            android:name=".ui.GameOverActivity"
             android:label="@string/title_activity_game_over" >
         </activity>
         <activity
-            android:name=".GameLiveActivity"
+            android:name=".ui.GameLiveActivity"
             android:label="@string/title_activity_game_live" >
         </activity>
         <activity
-            android:name=".LobbyActivity"
+            android:name=".ui.LobbyActivity"
             android:label="@string/title_activity_lobby" >
         </activity>
         <receiver
-            android:name=".GCMBroadcastReceiver"
+            android:name=".gcm.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="edu.msu.chuppthe.steampunked" />
             </intent-filter>
         </receiver>
-        <service android:name=".GCMIntentService" />
+        <service android:name=".gcm.GCMIntentService" />
     </application>
 
 </manifest>

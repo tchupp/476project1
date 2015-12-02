@@ -1,4 +1,4 @@
-package edu.msu.chuppthe.steampunked;
+package edu.msu.chuppthe.steampunked.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,6 +9,10 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import edu.msu.chuppthe.steampunked.game.Pipe;
+import edu.msu.chuppthe.steampunked.game.Player;
+import edu.msu.chuppthe.steampunked.game.PlayingArea;
 
 public class PlayingAreaView extends View {
 
