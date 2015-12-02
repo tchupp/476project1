@@ -1,8 +1,12 @@
 package edu.msu.chuppthe.steampunked.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -10,12 +14,15 @@ import android.widget.Toast;
 import edu.msu.chuppthe.steampunked.game.Pipe;
 import edu.msu.chuppthe.steampunked.game.Player;
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.gcm.GCMIntentService;
 
 public class GameLiveActivity extends AppCompatActivity {
 
-    public static String WINNING_PLAYER = "WINNING_PLAYER";
-
+    public static final String WINNING_PLAYER = "WINNING_PLAYER";
     private static final String ACTIVE_PLAYER = "activePlayer";
+    public static final String RECEIVE = "edu.msu.chuppthe.steampunked.ui.GameLiveActivity.receive";
+
+    private BroadcastReceiver receiver;
 
     private Player playerOne;
 
@@ -76,6 +83,39 @@ public class GameLiveActivity extends AppCompatActivity {
         }
 
         changeTurn();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter(RECEIVE);
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (intent.getExtras().getString(GCMIntentService.ACTION_KEY)) {
+                    case GCMIntentService.REFRESH_CASE:
+                        refresh();
+                    default:
+                    //TODO: Add more cases if needed
+                }
+            }
+        };
+        //registering our receiver
+        this.registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //unregister our receiver
+        this.unregisterReceiver(this.receiver);
+    }
+
+    public void refresh() {
+        //TODO: PULL LATEST MOVE FROM DB
+        Log.i("REFRESH", "test refresh log message");
     }
 
     public void onInstall(View view) {
