@@ -74,6 +74,10 @@ public class LoginDlg extends DialogFragment {
                         }
                     });
                 } else {
+
+
+
+
                     login(username, password);
                 }
             }
@@ -89,8 +93,13 @@ public class LoginDlg extends DialogFragment {
             return;
         }
 
+        LoginLoadingDlg loginDlg = new LoginLoadingDlg();
+        loginDlg.show(getActivity().getFragmentManager(), "loading");
+
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
+
+
 
         Runnable loginRunnable = new Runnable() {
             @Override
@@ -120,10 +129,13 @@ public class LoginDlg extends DialogFragment {
                     preferences.setAuthUsername(username);
                     preferences.setAuthToken(authToken);
 
+
                     activity.moveToLobby();
                 }
             }
         };
+
+
 
         new Thread(loginRunnable).start();
     }
