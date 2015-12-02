@@ -8,7 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 
-public class LoadingDlg extends DialogFragment {
+public class LoadingGameDlg extends DialogFragment {
 
     /**
      * Create the dialog box
