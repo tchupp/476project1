@@ -95,8 +95,6 @@ public class LoginDlg extends DialogFragment {
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
 
-
-
         Runnable loginRunnable = new Runnable() {
             @Override
             public void run() {
@@ -132,8 +130,6 @@ public class LoginDlg extends DialogFragment {
                 loginDlg.dismiss();
             }
         };
-
-
 
         new Thread(loginRunnable).start();
     }

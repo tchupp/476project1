@@ -18,10 +18,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +36,10 @@ public class Cloud {
     private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
     private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
     private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
-    private static final String CREATE_GAME_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-create-game.php";
+    private static final String CREATE_GAME_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-create.php";
     private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-catalog.php";
+    private static final String LOAD_PIPE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-load.php";
+    private static final String SAVE_PIPE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-save.php";
     private static final String UTF8 = "UTF-8";
 
     private static final String AUTH_USER_FIELD = "AuthUser";
@@ -495,6 +500,125 @@ public class Cloud {
         return gameId;
     }
 
+    /**
+     * Saves a pipe to the cloud
+     * This should run in a thread!!
+     *
+     * @param gameId the game id to save under
+     * @param pipe   the pipe to save
+     * @return true if the save was successful
+     */
+    public String savePipetoCloud(String gameId, Pipe pipe) {
+        String pipeId = null;
+
+        gameId = gameId.trim();
+        if (gameId.length() == 0) {
+            return null;
+        }
+
+        // Create an XML packet with the information about the current image
+        XmlSerializer xml = Xml.newSerializer();
+        StringWriter writer = new StringWriter();
+
+        try {
+            xml.setOutput(writer);
+
+            xml.startDocument("UTF-8", true);
+
+            xml.startTag(null, "pipe");
+
+            pipe.savePipeXml(gameId, xml);
+
+            xml.endTag(null, "pipe");
+
+            xml.endDocument();
+
+        } catch (IOException e) {
+            // This won't occur when writing to a string
+            return null;
+        }
+
+        final String xmlStr = writer.toString();
+
+        /*
+         * Convert the XML into HTTP POST data
+         */
+        String postDataStr;
+        try {
+            postDataStr = "xml=" + URLEncoder.encode(xmlStr, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+
+        /*
+         * Send the data to the server
+         */
+        byte[] postData = postDataStr.getBytes();
+
+        String query = SAVE_PIPE_URL + "?game=" + gameId;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
+            conn.setUseCaches(false);
+
+            OutputStream out = conn.getOutputStream();
+            out.write(postData);
+            out.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+                if (status.equals("no")) {
+                    return null;
+                }
+
+                pipeId = xmlR.getAttributeValue(null, "pipe");
+
+                // We are done
+            } catch (XmlPullParserException ex) {
+                return null;
+            } catch (IOException ex) {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            return null;
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return pipeId;
+    }
+
     private static void addAuthHeader(Preferences preferences, HttpURLConnection connection) {
         connection.setRequestProperty(AUTH_USER_FIELD, preferences.getAuthUsername());
         connection.setRequestProperty(AUTH_TOKEN_FIELD, preferences.getAuthToken());
@@ -514,45 +638,4 @@ public class Cloud {
         } catch (IOException ignored) {
         }
     }
-
-    /**
-     *
-     * @param name , the piper XML string
-     * @param pipe , the view we are loading the pipe into
-     * @return
-     */
-    public boolean savePipetoCloud(String name, Pipe pipe ) {
-        name = name.trim();
-        if(name.length() == 0) {
-            return false;
-        }
-
-        // Create an XML packet with the information about the current image
-        XmlSerializer xml = Xml.newSerializer();
-        StringWriter writer = new StringWriter();
-
-        try {
-            xml.setOutput(writer);
-
-            xml.startDocument("UTF-8", true);
-
-            xml.startTag(null, "pipe");
-
-            pipe.savePipeXml(name, xml);
-
-
-            xml.endTag(null, "pipe");
-
-            xml.endDocument();
-
-        } catch (IOException e) {
-            // This won't occur when writing to a string
-            return false;
-        }
-
-        final String xmlStr = writer.toString();
-        return true;
-    }
-
-
 }
