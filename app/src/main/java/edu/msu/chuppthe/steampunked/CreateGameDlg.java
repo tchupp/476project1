@@ -110,8 +110,8 @@ public class CreateGameDlg extends DialogFragment {
             @Override
             public void run() {
                 // Create a cloud object
-                Cloud cloud = new Cloud();
-                int gameId = cloud.createGameOnCloud("", gameName, gridSize);
+                Cloud cloud = new Cloud(view.getContext());
+                int gameId = cloud.createGameOnCloud(gameName, gridSize);
                 if (gameId == Cloud.FAIL_GAME_ID) {
                     view.post(new Runnable() {
                         @Override
@@ -122,7 +122,7 @@ public class CreateGameDlg extends DialogFragment {
                         }
                     });
                 } else {
-
+                    activity.update();
                 }
             }
         };

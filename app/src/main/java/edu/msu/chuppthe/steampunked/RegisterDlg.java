@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,8 @@ import android.widget.Toast;
 public class RegisterDlg extends DialogFragment {
 
     private AlertDialog dlg;
+
+    private Preferences preferences;
 
     /**
      * Create the dialog box
@@ -37,6 +37,8 @@ public class RegisterDlg extends DialogFragment {
         @SuppressLint("InflateParams")
         final View view = inflater.inflate(R.layout.register_dlg, null);
         builder.setView(view);
+
+        preferences = new Preferences(view.getContext());
 
         // Add a cancel button
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -93,7 +95,7 @@ public class RegisterDlg extends DialogFragment {
             @Override
             public void run() {
                 // Create a cloud object
-                Cloud cloud = new Cloud();
+                Cloud cloud = new Cloud(view.getContext());
                 final boolean ok = cloud.registerUserToCloud(username, password);
                 if (!ok) {
                     view.post(new Runnable() {
@@ -104,11 +106,9 @@ public class RegisterDlg extends DialogFragment {
                         }
                     });
                 } else {
-                    SharedPreferences preferences = view.getContext().getSharedPreferences(LoginDlg.SHARED_PREFERENCE_ID, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(LoginDlg.USERNAME_KEY, getUsername());
-                    editor.putString(LoginDlg.PASSWORD_KEY, getPassword());
-                    editor.apply();
+                    preferences.setLoginUsername(getUsername());
+                    preferences.setLoginPassword(getPassword());
+                    preferences.setRememberMe(false);
 
                     view.post(new Runnable() {
                         @Override

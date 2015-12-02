@@ -1,5 +1,6 @@
 package edu.msu.chuppthe.steampunked;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ public class Cloud {
     private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-catalog.php";
     private static final String UTF8 = "UTF-8";
 
+    private static final String AUTH_USER_FIELD = "AuthUser";
+    private static final String AUTH_TOKEN_FIELD = "AuthToken";
+
     /**
      * Nested class to store one catalog row
      */
@@ -50,13 +54,23 @@ public class Cloud {
          */
         private List<Item> items = new ArrayList<>();
 
-        public CatalogAdapter(final View view) {
+        private Preferences preferences;
 
+        private View view;
+
+        public CatalogAdapter(final View view) {
+            this.view = view;
+            this.preferences = new Preferences(view.getContext());
+
+            update();
+        }
+
+        public void update() {
             // Create a thread to load the catalog
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    List<Item> newItems = getCatalog("placeholderUsername");
+                    List<Item> newItems = getCatalog();
                     if (newItems != null) {
                         items = newItems;
 
@@ -128,10 +142,8 @@ public class Cloud {
             }
         }
 
-        private List<Item> getCatalog(String username) {
-            //TODO: Add auth token to the request header
-
-            String query = CATALOG_URL + "?user=" + username;
+        public List<Item> getCatalog() {
+            String query = CATALOG_URL;
 
             ArrayList<Item> newItems = new ArrayList<>();
 
@@ -143,6 +155,8 @@ public class Cloud {
                 URL url = new URL(query);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                addAuthHeader(preferences, conn);
+
                 int responseCode = conn.getResponseCode();
                 if (responseCode != HttpURLConnection.HTTP_OK) {
                     return null;
@@ -203,6 +217,12 @@ public class Cloud {
         public String getId(int position) {
             return items.get(position).id;
         }
+    }
+
+    private Preferences preferences;
+
+    public Cloud(Context context) {
+        preferences = new Preferences(context);
     }
 
     /**
@@ -348,19 +368,19 @@ public class Cloud {
      * Register a device to the cloud.
      * This should be run in a thread
      *
-     * @param username    user to register for
      * @param deviceToken device token to register
      * @return true if register is successful
      */
-    public boolean registerDeviceToCloud(String username, String deviceToken) {
-        //TODO: Add auth token to the request header
-        String query = REGISTER_DEVICE_URL + "?user=" + username + "&device=" + deviceToken;
+    public boolean registerDeviceToCloud(String deviceToken) {
+        String query = REGISTER_DEVICE_URL + "&device=" + deviceToken;
 
         InputStream stream = null;
         try {
             URL url = new URL(query);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 return false;
@@ -407,21 +427,21 @@ public class Cloud {
      * Create a new game on the cloud.
      * This should be run in a thread
      *
-     * @param username user creating the game
      * @param name     name of the game
      * @param gridSize size of the playing area
      * @return the id of the game
      */
-    public int createGameOnCloud(String username, String name, int gridSize) {
-        int gameId = -1;
-        //TODO: Add auth token to the request header
-        String query = CREATE_GAME_URL + "?user=" + username + "&name=" + name + "&grid=" + gridSize;
+    public int createGameOnCloud(String name, int gridSize) {
+        String query = CREATE_GAME_URL + "?name=" + name + "&grid=" + gridSize;
 
+        int gameId = -1;
         InputStream stream = null;
         try {
             URL url = new URL(query);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
             int responseCode = conn.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 return -1;
@@ -466,13 +486,17 @@ public class Cloud {
         return gameId;
     }
 
+    private static void addAuthHeader(Preferences preferences, HttpURLConnection connection) {
+        connection.setRequestProperty(AUTH_USER_FIELD, preferences.getAuthUsername());
+        connection.setRequestProperty(AUTH_TOKEN_FIELD, preferences.getAuthToken());
+    }
 
     //TODO: DELETE THIS
-    public static void logStream(InputStream stream) {
+    public static void logStream(InputStream stream, String prefix) {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream));
 
-        Log.e("Steampunked", "logStream: If you leave this in, code after will not work!");
+        Log.e("Steampunked-" + prefix, "logStream: If you leave this in, code after will not work!");
         try {
             String line;
             while ((line = reader.readLine()) != null) {

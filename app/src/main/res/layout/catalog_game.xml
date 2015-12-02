@@ -53,5 +53,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/gameName"
         android:gravity="center_vertical"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 </RelativeLayout>

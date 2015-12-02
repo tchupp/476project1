@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 public class LobbyActivity extends AppCompatActivity {
 
+    private Cloud.CatalogAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,8 +18,8 @@ public class LobbyActivity extends AppCompatActivity {
         // Find the list view
         ListView list = (ListView) findViewById(R.id.gameList);
 
-        // Create an adapter
-        final Cloud.CatalogAdapter adapter = new Cloud.CatalogAdapter(list);
+
+        adapter = new Cloud.CatalogAdapter(list);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -35,5 +37,9 @@ public class LobbyActivity extends AppCompatActivity {
     public void onCreateGame(View view) {
         CreateGameDlg createGameDlg = new CreateGameDlg();
         createGameDlg.show(getFragmentManager(), "create_game");
+    }
+
+    public void update() {
+        adapter.update();
     }
 }
