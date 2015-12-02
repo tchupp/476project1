@@ -64,9 +64,10 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
 
         if (!preferences.getDeviceToken().equals(token)) {
             preferences.setDeviceToken(token);
-            cloud.registerDeviceToCloud(token);
+            //TODO: BROKEN
+            //cloud.registerDeviceToCloud(token);
         }
 
-        Logger.getLogger("DEVICE TOKEN").log(Level.INFO, token);
+        Log.i("DEVICE TOKEN", token);
     }
 }
