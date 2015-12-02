@@ -62,4 +62,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- loading -->
+    <string name="loading_game">Loading Created Game</string>
+    <string name="loading_login">Loading Login</string>
+    <string name="loading_catalog">Loading Catalog</string>
+
+
 </resources>
