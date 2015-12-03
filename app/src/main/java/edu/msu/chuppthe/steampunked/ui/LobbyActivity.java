@@ -15,6 +15,7 @@ import edu.msu.chuppthe.steampunked.utility.Cloud;
 public class LobbyActivity extends AppCompatActivity {
 
     private Cloud.CatalogAdapter adapter;
+    private Cloud cloud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class LobbyActivity extends AppCompatActivity {
         // Find the list view
         ListView list = (ListView) findViewById(R.id.gameList);
 
+        cloud = new Cloud(this);
 
         adapter = new Cloud.CatalogAdapter(list);
         list.setAdapter(adapter);
@@ -33,11 +35,20 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the id of the one we want to delete
-                String gameId = adapter.getId(position);
+                final String gameId = adapter.getId(position);
 
-                //TODO: Send toast notification to game creator
-                //TODO: Add player to game in DB
-                moveToGame(Integer.parseInt(gameId));
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (cloud.addPlayerTwoToGame(gameId)) {
+                            moveToGame(Integer.parseInt(gameId));
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(), "Failed to join game", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).start();
             }
         });
     }
@@ -61,7 +72,6 @@ public class LobbyActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Cloud cloud = new Cloud(context);
 
                 GameInfo gameInfo = cloud.getGameInfoFromCloud(gameId);
                 if (gameInfo != null) {

@@ -442,6 +442,65 @@ public class Cloud {
     }
 
     /**
+     * Join player two to game
+     * This should be run in a thread
+     *
+     * @param deviceToken device token to register
+     * @return true if register is successful
+     */
+    public boolean addPlayerTwoToGame(String gameId) {
+        String query = GAME_JOIN_URL + "?game=" + gameId;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return false;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+                if (status.equals("no")) {
+                    return false;
+                }
+            } catch (XmlPullParserException e) {
+                return false;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return false;
+        } catch (IOException ex) {
+            return false;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Create a new game on the cloud.
      * This should be run in a thread
      *
