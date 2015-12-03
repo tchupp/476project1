@@ -29,19 +29,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.game.GameInfo;
 import edu.msu.chuppthe.steampunked.game.Pipe;
 
 public class Cloud {
     private static final String MAGIC = "TechItHa6RuzeM8";
-    private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
-    private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
-    private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
-    private static final String CREATE_GAME_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-create.php";
-    private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-catalog.php";
+
+    private static final String GAME_CATALOG_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-catalog.php";
+    private static final String GAME_CREATE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-create.php";
+    private static final String GAME_INFO_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-info.php";
+    private static final String GAME_JOIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-join.php";
     private static final String LOAD_PIPE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-load.php";
     private static final String SAVE_PIPE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-save.php";
-    private static final String UTF8 = "UTF-8";
+    private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
+    private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
+    private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
 
+    private static final String UTF8 = "UTF-8";
     private static final String AUTH_USER_FIELD = "AuthUser";
     private static final String AUTH_TOKEN_FIELD = "AuthToken";
 
@@ -157,7 +161,7 @@ public class Cloud {
         }
 
         public List<Item> getCatalog() {
-            String query = CATALOG_URL;
+            String query = GAME_CATALOG_URL;
 
             ArrayList<Item> newItems = new ArrayList<>();
 
@@ -446,7 +450,7 @@ public class Cloud {
      * @return the id of the game
      */
     public int createGameOnCloud(String name, int gridSize) {
-        String query = CREATE_GAME_URL + "?name=" + name + "&grid=" + gridSize;
+        String query = GAME_CREATE_URL + "?name=" + name + "&grid=" + gridSize;
 
         int gameId = -1;
         InputStream stream = null;
@@ -508,7 +512,7 @@ public class Cloud {
      * @param pipe   the pipe to save
      * @return true if the save was successful
      */
-    public String savePipetoCloud(String gameId, Pipe pipe) {
+    public String savePipeToCloud(String gameId, Pipe pipe) {
         String pipeId = null;
 
         gameId = gameId.trim();
@@ -617,6 +621,67 @@ public class Cloud {
         }
 
         return pipeId;
+    }
+
+    public GameInfo getGameInfoFromCloud(String gameId) {
+        String query = GAME_INFO_URL + "?game=" + gameId;
+
+        GameInfo gameInfo = null;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+                if (status.equals("no")) {
+                    return null;
+                }
+
+                String name = xmlR.getAttributeValue(null, "name");
+                String playerOne = xmlR.getAttributeValue(null, "creating");
+                String playerTwo = xmlR.getAttributeValue(null, "joining");
+                int gridSize = Integer.parseInt(xmlR.getAttributeValue(null, "grid"));
+
+                gameInfo = new GameInfo(name, playerOne, playerTwo, gridSize);
+            } catch (XmlPullParserException e) {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return null;
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return gameInfo;
     }
 
     private static void addAuthHeader(Preferences preferences, HttpURLConnection connection) {
