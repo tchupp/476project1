@@ -47,21 +47,21 @@ public class GCMIntentService extends IntentService {
                         showToast(extras.getString("message"));
                         Intent moveIntent = new Intent(GameLiveActivity.RECEIVE);
                         moveIntent.putExtra(ACTION_KEY, NEW_MOVE_CASE);
-                        moveIntent.putExtra(GameLiveActivity.MOVE_ID, extras.getString("move_id"));
+                        moveIntent.putExtra(GameLiveActivity.MOVE_ID, extras.getString("data"));
                         sendBroadcast(moveIntent);
                         break;
                     case PLAYER_JOINED_CASE:
                         showToast(extras.getString("message"));
                         Intent joinIntent = new Intent(GameLiveActivity.RECEIVE);
                         joinIntent.putExtra(ACTION_KEY, PLAYER_JOINED_CASE);
-                        joinIntent.putExtra(GameLiveActivity.PLAYER_TWO_NAME, extras.getString("player_two"));
+                        joinIntent.putExtra(GameLiveActivity.PLAYER_TWO_NAME, extras.getString("data"));
                         sendBroadcast(joinIntent);
                         break;
                     case END_GAME_CASE:
                         Intent endGameIntent = new Intent(getBaseContext(), GameOverActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         endGameIntent.putExtra(GameLiveActivity.GRID_SIZE, extras.getString("grid_size"));
-                        endGameIntent.putExtra(GameLiveActivity.WINNING_PLAYER, extras.getString("winner"));
+                        endGameIntent.putExtra(GameLiveActivity.WINNING_PLAYER, extras.getString("data"));
                         startActivity(intent);
                         break;
                     default:
