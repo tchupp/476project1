@@ -623,7 +623,7 @@ public class Cloud {
         return pipeId;
     }
 
-    public GameInfo getGameInfoFromCloud(String gameId) {
+    public GameInfo getGameInfoFromCloud(int gameId) {
         String query = GAME_INFO_URL + "?game=" + gameId;
 
         GameInfo gameInfo = null;

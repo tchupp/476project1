@@ -67,7 +67,6 @@ public class CreateGameDlg extends DialogFragment {
                         }
                     });
                 } else {
-
                     createGame(gameName, getGridSize());
                 }
             }
@@ -107,7 +106,7 @@ public class CreateGameDlg extends DialogFragment {
             return;
         }
 
-        final GameCreateLoadingDlg gameCreateLoadingDlg  = new GameCreateLoadingDlg();
+        final GameCreateLoadingDlg gameCreateLoadingDlg = new GameCreateLoadingDlg();
         gameCreateLoadingDlg.show(getActivity().getFragmentManager(), "create_loading");
 
         final LobbyActivity activity = (LobbyActivity) getActivity();
@@ -131,14 +130,12 @@ public class CreateGameDlg extends DialogFragment {
                     });
                     activity.update();
                 } else {
-                    activity.moveToGame(Integer.toString(gameId));
+                    activity.moveToGame(gameId);
                 }
 
                 gameCreateLoadingDlg.dismiss();
             }
         };
-
-
 
         new Thread(createGameRunnable).start();
     }
