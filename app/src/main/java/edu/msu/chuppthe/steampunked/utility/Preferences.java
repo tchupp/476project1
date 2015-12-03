@@ -73,14 +73,4 @@ public class Preferences {
         editor.putString(AUTH_TOKEN_KEY, authToken);
         editor.apply();
     }
-
-    public String getDeviceToken() {
-        return this.preferences.getString(DEVICE_TOKEN_KEY, "");
-    }
-
-    public void setDeviceToken(String deviceToken) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(DEVICE_TOKEN_KEY, deviceToken);
-        editor.apply();
-    }
 }

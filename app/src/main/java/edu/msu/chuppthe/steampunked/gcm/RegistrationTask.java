@@ -59,15 +59,12 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(final String token) {
 
-        if (!preferences.getDeviceToken().equals(token)) {
-            preferences.setDeviceToken(token);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    cloud.registerDeviceToCloud(token);
-                }
-            }).start();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                cloud.registerDeviceToCloud(token);
+            }
+        }).start();
 
         Log.i("DEVICE TOKEN", token);
     }
