@@ -1,25 +1,17 @@
 package edu.msu.chuppthe.steampunked.gcm;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.ui.GameLiveActivity;
-import edu.msu.chuppthe.steampunked.ui.LobbyActivity;
-import edu.msu.chuppthe.steampunked.ui.MainMenuActivity;
+import edu.msu.chuppthe.steampunked.ui.GameOverActivity;
 
 public class GCMIntentService extends IntentService {
 
@@ -27,6 +19,7 @@ public class GCMIntentService extends IntentService {
     public static final String TOAST_CASE = "show_toast";
     public static final String PLAYER_JOINED_CASE = "player_joined";
     public static final String NEW_MOVE_CASE = "new_move";
+    public static final String END_GAME_CASE = "end_game";
     public static final String ACTION_KEY = "action";
 
 
@@ -54,13 +47,22 @@ public class GCMIntentService extends IntentService {
                         showToast(extras.getString("message"));
                         Intent moveIntent = new Intent(GameLiveActivity.RECEIVE);
                         moveIntent.putExtra(ACTION_KEY, NEW_MOVE_CASE);
+                        moveIntent.putExtra(GameLiveActivity.MOVE_ID, extras.getString("move_id"));
                         sendBroadcast(moveIntent);
                         break;
                     case PLAYER_JOINED_CASE:
                         showToast(extras.getString("message"));
                         Intent joinIntent = new Intent(GameLiveActivity.RECEIVE);
                         joinIntent.putExtra(ACTION_KEY, PLAYER_JOINED_CASE);
+                        joinIntent.putExtra(GameLiveActivity.PLAYER_TWO_NAME, extras.getString("player_two"));
                         sendBroadcast(joinIntent);
+                        break;
+                    case END_GAME_CASE:
+                        Intent endGameIntent = new Intent(getBaseContext(), GameOverActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        endGameIntent.putExtra(GameLiveActivity.GRID_SIZE, extras.getString("grid_size"));
+                        endGameIntent.putExtra(GameLiveActivity.WINNING_PLAYER, extras.getString("winner"));
+                        startActivity(intent);
                         break;
                     default:
                         showToast("Unrecognized Notification");

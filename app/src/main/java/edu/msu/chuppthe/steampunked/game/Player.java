@@ -17,6 +17,8 @@ public class Player {
         return playerName;
     }
 
+    public void setName(String playerName) { this.playerName = playerName; }
+
     public boolean hasLeak() {
         return leak;
     }

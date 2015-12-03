@@ -3,15 +3,12 @@ package edu.msu.chuppthe.steampunked.gcm;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.msu.chuppthe.steampunked.gcm.registration.Registration;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
@@ -60,12 +57,16 @@ public class RegistrationTask extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String token) {
+    protected void onPostExecute(final String token) {
 
         if (!preferences.getDeviceToken().equals(token)) {
             preferences.setDeviceToken(token);
-            //TODO: BROKEN
-            //cloud.registerDeviceToCloud(token);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    cloud.registerDeviceToCloud(token);
+                }
+            }).start();
         }
 
         Log.i("DEVICE TOKEN", token);

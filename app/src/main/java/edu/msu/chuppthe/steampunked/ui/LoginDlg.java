@@ -90,7 +90,7 @@ public class LoginDlg extends DialogFragment {
         }
 
         final LoginLoadingDlg loginDlg = new LoginLoadingDlg();
-        loginDlg.show(getActivity().getFragmentManager(), "loading");
+        loginDlg.show(getActivity().getFragmentManager(), "login_loading");
 
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);

@@ -11,9 +11,6 @@ import edu.msu.chuppthe.steampunked.gcm.RegistrationTask;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    public static final String GRID_SELECTION = "GridSelection";
-    public static final String PLAYER_NAME = "PlayerName";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

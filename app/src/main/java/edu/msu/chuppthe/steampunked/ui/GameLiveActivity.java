@@ -25,8 +25,9 @@ public class GameLiveActivity extends AppCompatActivity {
     // Bundle keys
     public static final String PLAYER_ONE_NAME = "player_one_name";
     public static final String PLAYER_TWO_NAME = "player_two_name";
-    public static final String GAME_ID = "player_two_name";
-    public static final String GRID_SIZE = "player_two_name";
+    public static final String GAME_ID = "game_identification";
+    public static final String GRID_SIZE = "grid_size";
+    public static final String MOVE_ID = "move_identification";
 
     private BroadcastReceiver receiver;
 
@@ -107,10 +108,10 @@ public class GameLiveActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getExtras().getString(GCMIntentService.ACTION_KEY)) {
                     case GCMIntentService.NEW_MOVE_CASE:
-                        addMove();
+                        addMove(intent.getExtras().getString(MOVE_ID));
                         break;
                     case GCMIntentService.PLAYER_JOINED_CASE:
-                        addPlayer();
+                        addPlayer(intent.getExtras().getString(PLAYER_TWO_NAME));
                     default:
                     //TODO: Add more cases if needed
                 }
@@ -127,14 +128,13 @@ public class GameLiveActivity extends AppCompatActivity {
         this.unregisterReceiver(this.receiver);
     }
 
-    public void addPlayer() {
-        //TODO: Add Player two
-        Log.i("ADD PLAYER", "test add player log message");
+    public void addPlayer(String name) {
+        playerTwo.setName(name);
     }
 
-    public void addMove() {
-        //TODO: Add move to board
-        Log.i("ADD BOARD", "test add board log message");
+    public void addMove(String moveId) {
+        //TODO: Pull move from DB
+        Log.i("ADD MOVE", moveId);
     }
 
     public void onInstall(View view) {
@@ -181,9 +181,9 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private void gameOver(boolean activeWon) {
         Intent intent = new Intent(this, GameOverActivity.class);
-        //intent.putExtra(MainMenuActivity.PLAYER_ONE, playerOne.getName());
-        //intent.putExtra(MainMenuActivity.PLAYER_TWO, playerTwo.getName());
-        intent.putExtra(MainMenuActivity.GRID_SELECTION, (getPlayingAreaView().getPlayingAreaSize() / 5));
+        intent.putExtra(PLAYER_ONE_NAME, playerOne.getName());
+        intent.putExtra(PLAYER_TWO_NAME, playerTwo.getName());
+        intent.putExtra(GRID_SIZE, (getPlayingAreaView().getPlayingAreaSize() / 5));
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
         intent.putExtra(WINNING_PLAYER, winner.getName());

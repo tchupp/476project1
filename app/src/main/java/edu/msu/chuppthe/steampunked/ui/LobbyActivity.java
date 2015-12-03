@@ -62,7 +62,7 @@ public class LobbyActivity extends AppCompatActivity {
         extras.putString(GameLiveActivity.GAME_ID, gameId);
         extras.putString(GameLiveActivity.PLAYER_ONE_NAME, "P1");
         //extras.putString(GameLiveActivity.PLAYER_TWO_NAME, "P2");
-        extras.putInt(GameLiveActivity.GRID_SIZE, 10);
+        extras.putInt(GameLiveActivity.GRID_SIZE, 2);
 
         intent.putExtras(extras);
 

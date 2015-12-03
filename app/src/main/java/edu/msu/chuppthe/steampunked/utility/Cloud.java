@@ -390,7 +390,7 @@ public class Cloud {
      * @return true if register is successful
      */
     public boolean registerDeviceToCloud(String deviceToken) {
-        String query = REGISTER_DEVICE_URL + "&device=" + deviceToken;
+        String query = REGISTER_DEVICE_URL + "?device=" + deviceToken;
 
         InputStream stream = null;
         try {
