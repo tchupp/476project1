@@ -92,6 +92,9 @@ public class RegisterDlg extends DialogFragment {
             return;
         }
 
+        final RegisteringDlg registeringDlg = new RegisteringDlg();
+        registeringDlg.show(getActivity().getFragmentManager(), "registering");
+
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
 
@@ -121,6 +124,8 @@ public class RegisterDlg extends DialogFragment {
                         }
                     });
                 }
+
+                registeringDlg.dismiss();
             }
         };
 
