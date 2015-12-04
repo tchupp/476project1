@@ -606,7 +606,6 @@ public class Cloud {
         }
 
         final String xmlStr = writer.toString();
-        Log.i("PIPE XML", xmlStr);
 
         /*
          * Convert the XML into HTTP POST data
