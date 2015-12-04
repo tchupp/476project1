@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
+import edu.msu.chuppthe.steampunked.utility.Preferences;
 
 /**
  * A representation of the playing area
@@ -164,6 +166,9 @@ public class PlayingArea extends PipeArea {
      */
     private Touch touch2 = new Touch();
 
+    private Cloud cloud;
+    private Preferences preferences;
+
     /**
      * Construct a playing area
      *
@@ -175,6 +180,9 @@ public class PlayingArea extends PipeArea {
         this.height = height;
 
         this.context = context;
+
+        this.cloud = new Cloud(context);
+        this.preferences = new Preferences(context);
 
         this.pipes = new Pipe[width][height];
         this.leaks = new Leak[width][height];
@@ -391,6 +399,15 @@ public class PlayingArea extends PipeArea {
             this.selected.resetMovement();
             this.selected.setMovable(false);
             addPipe(this.selected, gridX, gridY);
+
+            final Pipe pipeToSave = this.selected;
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    cloud.savePipeToCloud(preferences.getGameId(), pipeToSave);
+                }
+            }).start();
 
             if (!this.selected.getPlayer().hasLeak()) {
                 this.selected.getPlayer().getEndingPipe().moveGauge();

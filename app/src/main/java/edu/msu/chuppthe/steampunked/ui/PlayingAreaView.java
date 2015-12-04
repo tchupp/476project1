@@ -92,6 +92,10 @@ public class PlayingAreaView extends View {
         return this.playingArea.onTouchEvent(this, event);
     }
 
+    public void addPipe(Pipe pipe) {
+        this.playingArea.addPipe(pipe, pipe.getGridPositionX() + 1, pipe.getGridPositionY());
+    }
+
     /**
      * Tell the playing area to install the selection and invalidate the view
      */

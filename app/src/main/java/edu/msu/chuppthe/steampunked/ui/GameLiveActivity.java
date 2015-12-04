@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +14,7 @@ import edu.msu.chuppthe.steampunked.game.Pipe;
 import edu.msu.chuppthe.steampunked.game.Player;
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.gcm.GCMIntentService;
+import edu.msu.chuppthe.steampunked.utility.Cloud;
 
 public class GameLiveActivity extends AppCompatActivity {
 
@@ -27,7 +27,9 @@ public class GameLiveActivity extends AppCompatActivity {
     public static final String PLAYER_TWO_NAME = "player_two_name";
     public static final String GAME_ID = "game_identification";
     public static final String GRID_SIZE = "grid_size";
-    public static final String MOVE_ID = "move_identification";
+    public static final String PIPE_ID = "move_identification";
+
+    private Cloud cloud;
 
     private BroadcastReceiver receiver;
 
@@ -57,6 +59,8 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_game_live);
+
+        cloud = new Cloud(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -108,7 +112,7 @@ public class GameLiveActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getExtras().getString(GCMIntentService.ACTION_KEY)) {
                     case GCMIntentService.NEW_MOVE_CASE:
-                        addMove(intent.getExtras().getString(MOVE_ID));
+                        addPipe(intent.getExtras().getString(PIPE_ID));
                         break;
                     case GCMIntentService.PLAYER_JOINED_CASE:
                         addPlayer(intent.getExtras().getString(PLAYER_TWO_NAME));
@@ -130,11 +134,17 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void addPlayer(String name) {
         playerTwo.setName(name);
+        getPlayingAreaView().invalidate();
     }
 
-    public void addMove(String moveId) {
-        //TODO: Pull move from DB
-        Log.i("ADD MOVE", moveId);
+    public void addPipe(final String pipeId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(pipeId));
+                changeTurn();
+            }
+        }).start();
     }
 
     public void onInstall(View view) {

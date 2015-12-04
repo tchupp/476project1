@@ -47,7 +47,7 @@ public class GCMIntentService extends IntentService {
                         showToast(extras.getString("message"));
                         Intent moveIntent = new Intent(GameLiveActivity.RECEIVE);
                         moveIntent.putExtra(ACTION_KEY, NEW_MOVE_CASE);
-                        moveIntent.putExtra(GameLiveActivity.MOVE_ID, extras.getString("data"));
+                        moveIntent.putExtra(GameLiveActivity.PIPE_ID, extras.getString("data"));
                         sendBroadcast(moveIntent);
                         break;
                     case PLAYER_JOINED_CASE:

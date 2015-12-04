@@ -49,6 +49,8 @@ public class Cloud {
     private static final String AUTH_USER_FIELD = "AuthUser";
     private static final String AUTH_TOKEN_FIELD = "AuthToken";
 
+    private Context context;
+
     /**
      * Nested class to store one catalog row
      */
@@ -235,11 +237,14 @@ public class Cloud {
         public String getId(int position) {
             return items.get(position).id;
         }
+
+        public String getCreator(int position) { return items.get(position).creator; }
     }
 
     private Preferences preferences;
 
     public Cloud(Context context) {
+        this.context = context;
         preferences = new Preferences(context);
     }
 
@@ -445,7 +450,7 @@ public class Cloud {
      * Join player two to game
      * This should be run in a thread
      *
-     * @param deviceToken device token to register
+     * @param gameId device token to register
      * @return true if register is successful
      */
     public boolean addPlayerTwoToGame(String gameId) {
@@ -602,6 +607,7 @@ public class Cloud {
         }
 
         final String xmlStr = writer.toString();
+        Log.i("PIPE XML", xmlStr);
 
         /*
          * Convert the XML into HTTP POST data
@@ -625,6 +631,7 @@ public class Cloud {
             URL url = new URL(query);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
 
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
@@ -680,6 +687,64 @@ public class Cloud {
         }
 
         return pipeId;
+    }
+
+    public Pipe loadPipeFromCloud(String pipeId) {
+        String query = LOAD_PIPE_URL + "?pipe=" + pipeId;
+
+        Pipe pipe = null;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+
+                if (status.equals("no")) {
+                    return null;
+                }
+
+                pipe = Pipe.createPipefromXml(xmlR, context);
+
+            } catch (XmlPullParserException e) {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return null;
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return pipe;
     }
 
     public GameInfo getGameInfoFromCloud(int gameId) {

@@ -11,11 +11,13 @@ import android.widget.Toast;
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.game.GameInfo;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
+import edu.msu.chuppthe.steampunked.utility.Preferences;
 
 public class LobbyActivity extends AppCompatActivity {
 
     private Cloud.CatalogAdapter adapter;
     private Cloud cloud;
+    private Preferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +25,10 @@ public class LobbyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby);
 
         // Find the list view
-        ListView list = (ListView) findViewById(R.id.gameList);
+        final ListView list = (ListView) findViewById(R.id.gameList);
 
         cloud = new Cloud(this);
+        preferences = new Preferences(this);
 
         adapter = new Cloud.CatalogAdapter(list);
         list.setAdapter(adapter);
@@ -37,18 +40,26 @@ public class LobbyActivity extends AppCompatActivity {
                 // Get the id of the one we want to delete
                 final String gameId = adapter.getId(position);
 
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (cloud.addPlayerTwoToGame(gameId)) {
-                            moveToGame(Integer.parseInt(gameId));
+                if (!adapter.getCreator(position).equals(preferences.getAuthUsername())) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (cloud.addPlayerTwoToGame(gameId)) {
+                                moveToGame(Integer.parseInt(gameId));
+                            } else {
+                                list.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getBaseContext(), "Failed to join game", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
-                        else {
-                            Toast.makeText(getBaseContext(), "Failed to join game", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).start();
+                    }).start();
+                }
+                else {
+                    moveToGame(Integer.parseInt(gameId));
+                }
             }
         });
     }
@@ -68,6 +79,8 @@ public class LobbyActivity extends AppCompatActivity {
 
     public void moveToGame(final int gameId) {
         final LobbyActivity context = this;
+
+        preferences.setGameId(Integer.toString(gameId));
 
         new Thread(new Runnable() {
             @Override

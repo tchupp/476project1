@@ -10,7 +10,7 @@ public class Preferences {
     public static final String REMEMBER_ME_KEY = "Login_Remember_Me";
     public static final String AUTH_USERNAME_KEY = "Auth_Username";
     public static final String AUTH_TOKEN_KEY = "Auth_Token";
-    public static final String DEVICE_TOKEN_KEY = "Device_Token";
+    public static final String GAME_ID = "game_id";
 
     /**
      * Shared preferences for the app
@@ -72,5 +72,15 @@ public class Preferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(AUTH_TOKEN_KEY, authToken);
         editor.apply();
+    }
+
+    public void setGameId(String gameId) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(GAME_ID, gameId);
+        editor.apply();
+    }
+
+    public String getGameId() {
+        return this.preferences.getString(GAME_ID, "");
     }
 }
