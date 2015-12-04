@@ -88,12 +88,12 @@ public class LoginDlg extends DialogFragment {
         if (!(getActivity() instanceof MainMenuActivity)) {
             return;
         }
-
         final LoginLoadingDlg loginDlg = new LoginLoadingDlg();
-        loginDlg.show(getActivity().getFragmentManager(), "login_loading");
 
         final MainMenuActivity activity = (MainMenuActivity) getActivity();
         final ImageView view = (ImageView) activity.findViewById(R.id.imageMainMenu);
+
+        loginDlg.show(activity.getFragmentManager(), "login_loading");
 
         Runnable loginRunnable = new Runnable() {
             @Override

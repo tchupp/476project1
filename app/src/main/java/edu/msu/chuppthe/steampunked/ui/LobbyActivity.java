@@ -27,7 +27,7 @@ public class LobbyActivity extends AppCompatActivity {
 
         cloud = new Cloud(this);
 
-        adapter = new Cloud.CatalogAdapter(list);
+        adapter = new Cloud.CatalogAdapter(list, this);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -63,7 +63,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void update() {
-        adapter.update();
+        adapter.update(this);
     }
 
     public void moveToGame(final int gameId) {

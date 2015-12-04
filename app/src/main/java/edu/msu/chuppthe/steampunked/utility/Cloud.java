@@ -1,5 +1,6 @@
 package edu.msu.chuppthe.steampunked.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
@@ -72,17 +73,15 @@ public class Cloud {
 
         private View view;
 
-        public CatalogAdapter(final View view) {
+        public CatalogAdapter(final View view, Activity activity) {
             this.view = view;
             this.preferences = new Preferences(view.getContext());
 
-            update();
+            update(activity);
         }
 
-        public void update() {
-
-            // add loading catalog dlg here
-
+        public void update(Activity activity) {
+            //TODO: add loading catalog dlg here
 
             // Create a thread to load the catalog
             new Thread(new Runnable() {
