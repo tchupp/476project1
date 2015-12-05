@@ -20,6 +20,7 @@ public class GCMIntentService extends IntentService {
     public static final String PLAYER_JOINED_CASE = "player_joined";
     public static final String NEW_MOVE_CASE = "new_move";
     public static final String END_GAME_CASE = "end_game";
+    public static final String PIPE_DISCARD_CASE = "pipe_discard";
     public static final String ACTION_KEY = "action";
 
 
@@ -57,12 +58,18 @@ public class GCMIntentService extends IntentService {
                         joinIntent.putExtra(GameLiveActivity.PLAYER_TWO_NAME, extras.getString("data"));
                         sendBroadcast(joinIntent);
                         break;
+                    case PIPE_DISCARD_CASE:
+                        showToast(extras.getString("message"));
+                        Intent discardIntent = new Intent(GameLiveActivity.RECEIVE);
+                        discardIntent.putExtra(ACTION_KEY, PIPE_DISCARD_CASE);
+                        discardIntent.putExtra(GameLiveActivity.DISCARD_ID, extras.getString("data"));
+                        sendBroadcast(discardIntent);
+                        break;
                     case END_GAME_CASE:
                         Intent endGameIntent = new Intent(getBaseContext(), GameOverActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        endGameIntent.putExtra(GameLiveActivity.GRID_SIZE, extras.getString("grid_size"));
+                        endGameIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         endGameIntent.putExtra(GameLiveActivity.WINNING_PLAYER, extras.getString("data"));
-                        startActivity(intent);
+                        startActivity(endGameIntent);
                         break;
                     default:
                         showToast("Unrecognized Notification");

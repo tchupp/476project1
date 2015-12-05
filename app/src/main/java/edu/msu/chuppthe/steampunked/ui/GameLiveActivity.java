@@ -15,6 +15,7 @@ import edu.msu.chuppthe.steampunked.game.Player;
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.gcm.GCMIntentService;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
+import edu.msu.chuppthe.steampunked.utility.Preferences;
 
 public class GameLiveActivity extends AppCompatActivity {
 
@@ -28,8 +29,10 @@ public class GameLiveActivity extends AppCompatActivity {
     public static final String GAME_ID = "game_identification";
     public static final String GRID_SIZE = "grid_size";
     public static final String PIPE_ID = "move_identification";
+    public static final String DISCARD_ID = "discard_id";
 
     private Cloud cloud;
+    private Preferences preferences;
 
     private BroadcastReceiver receiver;
 
@@ -61,6 +64,7 @@ public class GameLiveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_live);
 
         cloud = new Cloud(this);
+        preferences = new Preferences(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -116,8 +120,12 @@ public class GameLiveActivity extends AppCompatActivity {
                         break;
                     case GCMIntentService.PLAYER_JOINED_CASE:
                         addPlayer(intent.getExtras().getString(PLAYER_TWO_NAME));
+                        break;
+                    case GCMIntentService.PIPE_DISCARD_CASE:
+                        addPipe(intent.getExtras().getString(DISCARD_ID));
+                        break;
                     default:
-                    //TODO: Add more cases if needed
+                        break;
                 }
             }
         };
@@ -138,13 +146,18 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     public void addPipe(final String pipeId) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(pipeId));
-                changeTurn();
-            }
-        }).start();
+        if (!pipeId.equals("-1")) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(preferences.getGameId(), pipeId));
+                    changeTurn();
+                }
+            }).start();
+        }
+        else {
+             changeTurn();
+        }
     }
 
     public void onInstall(View view) {
@@ -168,7 +181,13 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void onOpenValve(View view) {
         boolean noLeaks = getPlayingAreaView().checkLeaks(activePlayer);
-        gameOver(noLeaks);
+
+        if (noLeaks) {
+            gameOver(noLeaks);
+        }
+        else {
+            Toast.makeText(this, "You Still Have Leaks!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onRotate(View view) {
@@ -190,10 +209,10 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     private void gameOver(boolean activeWon) {
+
+        //TODO: server call to push surrender message
+
         Intent intent = new Intent(this, GameOverActivity.class);
-        intent.putExtra(PLAYER_ONE_NAME, playerOne.getName());
-        intent.putExtra(PLAYER_TWO_NAME, playerTwo.getName());
-        intent.putExtra(GRID_SIZE, (getPlayingAreaView().getPlayingAreaSize() / 5));
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
         intent.putExtra(WINNING_PLAYER, winner.getName());
