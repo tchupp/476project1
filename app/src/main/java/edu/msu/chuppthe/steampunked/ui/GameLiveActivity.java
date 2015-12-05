@@ -10,9 +10,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.game.Pipe;
 import edu.msu.chuppthe.steampunked.game.Player;
-import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.gcm.GCMIntentService;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
 import edu.msu.chuppthe.steampunked.utility.Preferences;
@@ -33,6 +33,8 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private Cloud cloud;
     private Preferences preferences;
+    private WaitingForPlayerDlg waitingForPlayerDlg;
+    private WaitingForMoveDlg waitingForMoveDlg;
 
     private BroadcastReceiver receiver;
 
@@ -65,6 +67,10 @@ public class GameLiveActivity extends AppCompatActivity {
 
         cloud = new Cloud(this);
         preferences = new Preferences(this);
+        waitingForPlayerDlg = new WaitingForPlayerDlg();
+        waitingForPlayerDlg.setCancelable(false);
+        waitingForMoveDlg = new WaitingForMoveDlg();
+        waitingForMoveDlg.setCancelable(false);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -73,12 +79,14 @@ public class GameLiveActivity extends AppCompatActivity {
         String playerTwoName = extras.getString(PLAYER_TWO_NAME);
 
         this.playerOne = new Player(playerOneName);
+        this.playerTwo = new Player(playerTwoName);
 
-        if (playerTwoName != null) {
-            this.playerTwo = new Player(playerTwoName);
+        if (playerTwoName.equals("")) {
+            waitingForPlayerDlg.show(getFragmentManager(), "waiting");
         }
-        else {
-            this.playerTwo = new Player("");
+
+        if (playerTwoName.equals(preferences.getAuthUsername())) {
+            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
         }
 
         getPlayingAreaView().setupPlayArea(extras.getInt(GRID_SIZE), this.playerOne, this.playerTwo);
@@ -142,6 +150,7 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void addPlayer(String name) {
         playerTwo.setName(name);
+        waitingForPlayerDlg.dismiss();
         getPlayingAreaView().invalidate();
     }
 
@@ -150,21 +159,23 @@ public class GameLiveActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(preferences.getGameId(), pipeId));
+                    //getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(preferences.getGameId(), pipeId));
                     changeTurn();
+                    waitingForMoveDlg.dismiss();
                 }
             }).start();
         }
         else {
-             changeTurn();
+            changeTurn();
+            waitingForMoveDlg.dismiss();
         }
     }
 
     public void onInstall(View view) {
-
         activePlayer.setLeak(false);
 
         if (getPlayingAreaView().installSelection(this.activePlayer)) {
+            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
             changeTurn();
         } else {
             Toast.makeText(this, "Install Failed", Toast.LENGTH_SHORT).show();
@@ -173,6 +184,7 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void onDiscard(View view) {
         if (getPlayingAreaView().discardSelection()) {
+            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
             changeTurn();
         } else {
             Toast.makeText(this, "Discard Failed", Toast.LENGTH_SHORT).show();
