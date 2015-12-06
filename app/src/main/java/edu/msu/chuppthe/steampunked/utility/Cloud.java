@@ -590,8 +590,6 @@ public class Cloud {
         try {
             xml.setOutput(writer);
 
-            xml.startDocument("UTF-8", true);
-
             xml.startTag(null, "pipe");
 
             pipe.savePipeXml(gameId, xml);
@@ -687,8 +685,8 @@ public class Cloud {
         return pipeId;
     }
 
-    public Pipe loadPipeFromCloud(String pipeId) {
-        String query = LOAD_PIPE_URL + "?pipe=" + pipeId;
+    public Pipe loadPipeFromCloud(String gameId, String pipeId) {
+        String query = LOAD_PIPE_URL + "?game=" + gameId + "&pipe=" + pipeId;
 
         Pipe pipe = null;
 
@@ -721,6 +719,8 @@ public class Cloud {
                 if (status.equals("no")) {
                     return null;
                 }
+                xmlR.nextTag();
+                xmlR.require(XmlPullParser.START_TAG, null, "pipe");
 
                 pipe = Pipe.createPipefromXml(xmlR, context);
 
@@ -809,20 +809,5 @@ public class Cloud {
     private static void addAuthHeader(Preferences preferences, HttpURLConnection connection) {
         connection.setRequestProperty(AUTH_USER_FIELD, preferences.getAuthUsername());
         connection.setRequestProperty(AUTH_TOKEN_FIELD, preferences.getAuthToken());
-    }
-
-    //TODO: DELETE THIS
-    public static void logStream(InputStream stream, String prefix) {
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(stream));
-
-        Log.e("Steampunked-" + prefix, "logStream: If you leave this in, code after will not work!");
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Log.e("Steampunked", line);
-            }
-        } catch (IOException ignored) {
-        }
     }
 }

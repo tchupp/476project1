@@ -159,9 +159,16 @@ public class GameLiveActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    //getPlayingAreaView().addPipe(cloud.loadPipeFromCloud(preferences.getGameId(), pipeId));
-                    changeTurn();
-                    waitingForMoveDlg.dismiss();
+                    final Pipe pipe = cloud.loadPipeFromCloud(preferences.getGameId(), pipeId);
+
+                    getPlayingAreaView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getPlayingAreaView().addPipe(pipe);
+                            changeTurn();
+                            waitingForMoveDlg.dismiss();
+                        }
+                    });
                 }
             }).start();
         }

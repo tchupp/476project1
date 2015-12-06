@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.msu.chuppthe.steampunked.R;
+import edu.msu.chuppthe.steampunked.ui.GameLiveActivity;
 
 public class Pipe implements Serializable {
 
@@ -77,18 +78,43 @@ public class Pipe implements Serializable {
     }
 
     public static Pipe createPipefromXml(XmlPullParser xml, Context context) throws IOException, XmlPullParserException {
-        boolean[] newConnect = {false, false, false, false};
-        int newId = Integer.parseInt(xml.getAttributeValue(null, "id"));
+        int id = Integer.parseInt(xml.getAttributeValue(null, "id"));
 
-        newConnect[0] = xml.getAttributeValue(null, "connect_north").equals("yes");
-        newConnect[1] = xml.getAttributeValue(null, "connect_east").equals("yes");
-        newConnect[2] = xml.getAttributeValue(null, "connect_south").equals("yes");
-        newConnect[3] = xml.getAttributeValue(null, "connect_west").equals("yes");
+        Pipe pipe;
 
-        Pipe newPipe = new Pipe(newConnect[0], newConnect[1], newConnect[2], newConnect[3]);
-        newPipe.setId(context, newId);
+        switch (id) {
+            case STRAIGHT_PIPE:
+                pipe = Pipe.createStraightPipe(context, new Player(GameLiveActivity.PLAYER_TWO_NAME));
+                break;
+            case TEE_PIPE:
+                pipe = Pipe.createTeePipe(context, new Player(GameLiveActivity.PLAYER_TWO_NAME));
+                break;
+            case CAP_PIPE:
+                pipe = Pipe.createCapPipe(context, new Player(GameLiveActivity.PLAYER_TWO_NAME));
+                break;
+            case NINETY_PIPE:
+                pipe = Pipe.createNinetyPipe(context, new Player(GameLiveActivity.PLAYER_TWO_NAME));
+                break;
+            default:
+                pipe = Pipe.createStraightPipe(context, new Player(GameLiveActivity.PLAYER_TWO_NAME));
+                break;
+        }
 
-        return newPipe;
+        pipe.setRotationFromXml(Integer.parseInt(xml.getAttributeValue(null, "rotation")));
+        pipe.setGridPositionX(Integer.parseInt(xml.getAttributeValue(null, "x")));
+        pipe.setGridPositionY(Integer.parseInt(xml.getAttributeValue(null, "y")));
+        pipe.setBasePosition(Float.parseFloat(xml.getAttributeValue(null, "xBase")),
+                Float.parseFloat(xml.getAttributeValue(null, "yBase")),
+                Float.parseFloat(xml.getAttributeValue(null, "scaleBase")));
+
+        if (xml.getAttributeValue(null, "isMovable").equals("no")) {
+            pipe.setMovable(false);
+        }
+        else {
+            pipe.setMovable(true);
+        }
+
+        return pipe;
     }
 
     private class Parameters implements Serializable {
@@ -448,6 +474,8 @@ public class Pipe implements Serializable {
         return params.x;
     }
 
+    private void setGridPositionX(int x) { params.x = x; }
+
     /**
      * Get the Y location of the pipe on the grid
      *
@@ -456,6 +484,8 @@ public class Pipe implements Serializable {
     public int getGridPositionY() {
         return params.y;
     }
+
+    private void setGridPositionY(int y) { params.y = y; }
 
     /**
      * Get the scale of the pipe
@@ -560,6 +590,10 @@ public class Pipe implements Serializable {
         params.rotation %= 4;
     }
 
+    private void setRotationFromXml(int rotation) {
+        params.rotation = rotation;
+    }
+
     /**
      * @param x New X Position
      * @param y New Y Position
@@ -601,23 +635,14 @@ public class Pipe implements Serializable {
     public void savePipeXml(String name, XmlSerializer xml) throws IOException {
 
         xml.attribute(null, "id", Integer.toString(id)); // associated with type of pipe ?
-        // xml.attribute(null, "uri", pipeImage); // need to add pipe image
-        xml.attribute(null, "isVisited", visited ? "yes" : "no");
-        xml.attribute(null, "connect_north", connect[0] ? "yes" : "no");
-        xml.attribute(null, "connect_east", connect[1] ? "yes" : "no");
-        xml.attribute(null, "connect_south", connect[2] ? "yes" : "no");
-        xml.attribute(null, "connect_west", connect[3] ? "yes" : "no");
-
 
         //Params
         xml.attribute(null, "x", Integer.toString(params.x));
         xml.attribute(null, "y", Integer.toString(params.y));
-        xml.attribute(null, "xPos", Float.toString(params.xPos));
-        xml.attribute(null, "yPos", Float.toString(params.yPos));
         xml.attribute(null, "xBase", Float.toString(params.xBase));
         xml.attribute(null, "yBase", Float.toString(params.yBase));
         xml.attribute(null, "scaleBase", Float.toString(params.scaleBase));
-        xml.attribute(null, "rotation", Float.toString(params.rotation));
+        xml.attribute(null, "rotation", Integer.toString(params.rotation));
         xml.attribute(null, "isMovable", params.isMovable ? "yes" : "no");
     }
 
