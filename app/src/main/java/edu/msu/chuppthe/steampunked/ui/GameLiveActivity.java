@@ -195,8 +195,13 @@ public class GameLiveActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (cloud.discardPipeFromCloud(preferences.getGameId())) {
-                        waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
-                        changeTurn();
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
+                                changeTurn();
+                            }
+                        });
                     } else {
                         view.post(new Runnable() {
                             @Override

@@ -574,8 +574,8 @@ public class Cloud {
      * @return true if register is successful
      */
     public boolean endGameFromCloud(String gameId, Boolean won) {
-        String query = DISCARD_URL + "?game=" + gameId + "&won=" + won.toString();
-        Log.i("WON", won.toString());
+        String query = END_URL + "?game=" + gameId + "&won=" + won.toString();
+
         InputStream stream = null;
         try {
             URL url = new URL(query);
