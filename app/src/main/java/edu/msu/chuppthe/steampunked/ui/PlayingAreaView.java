@@ -93,7 +93,7 @@ public class PlayingAreaView extends View {
     }
 
     public void addPipe(Pipe pipe) {
-        this.playingArea.addPipe(pipe, pipe.getGridPositionX()+1, pipe.getGridPositionY());
+        this.playingArea.addPipe(pipe, pipe.getGridPositionX(), pipe.getGridPositionY());
         invalidate();
     }
 
