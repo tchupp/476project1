@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -23,7 +22,6 @@ public class GCMIntentService extends IntentService {
     public static final String PIPE_DISCARD_CASE = "pipe_discard";
     public static final String ACTION_KEY = "action";
 
-
     public GCMIntentService() {
         super("GCMIntentService");
     }
@@ -38,9 +36,13 @@ public class GCMIntentService extends IntentService {
         if (extras != null && !extras.isEmpty()) {
             // Since we're not using two way messaging, this is all we really to check for
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                Log.i("GCM_RECEIVED", extras.toString());
 
-                switch (extras.getString("title")) {
+                String title = extras.getString("title");
+                if (title == null) {
+                    return;
+                }
+
+                switch (title) {
                     case TOAST_CASE:
                         showToast(extras.getString("message"));
                         break;

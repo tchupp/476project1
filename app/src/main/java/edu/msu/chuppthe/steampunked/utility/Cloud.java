@@ -1,8 +1,6 @@
 package edu.msu.chuppthe.steampunked.utility;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +13,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -32,6 +28,7 @@ import java.util.List;
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.game.GameInfo;
 import edu.msu.chuppthe.steampunked.game.Pipe;
+import edu.msu.chuppthe.steampunked.ui.LobbyActivity;
 
 public class Cloud {
     private static final String MAGIC = "TechItHa6RuzeM8";
@@ -78,16 +75,14 @@ public class Cloud {
 
         private View view;
 
-        public CatalogAdapter(final View view, Activity activity) {
+        public CatalogAdapter(final View view, LobbyActivity activity) {
             this.view = view;
             this.preferences = new Preferences(view.getContext());
 
             update(activity);
         }
 
-        public void update(Activity activity) {
-            //TODO: add loading catalog dlg here
-
+        public void update(final LobbyActivity activity) {
             // Create a thread to load the catalog
             new Thread(new Runnable() {
                 @Override
@@ -102,6 +97,7 @@ public class Cloud {
                             public void run() {
                                 // Tell the adapter the data set has been changed
                                 notifyDataSetChanged();
+                                activity.stopRefresh();
                             }
                         });
                     } else {
@@ -111,6 +107,7 @@ public class Cloud {
                             @Override
                             public void run() {
                                 Toast.makeText(view.getContext(), R.string.catalog_fail, Toast.LENGTH_SHORT).show();
+                                activity.stopRefresh();
                             }
 
                         });
@@ -240,7 +237,9 @@ public class Cloud {
             return items.get(position).id;
         }
 
-        public String getCreator(int position) { return items.get(position).creator; }
+        public String getCreator(int position) {
+            return items.get(position).creator;
+        }
     }
 
     private Preferences preferences;

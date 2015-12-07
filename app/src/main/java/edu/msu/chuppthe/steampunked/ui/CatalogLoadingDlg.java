@@ -22,18 +22,16 @@ public class CatalogLoadingDlg extends DialogFragment {
         // Set the title
         builder.setTitle(R.string.loading_login);
 
-        builder.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                });
+            }
+        });
 
 
         // Create the dialog box
-        final AlertDialog dlg = builder.create();
-        return dlg;
+        return builder.create();
     }
 
 

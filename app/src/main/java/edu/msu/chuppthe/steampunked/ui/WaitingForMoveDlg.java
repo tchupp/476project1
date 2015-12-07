@@ -3,14 +3,14 @@ package edu.msu.chuppthe.steampunked.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import edu.msu.chuppthe.steampunked.R;
 
-/**
- * Created by evanhlavaty on 12/5/15.
- */
 public class WaitingForMoveDlg extends DialogFragment {
+
+    private GameLiveActivity gameLiveActivity;
 
     /**
      * Create the dialog box
@@ -23,8 +23,18 @@ public class WaitingForMoveDlg extends DialogFragment {
         // Set the title
         builder.setTitle(R.string.waiting_for_move_dlg);
 
+        builder.setNegativeButton(R.string.surrender_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                gameLiveActivity.onSurrender(null);
+            }
+        });
+
         // Create the dialog box
-        final AlertDialog dlg = builder.create();
-        return dlg;
+        return builder.create();
+    }
+
+    public void setGameLiveActivity(GameLiveActivity gameLiveActivity) {
+        this.gameLiveActivity = gameLiveActivity;
     }
 }

@@ -14,13 +14,22 @@
         android:onClick="onCreateGame"
         android:text="@string/create_game" />
 
-    <ListView
-        android:id="@+id/gameList"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/gameListRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:layout_alignParentTop="true">
+
+        <ListView
+            android:id="@+id/gameList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </RelativeLayout>

@@ -20,10 +20,11 @@ import edu.msu.chuppthe.steampunked.utility.Preferences;
 public class GameLiveActivity extends AppCompatActivity {
 
     public static final String WINNING_PLAYER = "WINNING_PLAYER";
-    private static final String ACTIVE_PLAYER = "activePlayer";
-    private static final String ACTIVE_MOVE_DLG =  "active_move_dlg";
-    private static final String ACTIVE_JOIN_DLG =  "active_join_dlg";
     public static final String RECEIVE = "edu.msu.chuppthe.steampunked.ui.GameLiveActivity.receive";
+
+    private static final String ACTIVE_PLAYER = "activePlayer";
+    private static final String ACTIVE_MOVE_DLG = "active_move_dlg";
+    private static final String ACTIVE_JOIN_DLG = "active_join_dlg";
 
     // Bundle keys
     public static final String PLAYER_ONE_NAME = "player_one_name";
@@ -39,8 +40,6 @@ public class GameLiveActivity extends AppCompatActivity {
     private WaitingForMoveDlg waitingForMoveDlg;
 
     private BroadcastReceiver receiver;
-
-    private Player playerOne;
 
     private Player playerTwo;
 
@@ -77,12 +76,13 @@ public class GameLiveActivity extends AppCompatActivity {
         super.onCreate(bundle);
         setContentView(R.layout.activity_game_live);
 
-        cloud = new Cloud(this);
-        preferences = new Preferences(this);
-        waitingForPlayerDlg = new WaitingForPlayerDlg();
-        waitingForPlayerDlg.setCancelable(false);
-        waitingForMoveDlg = new WaitingForMoveDlg();
-        waitingForMoveDlg.setCancelable(false);
+        this.cloud = new Cloud(this);
+        this.preferences = new Preferences(this);
+        this.waitingForPlayerDlg = new WaitingForPlayerDlg();
+        this.waitingForPlayerDlg.setCancelable(false);
+        this.waitingForMoveDlg = new WaitingForMoveDlg();
+        this.waitingForMoveDlg.setCancelable(false);
+        this.waitingForMoveDlg.setGameLiveActivity(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -90,10 +90,14 @@ public class GameLiveActivity extends AppCompatActivity {
         String playerOneName = extras.getString(PLAYER_ONE_NAME);
         String playerTwoName = extras.getString(PLAYER_TWO_NAME);
 
-        this.playerOne = new Player(playerOneName);
+        Player playerOne = new Player(playerOneName);
         this.playerTwo = new Player(playerTwoName);
 
-        if (playerTwoName.equals("")) {
+        if (playerOneName == null || playerTwoName == null) {
+            return;
+        }
+
+        if (playerTwoName.isEmpty()) {
             waitingForPlayerDlg.show(getFragmentManager(), "waiting");
         }
 
@@ -101,10 +105,10 @@ public class GameLiveActivity extends AppCompatActivity {
             waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
         }
 
-        getPlayingAreaView().setupPlayArea(extras.getInt(GRID_SIZE), this.playerOne, this.playerTwo);
+        getPlayingAreaView().setupPlayArea(extras.getInt(GRID_SIZE), playerOne, this.playerTwo);
 
         this.activePlayer = this.playerTwo;
-        this.inactivePlayer = this.playerOne;
+        this.inactivePlayer = playerOne;
 
         if (bundle != null) {
             // We have saved state
@@ -114,7 +118,7 @@ public class GameLiveActivity extends AppCompatActivity {
             }
 
             if (activeName.equals(this.playerTwo.getName())) {
-                this.activePlayer = this.playerOne;
+                this.activePlayer = playerOne;
                 this.inactivePlayer = this.playerTwo;
             }
 
@@ -126,8 +130,8 @@ public class GameLiveActivity extends AppCompatActivity {
                 waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
             }
 
-            getPlayingAreaView().getFromBundle(bundle, this.playerOne, this.playerTwo);
-            getSelectionAreaView().getFromBundle(bundle, this.playerOne, this.playerTwo);
+            getPlayingAreaView().getFromBundle(bundle, playerOne, this.playerTwo);
+            getSelectionAreaView().getFromBundle(bundle, playerOne, this.playerTwo);
         }
 
         changeTurn();
@@ -142,7 +146,12 @@ public class GameLiveActivity extends AppCompatActivity {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                switch (intent.getExtras().getString(GCMIntentService.ACTION_KEY)) {
+                String actionKey = intent.getExtras().getString(GCMIntentService.ACTION_KEY);
+                if (actionKey == null) {
+                    return;
+                }
+
+                switch (actionKey) {
                     case GCMIntentService.NEW_MOVE_CASE:
                         addPipe(intent.getExtras().getString(PIPE_ID));
                         break;
@@ -191,8 +200,7 @@ public class GameLiveActivity extends AppCompatActivity {
                     });
                 }
             }).start();
-        }
-        else {
+        } else {
             changeTurn();
             waitingForMoveDlg.dismiss();
         }
@@ -241,9 +249,8 @@ public class GameLiveActivity extends AppCompatActivity {
         boolean noLeaks = getPlayingAreaView().checkLeaks(activePlayer);
 
         if (noLeaks) {
-            gameOver(noLeaks);
-        }
-        else {
+            gameOver(true);
+        } else {
             Toast.makeText(this, "You Still Have Leaks!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -267,7 +274,6 @@ public class GameLiveActivity extends AppCompatActivity {
     }
 
     private void gameOver(final boolean activeWon) {
-
         final Intent intent = new Intent(this, GameOverActivity.class);
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
