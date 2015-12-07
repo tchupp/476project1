@@ -67,11 +67,16 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void moveToGame(final int gameId) {
+
         final LobbyActivity context = this;
+
+        final GameLoadingDlg gameLoadingDlg = new GameLoadingDlg();
+        gameLoadingDlg.show(context.getFragmentManager(), "game_loading");
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+
 
                 GameInfo gameInfo = cloud.getGameInfoFromCloud(gameId);
                 if (gameInfo != null) {
