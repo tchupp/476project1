@@ -191,6 +191,7 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public void onDiscard(View view) {
         if (getPlayingAreaView().discardSelection()) {
+            cloud.discardPipeFromCloud(preferences.getGameId());
             waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
             changeTurn();
         } else {
