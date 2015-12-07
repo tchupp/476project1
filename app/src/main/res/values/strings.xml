@@ -33,8 +33,9 @@
     <!-- How to play dlg -->
     <string name="how_to_play">How To Play</string>
     <string name="how_to_play_dlg_title">How To Play!!!</string>
-    <string name="gamerules">The object of the game is to place pipe that will connect a steam source to a steam engine so it can power your airship.
-        \nOf course, you want to do this before your opponent does.
+    <string name="gamerules"> In order to play this game you have to register and login in with the username and password that you registered. Once you successfully login, you will be taken to the Lobby where you will be able to see a list of players that are already waiting for you to join their game. If their are no available games you have the ability to create a game and wait for another user to join your game. Once a user joins your game, you will
+        receive a push notification, notifying you that a user has joined and you will be moved into the game.  The object of the game is to place a pipe that will connect a steam source to a steam engine so it can power your airship.
+        \nOf course, you want to do this before your opponent does. You will recieve a push notification every time the other player makes a move.
         \nThe winner is the first one to connect steam to their engine with no leaks and turn on the valve.</string>
 
     <!-- Lobby -->
