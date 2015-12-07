@@ -21,6 +21,8 @@ public class GameLiveActivity extends AppCompatActivity {
 
     public static final String WINNING_PLAYER = "WINNING_PLAYER";
     private static final String ACTIVE_PLAYER = "activePlayer";
+    private static final String ACTIVE_MOVE_DLG =  "active_move_dlg";
+    private static final String ACTIVE_JOIN_DLG =  "active_join_dlg";
     public static final String RECEIVE = "edu.msu.chuppthe.steampunked.ui.GameLiveActivity.receive";
 
     // Bundle keys
@@ -54,6 +56,16 @@ public class GameLiveActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
+
+        bundle.putBoolean(ACTIVE_JOIN_DLG, waitingForPlayerDlg.isVisible());
+        if (waitingForPlayerDlg.isVisible()) {
+            waitingForPlayerDlg.dismiss();
+        }
+
+        bundle.putBoolean(ACTIVE_MOVE_DLG, waitingForMoveDlg.isVisible());
+        if (waitingForMoveDlg.isVisible()) {
+            waitingForMoveDlg.dismiss();
+        }
 
         getPlayingAreaView().saveToBundle(bundle);
         getSelectionAreaView().saveToBundle(bundle);
@@ -104,6 +116,14 @@ public class GameLiveActivity extends AppCompatActivity {
             if (activeName.equals(this.playerTwo.getName())) {
                 this.activePlayer = this.playerOne;
                 this.inactivePlayer = this.playerTwo;
+            }
+
+            if (bundle.getBoolean(ACTIVE_JOIN_DLG)) {
+                waitingForPlayerDlg.show(getFragmentManager(), "waitingForPlayer");
+            }
+
+            if (bundle.getBoolean(ACTIVE_MOVE_DLG)) {
+                waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
             }
 
             getPlayingAreaView().getFromBundle(bundle, this.playerOne, this.playerTwo);
