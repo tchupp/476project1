@@ -68,9 +68,6 @@
     <string name="loading_login">Logging In..</string>
     <string name="loading_catalog">Loading Catalog..</string>
     <string name="registering_user">Registering..</string>
-    <string name="loading_game">Loading Game..</string>
-
-
-
-
+    <string name="waiting_dlg">Waiting For Opponent..</string>
+    <string name="waiting_for_move_dlg">Waiting For Opponent To Move..</string>
 </resources>

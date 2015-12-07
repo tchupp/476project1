@@ -13,9 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import edu.msu.chuppthe.steampunked.utility.Preferences;
 import edu.msu.chuppthe.steampunked.R;
 import edu.msu.chuppthe.steampunked.utility.Cloud;
+import edu.msu.chuppthe.steampunked.utility.Preferences;
 
 public class LoginDlg extends DialogFragment {
 
@@ -122,7 +122,6 @@ public class LoginDlg extends DialogFragment {
 
                     preferences.setAuthUsername(username);
                     preferences.setAuthToken(authToken);
-
 
                     activity.moveToLobby();
                 }

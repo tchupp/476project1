@@ -46,7 +46,6 @@ public class MainMenuActivity extends AppCompatActivity {
         // Attempts to register device token for notifications
         new RegistrationTask(this).execute();
 
-
         Intent intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
     }

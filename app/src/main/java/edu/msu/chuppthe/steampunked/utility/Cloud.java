@@ -45,10 +45,13 @@ public class Cloud {
     private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-login.php";
     private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
     private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
+    private static final String DISCARD_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-discard.php";
 
     private static final String UTF8 = "UTF-8";
     private static final String AUTH_USER_FIELD = "AuthUser";
     private static final String AUTH_TOKEN_FIELD = "AuthToken";
+
+    private Context context;
 
     /**
      * Nested class to store one catalog row
@@ -234,11 +237,14 @@ public class Cloud {
         public String getId(int position) {
             return items.get(position).id;
         }
+
+        public String getCreator(int position) { return items.get(position).creator; }
     }
 
     private Preferences preferences;
 
     public Cloud(Context context) {
+        this.context = context;
         preferences = new Preferences(context);
     }
 
@@ -444,11 +450,70 @@ public class Cloud {
      * Join player two to game
      * This should be run in a thread
      *
-     * @param deviceToken device token to register
+     * @param gameId device token to register
      * @return true if register is successful
      */
     public boolean addPlayerTwoToGame(String gameId) {
         String query = GAME_JOIN_URL + "?game=" + gameId;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return false;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+                if (status.equals("no")) {
+                    return false;
+                }
+            } catch (XmlPullParserException e) {
+                return false;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return false;
+        } catch (IOException ex) {
+            return false;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Join player two to game
+     * This should be run in a thread
+     *
+     * @param gameId device token to register
+     * @return true if register is successful
+     */
+    public boolean discardPipeFromCloud(String gameId) {
+        String query = DISCARD_URL + "?game=" + gameId;
 
         InputStream stream = null;
         try {
@@ -585,8 +650,6 @@ public class Cloud {
         try {
             xml.setOutput(writer);
 
-            xml.startDocument("UTF-8", true);
-
             xml.startTag(null, "pipe");
 
             pipe.savePipeXml(gameId, xml);
@@ -624,6 +687,7 @@ public class Cloud {
             URL url = new URL(query);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
 
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
@@ -679,6 +743,66 @@ public class Cloud {
         }
 
         return pipeId;
+    }
+
+    public Pipe loadPipeFromCloud(String gameId, String pipeId) {
+        String query = LOAD_PIPE_URL + "?game=" + gameId + "&pipe=" + pipeId;
+
+        Pipe pipe = null;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+
+                if (status.equals("no")) {
+                    return null;
+                }
+                xmlR.nextTag();
+                xmlR.require(XmlPullParser.START_TAG, null, "pipe");
+
+                pipe = Pipe.createPipefromXml(xmlR, context);
+
+            } catch (XmlPullParserException e) {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return null;
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return pipe;
     }
 
     public GameInfo getGameInfoFromCloud(int gameId) {
@@ -745,20 +869,5 @@ public class Cloud {
     private static void addAuthHeader(Preferences preferences, HttpURLConnection connection) {
         connection.setRequestProperty(AUTH_USER_FIELD, preferences.getAuthUsername());
         connection.setRequestProperty(AUTH_TOKEN_FIELD, preferences.getAuthToken());
-    }
-
-    //TODO: DELETE THIS
-    public static void logStream(InputStream stream, String prefix) {
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(stream));
-
-        Log.e("Steampunked-" + prefix, "logStream: If you leave this in, code after will not work!");
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Log.e("Steampunked", line);
-            }
-        } catch (IOException ignored) {
-        }
     }
 }
