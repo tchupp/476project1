@@ -46,6 +46,8 @@ public class Cloud {
     private static final String REGISTER_DEVICE_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-device.php";
     private static final String REGISTER_USER_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-register-user.php";
     private static final String DISCARD_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-discard.php";
+    private static final String END_URL = "http://webdev.cse.msu.edu/~chuppthe/cse476/steampunked/steam-game-end.php";
+
 
     private static final String UTF8 = "UTF-8";
     private static final String AUTH_USER_FIELD = "AuthUser";
@@ -506,15 +508,74 @@ public class Cloud {
     }
 
     /**
+     * Discard pipe notification
+     * This should be run in a thread
+     *
+     * @param gameId device token to register
+     * @return true if discard is successful
+     */
+    public boolean discardPipeFromCloud(String gameId) {
+        String query = DISCARD_URL + "?game=" + gameId;
+
+        InputStream stream = null;
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            addAuthHeader(preferences, conn);
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return false;
+            }
+
+            stream = conn.getInputStream();
+
+            /**
+             * Create an XML parser for the result
+             */
+            try {
+                XmlPullParser xmlR = Xml.newPullParser();
+                xmlR.setInput(stream, UTF8);
+
+                xmlR.nextTag();      // Advance to first tag
+                xmlR.require(XmlPullParser.START_TAG, null, "steam");
+
+                String status = xmlR.getAttributeValue(null, "status");
+                if (status.equals("no")) {
+                    return false;
+                }
+            } catch (XmlPullParserException e) {
+                return false;
+            }
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return false;
+        } catch (IOException ex) {
+            return false;
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // Fail silently
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Join player two to game
      * This should be run in a thread
      *
      * @param gameId device token to register
      * @return true if register is successful
      */
-    public boolean discardPipeFromCloud(String gameId) {
-        String query = DISCARD_URL + "?game=" + gameId;
-
+    public boolean endGameFromCloud(String gameId, Boolean won) {
+        String query = DISCARD_URL + "?game=" + gameId + "&won=" + won.toString();
+        Log.i("WON", won.toString());
         InputStream stream = null;
         try {
             URL url = new URL(query);

@@ -189,11 +189,24 @@ public class GameLiveActivity extends AppCompatActivity {
         }
     }
 
-    public void onDiscard(View view) {
+    public void onDiscard(final View view) {
         if (getPlayingAreaView().discardSelection()) {
-            cloud.discardPipeFromCloud(preferences.getGameId());
-            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
-            changeTurn();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (cloud.discardPipeFromCloud(preferences.getGameId())) {
+                        waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
+                        changeTurn();
+                    } else {
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getBaseContext(), "Failed to discard", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
         } else {
             Toast.makeText(this, "Discard Failed", Toast.LENGTH_SHORT).show();
         }
@@ -228,16 +241,28 @@ public class GameLiveActivity extends AppCompatActivity {
         return activePlayer;
     }
 
-    private void gameOver(boolean activeWon) {
+    private void gameOver(final boolean activeWon) {
 
-        //TODO: server call to push surrender message
-
-        Intent intent = new Intent(this, GameOverActivity.class);
+        final Intent intent = new Intent(this, GameOverActivity.class);
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
         intent.putExtra(WINNING_PLAYER, winner.getName());
 
-        startActivity(intent);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (cloud.endGameFromCloud(preferences.getGameId(), activeWon)) {
+                    startActivity(intent);
+                } else {
+                    getPlayingAreaView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getBaseContext(), "Failed Intent To Game Over", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     private void changeTurn() {
