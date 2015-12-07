@@ -273,6 +273,10 @@ public class GameLiveActivity extends AppCompatActivity {
         return activePlayer;
     }
 
+    public void onQuitWhileWaiting() {
+        gameOver(true);
+    }
+
     private void gameOver(final boolean activeWon) {
         final Intent intent = new Intent(this, GameOverActivity.class);
 
