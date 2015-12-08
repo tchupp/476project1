@@ -24,6 +24,9 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private static final String ACTIVE_PLAYER = "activePlayer";
     private static final String ACTIVE_MOVE_DLG = "active_move_dlg";
+    private static final String ACTIVE_JOIN_DLG = "active_join_dlg";
+    private static final String WAITING_FOR_MOVE_LABEL = "waitingForMove";
+    private static final String WAITING_FOR_PLAYER_LABEL = "waiting";
 
     // Bundle keys
     public static final String PLAYER_ONE_NAME = "player_one_name";
@@ -37,12 +40,14 @@ public class GameLiveActivity extends AppCompatActivity {
     private Preferences preferences;
 
     private WaitingForPlayerDlg waitingForPlayerDlg;
+    private Boolean waitingForPlayerShowing = false;
 
     private WaitingForMoveDlg waitingForMoveDlg;
-    private Boolean moveDlgShowing = false;
+    private Boolean waitingForMoveShowing = false;
 
     private BroadcastReceiver receiver;
 
+    private Player playerOne;
     private Player playerTwo;
 
     private Player activePlayer;
@@ -58,11 +63,17 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        bundle.putBoolean(ACTIVE_MOVE_DLG, moveDlgShowing);
+        bundle.putBoolean(ACTIVE_MOVE_DLG, waitingForMoveShowing);
+        bundle.putBoolean(ACTIVE_JOIN_DLG, waitingForPlayerShowing);
 
         getPlayingAreaView().saveToBundle(bundle);
         getSelectionAreaView().saveToBundle(bundle);
+
         bundle.putString(ACTIVE_PLAYER, this.activePlayer.getName());
+        bundle.putString(PLAYER_ONE_NAME, this.playerOne.getName());
+        bundle.putString(PLAYER_TWO_NAME, this.playerTwo.getName());
+        bundle.putString(PLAYER_TWO_NAME, this.playerTwo.getName());
+        bundle.putInt(GRID_SIZE, getPlayingAreaView().getPlayingAreaSize() / 5);
     }
 
     @Override
@@ -72,57 +83,54 @@ public class GameLiveActivity extends AppCompatActivity {
 
         this.cloud = new Cloud(this);
         this.preferences = new Preferences(this);
+
         this.waitingForPlayerDlg = new WaitingForPlayerDlg();
         this.waitingForPlayerDlg.setCancelable(false);
+
         this.waitingForMoveDlg = new WaitingForMoveDlg();
         this.waitingForMoveDlg.setCancelable(false);
         this.waitingForMoveDlg.setGameLiveActivity(this);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle savedState = (bundle == null) ? getIntent().getExtras() : bundle;
 
-        String playerOneName = extras.getString(PLAYER_ONE_NAME);
-        String playerTwoName = extras.getString(PLAYER_TWO_NAME);
+        int gridSize = savedState.getInt(GRID_SIZE);
 
-        Player playerOne = new Player(playerOneName);
-        this.playerTwo = new Player(playerTwoName);
+        String playerOneName = savedState.getString(PLAYER_ONE_NAME);
+        String playerTwoName = savedState.getString(PLAYER_TWO_NAME);
 
         if (playerOneName == null || playerTwoName == null) {
             return;
         }
 
-        if (playerTwoName.isEmpty()) {
-            waitingForPlayerDlg.show(getFragmentManager(), "waiting");
-        }
+        this.playerOne = new Player(playerOneName);
+        this.playerTwo = new Player(playerTwoName);
 
-        if (playerTwoName.equals(preferences.getAuthUsername()) ) {
-            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
-        }
-
-        getPlayingAreaView().setupPlayArea(extras.getInt(GRID_SIZE), playerOne, this.playerTwo);
+        getPlayingAreaView().setupPlayArea(gridSize, this.playerOne, this.playerTwo);
 
         this.activePlayer = this.playerTwo;
-        this.inactivePlayer = playerOne;
+        this.inactivePlayer = this.playerOne;
 
-        if (bundle != null) {
-            // We have saved state
-            String activeName = bundle.getString(ACTIVE_PLAYER);
-            if (activeName == null) {
+        if (bundle == null) {
+            if (playerTwoName.isEmpty()) {
+                this.waitingForPlayerDlg.show(getFragmentManager(), WAITING_FOR_PLAYER_LABEL);
+            } else if (playerTwoName.equals(preferences.getAuthUsername())) {
+                this.waitingForMoveDlg.show(getFragmentManager(), WAITING_FOR_MOVE_LABEL);
+            }
+        } else {
+            String activePlayer = bundle.getString(ACTIVE_PLAYER);
+            if (activePlayer == null) {
                 return;
             }
 
-            if (activeName.equals(this.playerTwo.getName())) {
+            if (activePlayer.equals(this.playerTwo.getName())) {
                 this.activePlayer = playerOne;
                 this.inactivePlayer = this.playerTwo;
             }
 
-            if (bundle.getBoolean(ACTIVE_MOVE_DLG)) {
-                waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
-            }
-            else {
-                if (waitingForMoveDlg.isAdded()) {
-                    waitingForMoveDlg.dismiss();
-                }
+            if (bundle.getBoolean(ACTIVE_JOIN_DLG)) {
+                this.waitingForPlayerDlg.show(getFragmentManager(), WAITING_FOR_PLAYER_LABEL);
+            } else if (bundle.getBoolean(ACTIVE_MOVE_DLG)) {
+                this.waitingForMoveDlg.show(getFragmentManager(), WAITING_FOR_MOVE_LABEL);
             }
 
             getPlayingAreaView().getFromBundle(bundle, playerOne, this.playerTwo);
@@ -171,7 +179,15 @@ public class GameLiveActivity extends AppCompatActivity {
         //unregister our receiver
         this.unregisterReceiver(this.receiver);
 
-        moveDlgShowing = waitingForMoveDlg.isAdded();
+        this.waitingForPlayerShowing = waitingForPlayerDlg.isAdded();
+        if (this.waitingForPlayerShowing) {
+            waitingForPlayerDlg.dismiss();
+        }
+
+        this.waitingForMoveShowing = waitingForMoveDlg.isAdded();
+        if (this.waitingForMoveShowing) {
+            waitingForMoveDlg.dismiss();
+        }
     }
 
     public void addPlayer(String name) {
@@ -207,7 +223,7 @@ public class GameLiveActivity extends AppCompatActivity {
         activePlayer.setLeak(false);
 
         if (getPlayingAreaView().installSelection(this.activePlayer)) {
-            waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
+            waitingForMoveDlg.show(getFragmentManager(), WAITING_FOR_MOVE_LABEL);
             changeTurn();
         } else {
             Toast.makeText(this, "Install Failed", Toast.LENGTH_SHORT).show();
@@ -223,7 +239,7 @@ public class GameLiveActivity extends AppCompatActivity {
                         view.post(new Runnable() {
                             @Override
                             public void run() {
-                                waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
+                                waitingForMoveDlg.show(getFragmentManager(), WAITING_FOR_MOVE_LABEL);
                                 changeTurn();
                             }
                         });
