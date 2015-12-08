@@ -36,8 +36,11 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private Cloud cloud;
     private Preferences preferences;
+
     private WaitingForPlayerDlg waitingForPlayerDlg;
+
     private WaitingForMoveDlg waitingForMoveDlg;
+    private Boolean moveDlgShowing = false;
 
     private BroadcastReceiver receiver;
 
@@ -56,15 +59,7 @@ public class GameLiveActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        bundle.putBoolean(ACTIVE_JOIN_DLG, waitingForPlayerDlg.isVisible());
-        if (waitingForPlayerDlg.isVisible()) {
-            waitingForPlayerDlg.dismiss();
-        }
-
-        bundle.putBoolean(ACTIVE_MOVE_DLG, waitingForMoveDlg.isVisible());
-        if (waitingForMoveDlg.isVisible()) {
-            waitingForMoveDlg.dismiss();
-        }
+        bundle.putBoolean(ACTIVE_MOVE_DLG, moveDlgShowing);
 
         getPlayingAreaView().saveToBundle(bundle);
         getSelectionAreaView().saveToBundle(bundle);
@@ -101,7 +96,7 @@ public class GameLiveActivity extends AppCompatActivity {
             waitingForPlayerDlg.show(getFragmentManager(), "waiting");
         }
 
-        if (playerTwoName.equals(preferences.getAuthUsername())) {
+        if (playerTwoName.equals(preferences.getAuthUsername()) ) {
             waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
         }
 
@@ -122,12 +117,13 @@ public class GameLiveActivity extends AppCompatActivity {
                 this.inactivePlayer = this.playerTwo;
             }
 
-            if (bundle.getBoolean(ACTIVE_JOIN_DLG)) {
-                waitingForPlayerDlg.show(getFragmentManager(), "waitingForPlayer");
-            }
-
             if (bundle.getBoolean(ACTIVE_MOVE_DLG)) {
                 waitingForMoveDlg.show(getFragmentManager(), "waitingForMove");
+            }
+            else {
+                if (waitingForMoveDlg.isAdded()) {
+                    waitingForMoveDlg.dismiss();
+                }
             }
 
             getPlayingAreaView().getFromBundle(bundle, playerOne, this.playerTwo);
@@ -175,6 +171,15 @@ public class GameLiveActivity extends AppCompatActivity {
         super.onPause();
         //unregister our receiver
         this.unregisterReceiver(this.receiver);
+
+        if (waitingForPlayerDlg.isAdded()) {
+            waitingForPlayerDlg.dismiss();
+        }
+
+        moveDlgShowing = waitingForMoveDlg.isAdded();
+        if (moveDlgShowing) {
+            waitingForMoveDlg.dismiss();
+        }
     }
 
     public void addPlayer(String name) {
