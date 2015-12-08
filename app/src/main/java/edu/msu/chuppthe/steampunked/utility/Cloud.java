@@ -685,6 +685,11 @@ public class Cloud {
      * @return the id of the game
      */
     public int createGameOnCloud(String name, int gridSize) {
+
+        if (name.contains(" ")) {
+            name = name.replace(" ", "%20");
+        }
+
         String query = GAME_CREATE_URL + "?name=" + name + "&grid=" + gridSize;
 
         int gameId = -1;
