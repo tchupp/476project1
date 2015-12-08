@@ -258,24 +258,30 @@ public class GameLiveActivity extends AppCompatActivity {
         }
     }
 
-    public void onOpenValve(View view) {
-        boolean noLeaks = getPlayingAreaView().checkLeaks(activePlayer);
-
-        if (noLeaks) {
-            gameOver(true);
-        } else {
-            Toast.makeText(this, "You Still Have Leaks!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void onRotate(View view) {
         if (!getPlayingAreaView().rotateSelected()) {
             Toast.makeText(this, "Please Select A Pipe First.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    public void onOpenValve(View view) {
+        if (getPlayingAreaView().checkLeaks(activePlayer)) {
+            gameOver(true, true);
+        } else {
+            Toast.makeText(this, "You Still Have Leaks!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void onSurrender(View view) {
-        gameOver(false);
+        gameOver(false, false);
+    }
+
+    public void onQuitWhileWaiting() {
+        gameOver(true, false);
+    }
+
+    public void onPassiveQuit() {
+        gameOver(false, true);
     }
 
     public void onPieceSelected(Pipe pipe, boolean isPortrait) {
@@ -286,11 +292,7 @@ public class GameLiveActivity extends AppCompatActivity {
         return activePlayer;
     }
 
-    public void onQuitWhileWaiting() {
-        gameOver(true);
-    }
-
-    private void gameOver(final boolean activeWon) {
+    private void gameOver(final boolean activeWon, final boolean thisPlayerWon) {
         final Intent intent = new Intent(this, GameOverActivity.class);
 
         Player winner = activeWon ? activePlayer : inactivePlayer;
@@ -299,7 +301,7 @@ public class GameLiveActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (cloud.endGameFromCloud(preferences.getGameId(), activeWon)) {
+                if (cloud.endGameFromCloud(preferences.getGameId(), thisPlayerWon)) {
                     startActivity(intent);
                 } else {
                     getPlayingAreaView().post(new Runnable() {
@@ -312,6 +314,7 @@ public class GameLiveActivity extends AppCompatActivity {
             }
         }).start();
     }
+
 
     private void changeTurn() {
         Player temp = this.activePlayer;

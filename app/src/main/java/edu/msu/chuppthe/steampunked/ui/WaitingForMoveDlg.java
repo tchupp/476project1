@@ -62,7 +62,7 @@ public class WaitingForMoveDlg extends DialogFragment {
                     delta = SystemClock.currentThreadTimeMillis() - startTime;
                     Thread.yield();
                 } while ((delta / 1000) < MAX_WAIT_TIME);
-                gameLiveActivity.onSurrender(null);
+                gameLiveActivity.onPassiveQuit();
             }
         }).start();
     }
