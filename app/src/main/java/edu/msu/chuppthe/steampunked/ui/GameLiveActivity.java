@@ -24,7 +24,6 @@ public class GameLiveActivity extends AppCompatActivity {
 
     private static final String ACTIVE_PLAYER = "activePlayer";
     private static final String ACTIVE_MOVE_DLG = "active_move_dlg";
-    private static final String ACTIVE_JOIN_DLG = "active_join_dlg";
 
     // Bundle keys
     public static final String PLAYER_ONE_NAME = "player_one_name";
@@ -172,14 +171,7 @@ public class GameLiveActivity extends AppCompatActivity {
         //unregister our receiver
         this.unregisterReceiver(this.receiver);
 
-        if (waitingForPlayerDlg.isAdded()) {
-            waitingForPlayerDlg.dismiss();
-        }
-
         moveDlgShowing = waitingForMoveDlg.isAdded();
-        if (moveDlgShowing) {
-            waitingForMoveDlg.dismiss();
-        }
     }
 
     public void addPlayer(String name) {
