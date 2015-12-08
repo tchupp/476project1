@@ -29,10 +29,7 @@ public class CatalogLoadingDlg extends DialogFragment {
             }
         });
 
-
         // Create the dialog box
         return builder.create();
     }
-
-
 }

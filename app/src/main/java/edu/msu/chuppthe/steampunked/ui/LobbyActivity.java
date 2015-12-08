@@ -39,14 +39,23 @@ public class LobbyActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get the id of the one we want to delete
+                int type = adapter.getType(position);
+                if (type == Cloud.CatalogAdapter.TYPE_SEPARATOR) {
+                    return;
+                }
+
+                // Get the id of the game we want to load
                 final String gameId = adapter.getId(position);
 
-                if (!adapter.getCreator(position).equals(preferences.getAuthUsername())) {
+                String authUsername = preferences.getAuthUsername();
+
+                String creating = adapter.getCreator(position);
+                String joining = adapter.getJoining(position);
+                if (!authUsername.equals(creating) && !authUsername.equals(joining)) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (cloud.addPlayerTwoToGame(gameId)) {
+                            if (cloud.joinGame(gameId)) {
                                 moveToGame(Integer.parseInt(gameId));
                             } else {
                                 list.post(new Runnable() {

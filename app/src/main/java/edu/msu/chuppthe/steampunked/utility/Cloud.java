@@ -60,11 +60,16 @@ public class Cloud {
         public String creator = "";
         public String name = "";
         public String id = "";
+        public String joining = "";
+        public int type = -1;
     }
 
     public static final int FAIL_GAME_ID = -1;
 
     public static class CatalogAdapter extends BaseAdapter {
+        public static final int TYPE_SEPARATOR = 12345;
+        public static final int TYPE_GAME = 54321;
+
         /**
          * The items we display in the list box. Initially this is
          * empty until we get items from the server.
@@ -133,20 +138,46 @@ public class Cloud {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
+            Item item = items.get(position);
+
             if (view == null) {
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.catalog_game, parent, false);
+                int viewId = (item.type == TYPE_GAME)
+                        ? R.layout.catalog_game
+                        : R.layout.catalog_separator;
+
+                view = LayoutInflater.from(parent.getContext()).inflate(viewId, parent, false);
             }
 
-            TextView nameView = (TextView) view.findViewById(R.id.gameName);
-            nameView.setText(items.get(position).name);
+            if (item.type == TYPE_GAME) {
+                TextView nameView = (TextView) view.findViewById(R.id.gameName);
+                nameView.setText(item.name);
 
-            TextView userView = (TextView) view.findViewById(R.id.gameCreator);
-            userView.setText(items.get(position).creator);
+                TextView userView = (TextView) view.findViewById(R.id.gameCreator);
+                userView.setText(item.creator);
 
-            TextView gridSizeView = (TextView) view.findViewById(R.id.gridSize);
-            gridSizeView.setText(getGridSize(position));
+                TextView gridSizeView = (TextView) view.findViewById(R.id.gridSize);
+                gridSizeView.setText(getGridSize(position));
+            } else if (item.type == TYPE_SEPARATOR) {
+                TextView labelView = (TextView) view.findViewById(R.id.separatorLabel);
+                labelView.setText(item.name);
+            }
 
             return view;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return items.get(position).type != TYPE_SEPARATOR;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            for (Item item : items) {
+                if (item.type != TYPE_SEPARATOR) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private String getGridSize(int position) {
@@ -199,13 +230,26 @@ public class Cloud {
                     }
 
                     while (xml.nextTag() == XmlPullParser.START_TAG) {
-                        if (xml.getName().equals("game")) {
+                        String tagName = xml.getName();
+
+                        if (tagName.equals("game")) {
                             Item item = new Item();
 
+                            item.type = TYPE_GAME;
+
                             item.grid = xml.getAttributeValue(null, "grid");
-                            item.creator = xml.getAttributeValue(null, "creator");
+                            item.creator = xml.getAttributeValue(null, "creating");
+                            item.joining = xml.getAttributeValue(null, "joining");
                             item.name = xml.getAttributeValue(null, "name");
                             item.id = xml.getAttributeValue(null, "id");
+
+                            newItems.add(item);
+                        } else if (tagName.equals("separator")) {
+                            Item item = new Item();
+
+                            item.type = TYPE_SEPARATOR;
+
+                            item.name = xml.getAttributeValue(null, "name");
 
                             newItems.add(item);
                         }
@@ -239,6 +283,14 @@ public class Cloud {
 
         public String getCreator(int position) {
             return items.get(position).creator;
+        }
+
+        public int getType(int position) {
+            return items.get(position).type;
+        }
+
+        public String getJoining(int position) {
+            return items.get(position).joining;
         }
     }
 
@@ -454,7 +506,7 @@ public class Cloud {
      * @param gameId device token to register
      * @return true if register is successful
      */
-    public boolean addPlayerTwoToGame(String gameId) {
+    public boolean joinGame(String gameId) {
         String query = GAME_JOIN_URL + "?game=" + gameId;
 
         InputStream stream = null;

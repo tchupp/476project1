@@ -41,8 +41,8 @@ public class WaitingForMoveDlg extends DialogFragment {
     }
 
     @Override
-    public void dismiss() {
-        super.dismiss();
+    public void onStop() {
+        super.onStop();
         cancel = true;
     }
 
